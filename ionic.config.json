@@ -1,0 +1,7 @@
+{
+  "name": "bpc",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
