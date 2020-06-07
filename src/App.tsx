@@ -1,8 +1,17 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet } from '@ionic/react';
+import {
+  IonApp,
+  IonLabel,
+  IonRouterOutlet,
+  IonTabBar,
+  IonTabButton,
+  IonTabs
+} from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home';
+import Overall from './pages/Overall';
+import Preferment from './pages/Preferment';
+import FinalDough from './pages/FinalDough';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -23,15 +32,30 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-const App: React.FC = () => (
-  <IonApp>
+const App: React.FC = () => {
+  return (<IonApp>
     <IonReactRouter>
-      <IonRouterOutlet>
-        <Route path="/home" component={Home} exact={true} />
-        <Route exact path="/" render={() => <Redirect to="/home" />} />
-      </IonRouterOutlet>
+      <IonTabs>
+        <IonRouterOutlet>
+          <Route path="/overallTab" component={Overall} exact={true} />
+          <Route path="/prefermentTab" component={Preferment} exact={true} />
+          <Route path="/finalDough" component={FinalDough} />
+          <Route path="/" render={() => <Redirect to="/overallTab" />} exact={true} />
+        </IonRouterOutlet>
+        <IonTabBar slot="bottom">
+          <IonTabButton tab="overallTab" href="/overallTab">
+            <IonLabel>OVERALL %</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="prefermentTab" href="/prefermentTab">
+            <IonLabel>PREFERMENT %</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="finalDough" href="/finalDough">
+            <IonLabel>FINAL DOUGH</IonLabel>
+          </IonTabButton>
+        </IonTabBar>
+      </IonTabs>
     </IonReactRouter>
-  </IonApp>
-);
+  </IonApp>);
+};
 
 export default App;
