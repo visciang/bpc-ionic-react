@@ -3,9 +3,13 @@ import ExploreContainer from '../components/ExploreContainer';
 import './Preferment.css';
 import FormulaTab from './FormulaTab';
 
-const Preferment: React.FC = () => {
+interface Props {
+  recipe: string;
+}
+
+const Preferment: React.FC<Props> = ({recipe}) => {
   return (
-    <FormulaTab title="Preferment" content={<ExploreContainer name="Preferment" />} />
+    <FormulaTab title={recipe} content={<ExploreContainer name="Preferment" />} />
   );
 };
 

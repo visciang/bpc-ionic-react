@@ -3,9 +3,13 @@ import ExploreContainer from '../components/ExploreContainer';
 import './FinalDough.css';
 import FormulaTab from './FormulaTab';
 
-const FinalDough: React.FC = () => {
+interface Props {
+  recipe: string;
+}
+
+const FinalDough: React.FC<Props> = ({recipe}) => {
   return (
-    <FormulaTab title="Final Dough" content={<ExploreContainer name="Final Dough" />} />
+    <FormulaTab title={recipe} content={<ExploreContainer name="Final Dough" />} />
   );
 };
 

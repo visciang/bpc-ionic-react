@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
@@ -6,9 +6,10 @@ import {
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
-  IonTabs
-} from '@ionic/react';
+  IonTabs,
+  IonIcon} from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import { calculatorOutline, restaurantOutline } from 'ionicons/icons';
 import Overall from './pages/Overall';
 import Preferment from './pages/Preferment';
 import FinalDough from './pages/FinalDough';
@@ -32,24 +33,33 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
+interface Props {
+  title: string;
+}
+
 const App: React.FC = () => {
+  const [recipe,] = useState("Baker % Calc");
+
   return (<IonApp>
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
-          <Route path="/overallTab" component={Overall} exact={true} />
-          <Route path="/prefermentTab" component={Preferment} exact={true} />
-          <Route path="/finalDough" component={FinalDough} />
+          <Route path="/overallTab" render={() => <Overall recipe={recipe} />} exact={true} />
+          <Route path="/prefermentTab" render={() => <Preferment recipe={recipe} />} exact={true} />
+          <Route path="/finalDough" render={() => <FinalDough recipe={recipe} />} />
           <Route path="/" render={() => <Redirect to="/overallTab" />} exact={true} />
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
           <IonTabButton tab="overallTab" href="/overallTab">
-            <IonLabel>OVERALL %</IonLabel>
+            <IonIcon icon={restaurantOutline} />
+            <IonLabel>OVERALL</IonLabel>
           </IonTabButton>
           <IonTabButton tab="prefermentTab" href="/prefermentTab">
-            <IonLabel>PREFERMENT %</IonLabel>
+            <IonIcon icon={restaurantOutline} />
+            <IonLabel>PREFERMENT</IonLabel>
           </IonTabButton>
           <IonTabButton tab="finalDough" href="/finalDough">
+            <IonIcon icon={calculatorOutline} />
             <IonLabel>FINAL DOUGH</IonLabel>
           </IonTabButton>
         </IonTabBar>
