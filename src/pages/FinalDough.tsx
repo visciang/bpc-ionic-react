@@ -1,15 +1,17 @@
 import React from 'react';
-import ExploreContainer from '../components/ExploreContainer';
-import './FinalDough.css';
 import FormulaTab from './FormulaTab';
+import { Recipe } from '../components/Recipe';
+import './FinalDough.css';
 
 interface Props {
-  recipe: string;
+  recipe: Recipe;
 }
 
 const FinalDough: React.FC<Props> = ({recipe}) => {
   return (
-    <FormulaTab title={recipe} content={<ExploreContainer name="Final Dough" />} />
+    <FormulaTab title={recipe.name}>
+      <p>{recipe.name}</p>
+    </FormulaTab>
   );
 };
 

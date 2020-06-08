@@ -1,15 +1,19 @@
 import React from 'react';
-import ExploreContainer from '../components/ExploreContainer';
-import './Overall.css';
 import FormulaTab from './FormulaTab';
+import IngredientsPercentage from '../components/IngredientsPercentage';
+import { Recipe } from '../components/Recipe';
+import './Overall.css';
 
 interface Props {
-  recipe: string;
+  recipe: Recipe;
 }
 
 const Overall: React.FC<Props> = ({ recipe }) => {
   return (
-    <FormulaTab title={recipe} content={<ExploreContainer name="Overall page" />} />
+    <FormulaTab title={recipe.name}>
+      <IngredientsPercentage title="FLOURS" ingredients={recipe.flours} />
+      <IngredientsPercentage title="INGREDIENTS" ingredients={recipe.ingredients} />
+    </FormulaTab>
   );
 };
 

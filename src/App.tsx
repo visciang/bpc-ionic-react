@@ -7,12 +7,14 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
-  IonIcon} from '@ionic/react';
+  IonIcon,
+} from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { calculatorOutline, restaurantOutline } from 'ionicons/icons';
 import Overall from './pages/Overall';
 import Preferment from './pages/Preferment';
 import FinalDough from './pages/FinalDough';
+import { Recipe } from './components/Recipe';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -38,7 +40,19 @@ interface Props {
 }
 
 const App: React.FC = () => {
-  const [recipe,] = useState("Baker % Calc");
+  const untitledRecipe: Recipe = {
+    name: "Untitled",
+    flours: [
+      { name: "Farina 00 W300", value: 80 },
+      { name: "Semola Rimacinata", value: 20 },
+    ],
+    ingredients: [
+      { name: "Acqua", value: 73 },
+      { name: "Lievito", value: 0.8 },
+      { name: "Sale", value: 2.5 },
+    ],
+  };
+  const [recipe,] = useState(untitledRecipe);
 
   return (<IonApp>
     <IonReactRouter>

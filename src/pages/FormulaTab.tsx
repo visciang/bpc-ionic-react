@@ -4,10 +4,9 @@ import './FormulaTab.css';
 
 interface Props {
   title: string;
-  content: React.FunctionComponentElement<any>;
 }
 
-const FormulaTab: React.FC<Props> = ({ title, content }) => {
+const FormulaTab: React.FC<Props> = ({ title, children }) => {
   return (
     <IonPage>
       <IonHeader>
@@ -15,13 +14,13 @@ const FormulaTab: React.FC<Props> = ({ title, content }) => {
           <IonTitle className="ion-text-center">{title}</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent className="ion-padding">
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle className="ion-text-center" size="large">{title}</IonTitle>
           </IonToolbar>
         </IonHeader>
-        {content}
+        {children}
       </IonContent>
     </IonPage>
   );
