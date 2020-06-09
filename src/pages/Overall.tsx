@@ -11,7 +11,7 @@ interface Props {
 const Overall: React.FC<Props> = ({ recipe }) => {
   return (
     <FormulaTab title={recipe.name}>
-      <IngredientsPercentage title="FLOURS" ingredients={recipe.flours} maxPercentage={100}/>
+      <IngredientsPercentage title="FLOURS" ingredients={recipe.flours} maxPercentage={100} />
       <IngredientsPercentage title="INGREDIENTS" ingredients={recipe.ingredients} />
     </FormulaTab>
   );
