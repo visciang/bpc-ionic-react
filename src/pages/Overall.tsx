@@ -1,8 +1,8 @@
-import React from 'react';
-import FormulaTab from './FormulaTab';
-import IngredientsPercentage from '../components/IngredientsPercentage';
-import { Recipe } from '../components/Recipe';
-import './Overall.css';
+import React from "react";
+import FormulaTab from "./FormulaTab";
+import IngredientsPercentage from "../components/IngredientsPercentage";
+import { Recipe } from "../components/Recipe";
+import "./Overall.css";
 
 interface Props {
   recipe: Recipe;
