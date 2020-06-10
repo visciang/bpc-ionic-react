@@ -1,12 +1,8 @@
-import React, { useState } from "react";
-import { Redirect, Route } from "react-router-dom";
-import { IonApp, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, IonIcon } from "@ionic/react";
+import React from "react";
+import { IonApp } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { calculatorOutline, restaurantOutline } from "ionicons/icons";
-import Overall from "./pages/Overall";
-import Preferment from "./pages/Preferment";
-import FinalDough from "./pages/FinalDough";
-import { Recipe } from "./components/Recipe";
+import Menu from "./components/Menu";
+import Tabs from "./pages/Tabs";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -27,59 +23,12 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 
-type Props = {
-  title: string;
-};
-
-const untitledRecipe: Recipe = {
-  name: "Untitled",
-  flours: new Map([
-    ["Farina 00 W300", 80],
-    ["Semola Rimacinata", 20],
-  ]),
-  ingredients: new Map([
-    ["Acqua", 73],
-    ["Lievito", 0.8],
-    ["Sale", 2.5],
-  ]),
-};
-
 const App: React.FC = () => {
-  const [recipe, setRecipe] = useState(untitledRecipe);
-
-  const onRecipeChange = (recipe: Recipe) => {
-    setRecipe(recipe);
-  };
-
   return (
     <IonApp>
       <IonReactRouter>
-        <IonTabs>
-          <IonRouterOutlet>
-            <Route
-              path="/overallTab"
-              render={() => <Overall recipe={recipe} onRecipeChange={onRecipeChange} />}
-              exact={true}
-            />
-            <Route path="/prefermentTab" render={() => <Preferment recipe={recipe} />} exact={true} />
-            <Route path="/finalDough" render={() => <FinalDough recipe={recipe} />} />
-            <Route path="/" render={() => <Redirect to="/overallTab" />} exact={true} />
-          </IonRouterOutlet>
-          <IonTabBar slot="bottom">
-            <IonTabButton tab="overallTab" href="/overallTab">
-              <IonIcon icon={restaurantOutline} />
-              <IonLabel>OVERALL</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="prefermentTab" href="/prefermentTab">
-              <IonIcon icon={restaurantOutline} />
-              <IonLabel>PREFERMENT</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="finalDough" href="/finalDough">
-              <IonIcon icon={calculatorOutline} />
-              <IonLabel>FINAL DOUGH</IonLabel>
-            </IonTabButton>
-          </IonTabBar>
-        </IonTabs>
+        <Menu />
+        <Tabs />
       </IonReactRouter>
     </IonApp>
   );

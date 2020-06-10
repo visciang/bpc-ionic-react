@@ -1,5 +1,16 @@
 import React from "react";
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from "@ionic/react";
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonButton,
+  IonIcon,
+  IonButtons,
+  IonMenuButton,
+} from "@ionic/react";
+import { pencil } from "ionicons/icons";
 import "./FormulaTab.css";
 
 type Props = {
@@ -11,7 +22,15 @@ const FormulaTab: React.FC<Props> = ({ title, children }) => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
+          <IonButtons slot="start">
+            <IonMenuButton />
+          </IonButtons>
           <IonTitle className="ion-text-center">{title}</IonTitle>
+          <IonButtons slot="end">
+            <IonButton>
+              <IonIcon icon={pencil} />
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">

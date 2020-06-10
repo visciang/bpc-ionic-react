@@ -1,5 +1,5 @@
 import React from "react";
-import FormulaTab from "./FormulaTab";
+import FormulaTab from "../components/FormulaTab";
 import IngredientsPercentage from "../components/IngredientsPercentage";
 import { Recipe } from "../components/Recipe";
 import "./Overall.css";
