@@ -3,14 +3,14 @@ import FormulaTab from "./FormulaTab";
 import { Recipe } from "../components/Recipe";
 import "./FinalDough.css";
 
-interface Props {
+type Props = {
   recipe: Recipe;
-}
+};
 
 const FinalDough: React.FC<Props> = ({ recipe }) => {
   return (
     <FormulaTab title={recipe.name}>
-      <p>{recipe.name}</p>
+      <p>TODO</p>
     </FormulaTab>
   );
 };

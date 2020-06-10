@@ -4,15 +4,26 @@ import IngredientsPercentage from "../components/IngredientsPercentage";
 import { Recipe } from "../components/Recipe";
 import "./Overall.css";
 
-interface Props {
+type Props = {
   recipe: Recipe;
-}
+  onRecipeChange(recipe: Recipe): void;
+};
 
-const Overall: React.FC<Props> = ({ recipe }) => {
+const Overall: React.FC<Props> = ({ recipe, onRecipeChange }) => {
   return (
     <FormulaTab title={recipe.name}>
-      <IngredientsPercentage title="FLOURS" ingredients={recipe.flours} maxPercentage={100} />
-      <IngredientsPercentage title="INGREDIENTS" ingredients={recipe.ingredients} />
+      <IngredientsPercentage
+        title="FLOURS"
+        ingredients={recipe.flours}
+        maxPercentage={100}
+        onIngredientsChange={(flours) => onRecipeChange({ ...recipe, flours: flours })}
+      />
+      <IngredientsPercentage
+        title="INGREDIENTS"
+        ingredients={recipe.ingredients}
+        maxPercentage={undefined}
+        onIngredientsChange={(ingredients) => onRecipeChange({ ...recipe, ingredients: ingredients })}
+      />
     </FormulaTab>
   );
 };

@@ -1,10 +1,9 @@
-export interface Ingredient {
-  name: string;
-  value: number;
-}
+export type IngredientName = string;
+export type IngredientValue = number | undefined;
+export type Ingredients = Map<IngredientName, IngredientValue>;
 
-export interface Recipe {
+export type Recipe = {
   name: string;
-  flours: Ingredient[];
-  ingredients: Ingredient[];
-}
+  flours: Ingredients;
+  ingredients: Ingredients;
+};

@@ -27,31 +27,40 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 
-interface Props {
+type Props = {
   title: string;
-}
+};
+
+const untitledRecipe: Recipe = {
+  name: "Untitled",
+  flours: new Map([
+    ["Farina 00 W300", 80],
+    ["Semola Rimacinata", 20],
+  ]),
+  ingredients: new Map([
+    ["Acqua", 73],
+    ["Lievito", 0.8],
+    ["Sale", 2.5],
+  ]),
+};
 
 const App: React.FC = () => {
-  const untitledRecipe: Recipe = {
-    name: "Untitled",
-    flours: [
-      { name: "Farina 00 W300", value: 80 },
-      { name: "Semola Rimacinata", value: 20 },
-    ],
-    ingredients: [
-      { name: "Acqua", value: 73 },
-      { name: "Lievito", value: 0.8 },
-      { name: "Sale", value: 2.5 },
-    ],
+  const [recipe, setRecipe] = useState(untitledRecipe);
+
+  const onRecipeChange = (recipe: Recipe) => {
+    setRecipe(recipe);
   };
-  const [recipe] = useState(untitledRecipe);
 
   return (
     <IonApp>
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/overallTab" render={() => <Overall recipe={recipe} />} exact={true} />
+            <Route
+              path="/overallTab"
+              render={() => <Overall recipe={recipe} onRecipeChange={onRecipeChange} />}
+              exact={true}
+            />
             <Route path="/prefermentTab" render={() => <Preferment recipe={recipe} />} exact={true} />
             <Route path="/finalDough" render={() => <FinalDough recipe={recipe} />} />
             <Route path="/" render={() => <Redirect to="/overallTab" />} exact={true} />

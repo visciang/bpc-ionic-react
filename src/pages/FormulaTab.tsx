@@ -2,9 +2,9 @@ import React from "react";
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from "@ionic/react";
 import "./FormulaTab.css";
 
-interface Props {
+type Props = {
   title: string;
-}
+};
 
 const FormulaTab: React.FC<Props> = ({ title, children }) => {
   return (
