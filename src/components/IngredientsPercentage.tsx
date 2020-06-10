@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { IonList, IonItem, IonLabel, IonListHeader, IonInput, IonText, IonButton, IonIcon } from "@ionic/react";
+import { addOutline } from "ionicons/icons";
 import { Ingredients, IngredientName, IngredientValue } from "./Recipe";
 import "./IngredientsPercentage.css";
-import { addOutline } from "ionicons/icons";
 
 type Props = {
   title: string;

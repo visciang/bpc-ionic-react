@@ -11,7 +11,6 @@ import {
   IonMenuButton,
 } from "@ionic/react";
 import { pencil } from "ionicons/icons";
-import "./FormulaTab.css";
 
 type Props = {
   title: string;

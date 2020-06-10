@@ -1,7 +1,6 @@
 import React from "react";
 import FormulaTab from "../components/FormulaTab";
 import { Recipe } from "../components/Recipe";
-import "./Preferment.css";
 
 type Props = {
   recipe: Recipe;

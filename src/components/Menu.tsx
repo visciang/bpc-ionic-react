@@ -1,6 +1,5 @@
 import React from "react";
 import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem } from "@ionic/react";
-import "./Menu.css";
 
 const Menu: React.FC = () => {
   return (

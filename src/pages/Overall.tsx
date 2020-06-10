@@ -2,7 +2,6 @@ import React from "react";
 import FormulaTab from "../components/FormulaTab";
 import IngredientsPercentage from "../components/IngredientsPercentage";
 import { Recipe } from "../components/Recipe";
-import "./Overall.css";
 
 type Props = {
   recipe: Recipe;
