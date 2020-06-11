@@ -3,9 +3,9 @@ import { Redirect, Route } from "react-router-dom";
 import { IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, IonIcon } from "@ionic/react";
 import { calculatorOutline, restaurantOutline } from "ionicons/icons";
 import { Recipe } from "../components/Recipe";
-import Overall from "./Overall";
-import Preferment from "./Preferment";
-import FinalDough from "./FinalDough";
+import Overall from "./tabs/Overall";
+import Preferment from "./tabs/Preferment";
+import FinalDough from "./tabs/FinalDough";
 
 const untitledRecipe: Recipe = {
   name: "Untitled",
@@ -35,7 +35,7 @@ const Tabs: React.FC = () => {
           exact={true}
         />
         <Route path="/prefermentTab" render={() => <Preferment recipe={recipe} />} exact={true} />
-        <Route path="/finalDough" render={() => <FinalDough recipe={recipe} />} />
+        <Route path="/finalDough" render={() => <FinalDough recipe={recipe} />} exact={true} />
         <Route path="/" render={() => <Redirect to="/overallTab" />} exact={true} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">

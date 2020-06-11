@@ -1,7 +1,7 @@
 import React from "react";
-import FormulaTab from "../components/FormulaTab";
-import IngredientsPercentage from "../components/IngredientsPercentage";
-import { Recipe } from "../components/Recipe";
+import FormulaTab from "../../components/FormulaTab";
+import IngredientsPercentage from "../../components/IngredientsPercentage";
+import { Recipe } from "../../components/Recipe";
 
 type Props = {
   recipe: Recipe;
