@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Redirect, Route } from "react-router-dom";
 import { IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, IonIcon } from "@ionic/react";
-import { calculatorOutline, restaurantOutline } from "ionicons/icons";
+import { calculatorOutline, restaurantOutline, arrowUndoCircleOutline, arrowUndoOutline } from "ionicons/icons";
 import { Recipe } from "../components/Recipe";
 import Overall from "./tabs/Overall";
 import Preferment from "./tabs/Preferment";
@@ -44,7 +44,7 @@ const Tabs: React.FC = () => {
           <IonLabel>OVERALL</IonLabel>
         </IonTabButton>
         <IonTabButton tab="prefermentTab" href="/prefermentTab">
-          <IonIcon icon={restaurantOutline} />
+          <IonIcon icon={arrowUndoOutline} />
           <IonLabel>PREFERMENT</IonLabel>
         </IonTabButton>
         <IonTabButton tab="finalDough" href="/finalDough">
