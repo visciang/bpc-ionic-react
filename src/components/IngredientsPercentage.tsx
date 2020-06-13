@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { IonList, IonReorderGroup } from "@ionic/react";
 import { ItemReorderEventDetail } from "@ionic/core";
 import { Ingredients, IngredientName, IngredientValue } from "./Recipe";
@@ -10,12 +10,11 @@ type Props = {
   title: string;
   ingredients: Ingredients;
   maxPercentage?: number;
+  editable: boolean;
   onIngredientsChange(ingredients: Ingredients): void;
 };
 
-const IngredientsPercentage: React.FC<Props> = ({ title, ingredients, onIngredientsChange }) => {
-  const [editable, setEditable] = useState(false);
-
+const IngredientsPercentage: React.FC<Props> = ({ title, ingredients, editable, onIngredientsChange }) => {
   const onIngredientChange = (name: IngredientName, value: IngredientValue) => {
     onIngredientsChange(new Map([...ingredients, [name, value]]));
   };
@@ -43,7 +42,7 @@ const IngredientsPercentage: React.FC<Props> = ({ title, ingredients, onIngredie
 
   return (
     <IonList lines="none" className="ion-padding-top ion-padding-horizontal">
-      <IngredientsPercentageToolbar title={title} onEditToggle={() => setEditable(!editable)} />
+      <IngredientsPercentageToolbar title={title} />
       <IonReorderGroup disabled={!editable} onIonItemReorder={onIngredientReorder}>
         {[...ingredients.entries()].map(([name, value]) => {
           return (

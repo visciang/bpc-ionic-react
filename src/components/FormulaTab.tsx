@@ -1,11 +1,31 @@
 import React from "react";
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonMenuButton } from "@ionic/react";
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonButtons,
+  IonMenuButton,
+  IonButton,
+  IonIcon,
+} from "@ionic/react";
+import { pencil } from "ionicons/icons";
 
 type Props = {
   title: string;
+  onEditToggle?(): void;
 };
 
-const FormulaTab: React.FC<Props> = ({ title, children }) => {
+const FormulaTab: React.FC<Props> = ({ title, onEditToggle, children }) => {
+  const editButton = onEditToggle ? (
+    <IonButtons slot="end">
+      <IonButton onClick={() => onEditToggle()}>
+        <IonIcon icon={pencil} />
+      </IonButton>
+    </IonButtons>
+  ) : undefined;
+
   return (
     <IonPage>
       <IonHeader translucent={true}>
@@ -13,7 +33,8 @@ const FormulaTab: React.FC<Props> = ({ title, children }) => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>{title}</IonTitle>
+          <IonTitle className="ion-text-center">{title}</IonTitle>
+          {editButton}
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen={true}>

@@ -1,21 +1,14 @@
 import React from "react";
-import { IonButton, IonIcon, IonTitle, IonToolbar, IonButtons } from "@ionic/react";
-import { pencilOutline } from "ionicons/icons";
+import { IonTitle, IonToolbar } from "@ionic/react";
 
 type Props = {
   title: string;
-  onEditToggle(): void;
 };
 
-const IngredientsPercentageToolbar: React.FC<Props> = ({ title, onEditToggle }) => {
+const IngredientsPercentageToolbar: React.FC<Props> = ({ title }) => {
   return (
     <IonToolbar>
-      <IonTitle>{title}</IonTitle>
-      <IonButtons slot="end">
-        <IonButton onClick={() => onEditToggle()} fill="clear">
-          <IonIcon slot="icon-only" icon={pencilOutline} />
-        </IonButton>
-      </IonButtons>
+      <IonTitle className="ion-text-center">{title}</IonTitle>
     </IonToolbar>
   );
 };
