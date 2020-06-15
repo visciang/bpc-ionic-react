@@ -7,3 +7,8 @@ export type Recipe = {
   flours: Ingredients;
   ingredients: Ingredients;
 };
+
+export enum ScaleBy {
+  DOUGH = "DOUGH",
+  FLOUR = "FLOUR",
+}

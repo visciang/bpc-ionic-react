@@ -37,8 +37,8 @@ const FormulaTab: React.FC<Props> = ({ title, onEditToggle, children }) => {
           {editButton}
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen={true}>
-        <IonHeader collapse="condense">
+      <IonContent fullscreen={true} className="ion-padding">
+        <IonHeader collapse="condense" className="ion-padding-bottom">
           <IonToolbar>
             <IonTitle className="ion-text-center" size="large">
               {title}
