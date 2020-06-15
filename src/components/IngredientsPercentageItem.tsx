@@ -1,7 +1,8 @@
 import React from "react";
 import { IonItem, IonLabel, IonInput, IonText, IonReorder, IonButton, IonIcon } from "@ionic/react";
-import { IngredientName, IngredientValue } from "./Recipe";
 import { trashOutline } from "ionicons/icons";
+import { IngredientName, IngredientValue } from "./Recipe";
+import { onIonChangeFloat } from "./utils";
 
 type Props = {
   name: IngredientName;
@@ -30,19 +31,16 @@ const IngredientsPercentageItem: React.FC<Props> = ({ name, value, editable, max
         <IonInput
           className="ion-padding-horizontal ion-text-right"
           type="number"
+          inputMode="decimal"
           min="0"
           max={maxPercentage?.toString()}
           value={value}
-          onIonChange={(e) => onChange(name, parseIngredientValue(e.detail.value))}
+          onIonChange={onIonChangeFloat((v) => onChange(name, v))}
         />
         <IonText>%</IonText>
       </IonItem>
     );
   }
-};
-
-const parseIngredientValue = (value: string | undefined | null) => {
-  return value ? parseFloat(value) : undefined;
 };
 
 export default IngredientsPercentageItem;

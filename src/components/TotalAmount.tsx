@@ -1,5 +1,6 @@
 import React from "react";
 import { IonItem, IonLabel, IonInput, IonText } from "@ionic/react";
+import { onIonChangeFloat } from "./utils";
 
 type Props = {
   value: number | undefined;
@@ -13,17 +14,14 @@ const TotalAmount: React.FC<Props> = ({ value, onChange }) => {
       <IonInput
         className="ion-padding-horizontal ion-text-right"
         type="number"
+        inputMode="decimal"
         min="0"
         value={value}
-        onIonChange={(e) => onChange(parseTotalAmount(e.detail.value))}
+        onIonChange={onIonChangeFloat((v) => onChange(v))}
       />
       <IonText>g</IonText>
     </IonItem>
   );
-};
-
-const parseTotalAmount = (value: string | undefined | null) => {
-  return value ? parseFloat(value) : undefined;
 };
 
 export default TotalAmount;
