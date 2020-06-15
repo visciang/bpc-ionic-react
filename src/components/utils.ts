@@ -3,7 +3,7 @@ import { InputChangeEventDetail } from "@ionic/core";
 type OnIonChange = (value: CustomEvent<InputChangeEventDetail>) => void;
 type OnChangeFloat = (value: number | undefined) => void;
 
-export function onIonChangeFloat(onChangeFloat: OnChangeFloat): OnIonChange {
+export const onIonChangeFloat = (onChangeFloat: OnChangeFloat): OnIonChange => {
   return (event: CustomEvent<InputChangeEventDetail>): void => {
     if (event.detail.value?.endsWith(",") || event.detail.value?.endsWith(".")) {
       return;
@@ -15,4 +15,4 @@ export function onIonChangeFloat(onChangeFloat: OnChangeFloat): OnIonChange {
       return onChangeFloat(parseFloat(event.detail.value.replace(",", ".")));
     }
   };
-}
+};
