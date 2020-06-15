@@ -3,7 +3,7 @@ import { IonList, IonReorderGroup } from "@ionic/react";
 import { ItemReorderEventDetail } from "@ionic/core";
 import { Ingredients, IngredientName, IngredientValue } from "./Recipe";
 import IngredientsPercentageToolbar from "./IngredientsPercentageToolbar";
-import IngredientsPercentageNewItem from "./IngredientsPercentageNewItem";
+import NewItem from "./NewItem";
 import IngredientsPercentageItem from "./IngredientsPercentageItem";
 
 type Props = {
@@ -57,7 +57,7 @@ const IngredientsPercentage: React.FC<Props> = ({ title, ingredients, editable, 
           );
         })}
       </IonReorderGroup>
-      <IngredientsPercentageNewItem onNewIngredient={onNewIngredient} />
+      <NewItem onNewItem={onNewIngredient} />
     </IonList>
   );
 };
