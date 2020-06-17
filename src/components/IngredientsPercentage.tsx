@@ -1,8 +1,8 @@
 import React from "react";
-import { IonList, IonReorderGroup } from "@ionic/react";
+import { IonList, IonReorderGroup, IonReorder } from "@ionic/react";
 import { ItemReorderEventDetail } from "@ionic/core";
 import { Ingredients, IngredientName, IngredientValue } from "./Recipe";
-import IngredientsPercentageToolbar from "./IngredientsPercentageToolbar";
+import IngredientsTitleToolbar from "./IngredientsTitleToolbar";
 import NewItem from "./NewItem";
 import IngredientsPercentageItem from "./IngredientsPercentageItem";
 
@@ -14,7 +14,13 @@ type Props = {
   onIngredientsChange(ingredients: Ingredients): void;
 };
 
-const IngredientsPercentage: React.FC<Props> = ({ title, ingredients, editable, onIngredientsChange }) => {
+const IngredientsPercentage: React.FC<Props> = ({
+  title,
+  ingredients,
+  maxPercentage,
+  editable,
+  onIngredientsChange,
+}) => {
   const onIngredientChange = (name: IngredientName, value: IngredientValue) => {
     onIngredientsChange(new Map([...ingredients, [name, value]]));
   };
@@ -42,7 +48,7 @@ const IngredientsPercentage: React.FC<Props> = ({ title, ingredients, editable, 
 
   return (
     <IonList lines="none">
-      <IngredientsPercentageToolbar title={title} />
+      <IngredientsTitleToolbar title={title} />
       <IonReorderGroup disabled={!editable} onIonItemReorder={onIngredientReorder}>
         {[...ingredients.entries()].map(([name, value]) => {
           return (
@@ -50,10 +56,12 @@ const IngredientsPercentage: React.FC<Props> = ({ title, ingredients, editable, 
               key={name}
               name={name}
               value={value}
-              editable={editable}
+              maxPercentage={maxPercentage}
               onChange={onIngredientChange}
-              onDelete={onDeleteIngredient}
-            />
+              onDelete={editable ? onDeleteIngredient : undefined}
+            >
+              <IonReorder slot="end" />
+            </IngredientsPercentageItem>
           );
         })}
       </IonReorderGroup>

@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import FormulaTab from "../../components/FormulaTab";
 import IngredientsPercentage from "../../components/IngredientsPercentage";
-import { Recipe } from "../../components/Recipe";
+import { Recipe, Ingredients } from "../../components/Recipe";
 
 type Props = {
   recipe: Recipe;
-  onRecipeChange(recipe: Recipe): void;
+  onFloursChange(flours: Ingredients): void;
+  onIngredientsChange(flours: Ingredients): void;
 };
 
-const Overall: React.FC<Props> = ({ recipe, onRecipeChange }) => {
+const Overall: React.FC<Props> = ({ recipe, onFloursChange, onIngredientsChange }) => {
   const [editable, setEditable] = useState(false);
 
   return (
@@ -17,14 +18,14 @@ const Overall: React.FC<Props> = ({ recipe, onRecipeChange }) => {
         title="FLOURS"
         ingredients={recipe.flours}
         maxPercentage={100}
-        onIngredientsChange={(flours) => onRecipeChange({ ...recipe, flours: flours })}
+        onIngredientsChange={onFloursChange}
         editable={editable}
       />
       <IngredientsPercentage
         title="INGREDIENTS"
         ingredients={recipe.ingredients}
         maxPercentage={undefined}
-        onIngredientsChange={(ingredients) => onRecipeChange({ ...recipe, ingredients: ingredients })}
+        onIngredientsChange={onIngredientsChange}
         editable={editable}
       />
     </FormulaTab>

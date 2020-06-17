@@ -5,7 +5,7 @@ type Props = {
   title: string;
 };
 
-const IngredientsPercentageToolbar: React.FC<Props> = ({ title }) => {
+const IngredientsTitleToolbar: React.FC<Props> = ({ title }) => {
   return (
     <IonToolbar>
       <IonTitle className="ion-text-center">{title}</IonTitle>
@@ -13,4 +13,4 @@ const IngredientsPercentageToolbar: React.FC<Props> = ({ title }) => {
   );
 };
 
-export default IngredientsPercentageToolbar;
+export default IngredientsTitleToolbar;

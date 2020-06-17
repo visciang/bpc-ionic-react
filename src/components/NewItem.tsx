@@ -15,7 +15,7 @@ const NewItem: React.FC<Props> = ({ onNewItem }) => {
   };
 
   return (
-    <IonItem key="__new__">
+    <IonItem lines="none">
       <IonInput
         required={true}
         type="text"
