@@ -12,14 +12,14 @@ type Props = {
 
 const Preferment: React.FC<Props> = ({ recipe, onPrefermentsChange }) => {
   const [editable, setEditable] = useState(false);
-  const [prefermentKind, setPreferment] = useState<PrefermentKind>(PrefermentKind.YEAST);
+  const [prefermentKind, setPreferment] = useState<PrefermentKind>(PrefermentKind.PREDOUGH);
 
   const onNewPreferment = (name: string) => {
     let preferment: Pref;
 
-    if (prefermentKind === PrefermentKind.YEAST)
+    if (prefermentKind === PrefermentKind.PREDOUGH)
       preferment = {
-        kind: PrefermentKind.YEAST,
+        kind: PrefermentKind.PREDOUGH,
         prefermentedFlour: undefined,
         flours: new Map(),
         ingredients: new Map(),

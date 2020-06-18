@@ -22,7 +22,7 @@ const untitledRecipe: Recipe = {
     [
       "Biga",
       {
-        kind: PrefermentKind.YEAST,
+        kind: PrefermentKind.PREDOUGH,
         prefermentedFlour: 80,
         flours: new Map([["Farina 00 W300", 100]]),
         ingredients: new Map([["Acqua", 45]]),
