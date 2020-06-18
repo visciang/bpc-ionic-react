@@ -24,7 +24,10 @@ const untitledRecipe: Recipe = {
       {
         kind: PrefermentKind.PREDOUGH,
         prefermentedFlour: 80,
-        flours: new Map([["Farina 00 W300", 100]]),
+        flours: new Map([
+          ["Farina 00 W300", 50],
+          ["Semola Rimacinata", 50],
+        ]),
         ingredients: new Map([["Acqua", 45]]),
       },
     ],

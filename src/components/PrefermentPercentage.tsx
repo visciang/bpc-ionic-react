@@ -1,7 +1,7 @@
 import React from "react";
 import { IonList, IonReorderGroup, IonReorder } from "@ionic/react";
 import { ItemReorderEventDetail } from "@ionic/core";
-import { Preferment, Recipe, IngredientName, IngredientValue } from "./Recipe";
+import { Preferment, Recipe, IngredientName, IngredientValue, PrefermentKind } from "./Recipe";
 import IngredientsTitleToolbar from "./IngredientsTitleToolbar";
 import IngredientsPercentageItem from "./IngredientsPercentageItem";
 
@@ -16,6 +16,10 @@ type Props = {
 const PrefermentPercentage: React.FC<Props> = ({ title, preferment, editable, onPrefermentChange }) => {
   const onPrefermentedFlourChange = (name: IngredientName, value: IngredientValue) => {
     onPrefermentChange({ ...preferment, prefermentedFlour: value });
+  };
+
+  const onSeedChange = (name: IngredientName, value: IngredientValue) => {
+    if (preferment.kind === PrefermentKind.SOURDOUGH) onPrefermentChange({ ...preferment, seed: value });
   };
 
   const onFlourChange = (name: IngredientName, value: IngredientValue) => {
@@ -71,6 +75,14 @@ const PrefermentPercentage: React.FC<Props> = ({ title, preferment, editable, on
         maxPercentage={100}
         onChange={onPrefermentedFlourChange}
       />
+      {preferment.kind === PrefermentKind.SOURDOUGH ? (
+        <IngredientsPercentageItem
+          name="Sourdough starter"
+          value={preferment.seed}
+          maxPercentage={100}
+          onChange={onSeedChange}
+        />
+      ) : undefined}
       <IonReorderGroup disabled={!editable} onIonItemReorder={onFlourReorder}>
         {[...preferment.flours.entries()].map(([name, value]) => {
           return (

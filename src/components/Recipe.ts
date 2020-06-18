@@ -14,11 +14,12 @@ type BasePreferment = {
   ingredients: Ingredients;
 };
 
-export type PreDoughPreferment = BasePreferment;
+export type PreDoughPreferment = { kind: PrefermentKind.PREDOUGH } & BasePreferment;
 
-export type SourdoughPreferment = BasePreferment & {
+export type SourdoughPreferment = {
+  kind: PrefermentKind.SOURDOUGH;
   seed: IngredientValue;
-};
+} & BasePreferment;
 
 export enum PrefermentKind {
   PREDOUGH = "PRE-DOUGH",
