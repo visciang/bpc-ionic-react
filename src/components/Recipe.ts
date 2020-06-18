@@ -21,7 +21,7 @@ export type SourdoughPreferment = BasePreferment & {
 };
 
 export enum PrefermentKind {
-  YEAST = "YEAST",
+  PREDOUGH = "PRE-DOUGH",
   SOURDOUGH = "SOURDOUGH",
 }
 

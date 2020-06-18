@@ -10,9 +10,9 @@ type Props = {
 const PrefermentSelector: React.FC<Props> = ({ value, onChange }) => {
   return (
     <IonItem lines="none">
-      <IonLabel>Type of preferment</IonLabel>
+      <IonLabel>Kind</IonLabel>
       <IonSelect interface="popover" value={value} onIonChange={(e) => onChange(e.detail.value)}>
-        <IonSelectOption value={PrefermentKind.YEAST}>{PrefermentKind.YEAST}</IonSelectOption>
+        <IonSelectOption value={PrefermentKind.PREDOUGH}>{PrefermentKind.PREDOUGH}</IonSelectOption>
         <IonSelectOption value={PrefermentKind.SOURDOUGH}>{PrefermentKind.SOURDOUGH}</IonSelectOption>
       </IonSelect>
     </IonItem>
