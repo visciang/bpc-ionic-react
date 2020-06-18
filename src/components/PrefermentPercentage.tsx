@@ -36,7 +36,7 @@ const PrefermentPercentage: React.FC<Props> = ({ title, preferment, editable, on
     orderedFlours.splice(event.detail.from, 1);
     orderedFlours.splice(event.detail.to, 0, movedFlour);
 
-    onPrefermentChange({...preferment, flours: new Map(orderedFlours)});
+    onPrefermentChange({ ...preferment, flours: new Map(orderedFlours) });
     event.detail.complete();
   };
 
@@ -58,10 +58,9 @@ const PrefermentPercentage: React.FC<Props> = ({ title, preferment, editable, on
     orderedIngredients.splice(event.detail.from, 1);
     orderedIngredients.splice(event.detail.to, 0, movedFlour);
 
-    onPrefermentChange({...preferment, ingredients: new Map(orderedIngredients)});
+    onPrefermentChange({ ...preferment, ingredients: new Map(orderedIngredients) });
     event.detail.complete();
   };
-
 
   return (
     <IonList lines="none">

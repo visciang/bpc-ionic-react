@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Redirect, Route } from "react-router-dom";
 import { IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, IonIcon } from "@ionic/react";
 import { calculatorOutline, restaurantOutline, arrowUndoOutline } from "ionicons/icons";
-import { Recipe, Ingredients, Preferments, PrefermentKind } from "../components/Recipe";
+import { Recipe, Ingredients, Preferments, PrefermentKind, Preferment as Pref } from "../components/Recipe";
 import Overall from "./tabs/Overall";
 import Preferment from "./tabs/Preferment";
 import FinalDough from "./tabs/FinalDough";
@@ -35,15 +35,51 @@ const Tabs: React.FC = () => {
   const [recipe, setRecipe] = useState(untitledRecipe);
 
   const onFloursChange = (flours: Ingredients) => {
-    setRecipe({ ...recipe, flours: flours });
+    let preferments: Preferments = new Map([...recipe.preferments]);
+
+    for (let [prefermentName, preferment] of recipe.preferments) {
+      preferments.set(prefermentName, updatePrefermentFlours(preferment, flours));
+    }
+
+    setRecipe({ ...recipe, flours: flours, preferments: preferments });
   };
 
   const onIngredientsChange = (ingredients: Ingredients) => {
-    setRecipe({ ...recipe, ingredients: ingredients });
+    let preferments: Preferments = new Map([...recipe.preferments]);
+
+    for (let [prefermentName, preferment] of recipe.preferments) {
+      preferments.set(prefermentName, updatePrefermentIngredients(preferment, ingredients));
+    }
+
+    setRecipe({ ...recipe, ingredients: ingredients, preferments: preferments });
   };
 
   const onPrefermentsChange = (preferments: Preferments) => {
     setRecipe({ ...recipe, preferments: preferments });
+  };
+
+  const updatePrefermentFlours = (preferment: Pref, flours: Ingredients): Pref => {
+    let result: Pref = { ...preferment, flours: new Map([...preferment.flours]) };
+
+    for (let prefermentFlour of result.flours.keys()) {
+      if (!flours.has(prefermentFlour)) {
+        result.flours.delete(prefermentFlour);
+      }
+    }
+
+    return result;
+  };
+
+  const updatePrefermentIngredients = (preferment: Pref, ingredients: Ingredients): Pref => {
+    let result: Pref = { ...preferment, ingredients: new Map([...preferment.ingredients]) };
+
+    for (let prefermentIngredient of result.ingredients.keys()) {
+      if (!ingredients.has(prefermentIngredient)) {
+        result.ingredients.delete(prefermentIngredient);
+      }
+    }
+
+    return result;
   };
 
   return (

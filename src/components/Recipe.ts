@@ -14,7 +14,7 @@ type BasePreferment = {
   ingredients: Ingredients;
 };
 
-export type YeastPreferment = BasePreferment;
+export type PreDoughPreferment = BasePreferment;
 
 export type SourdoughPreferment = BasePreferment & {
   seed: IngredientValue;
@@ -26,7 +26,7 @@ export enum PrefermentKind {
 }
 
 export type PrefermentName = string;
-export type Preferment = YeastPreferment | SourdoughPreferment;
+export type Preferment = PreDoughPreferment | SourdoughPreferment;
 export type Preferments = Map<PrefermentName, Preferment>;
 
 export type Recipe = {
