@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import FormulaTab from "../../components/FormulaTab";
-import { Recipe, ScaleBy } from "../../components/Recipe";
 import ScaleBySelector from "../../components/ScaleBySelector";
 import TotalAmount from "../../components/TotalAmount";
 import Calculate from "../../components/Calculate";
+import { ScaleBy, Recipe } from "../../components/dataModel/Recipe";
 
 type Props = {
   recipe: Recipe;
 };
 
-const FinalDough: React.FC<Props> = ({ recipe }) => {
+export const FinalDough: React.FC<Props> = ({ recipe }) => {
   const [scaleBy, setScaleBy] = useState(ScaleBy.DOUGH);
   const [totalAmount, setTotalAmount] = useState<number | undefined>(undefined);
 
@@ -19,11 +19,9 @@ const FinalDough: React.FC<Props> = ({ recipe }) => {
 
   return (
     <FormulaTab title={recipe.name}>
-      <ScaleBySelector value={scaleBy} onChange={setScaleBy} />
+      <ScaleBySelector value={scaleBy} valueOptions={Object.values(scaleBy)} onChange={setScaleBy} />
       <TotalAmount value={totalAmount} onChange={setTotalAmount} />
       <Calculate onClick={calculate} />
     </FormulaTab>
   );
 };
-
-export default FinalDough;

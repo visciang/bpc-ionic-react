@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import FormulaTab from "../../components/FormulaTab";
 import IngredientsPercentage from "../../components/IngredientsPercentage";
-import { Recipe, Ingredients } from "../../components/Recipe";
+import { Recipe } from "../../components/dataModel/Recipe";
+import { Ingredients } from "../../components/dataModel/Ingredient";
 
 type Props = {
   recipe: Recipe;
@@ -9,7 +10,7 @@ type Props = {
   onIngredientsChange(flours: Ingredients): void;
 };
 
-const Overall: React.FC<Props> = ({ recipe, onFloursChange, onIngredientsChange }) => {
+export const Overall: React.FC<Props> = ({ recipe, onFloursChange, onIngredientsChange }) => {
   const [editable, setEditable] = useState(false);
 
   return (
@@ -31,5 +32,3 @@ const Overall: React.FC<Props> = ({ recipe, onFloursChange, onIngredientsChange 
     </FormulaTab>
   );
 };
-
-export default Overall;

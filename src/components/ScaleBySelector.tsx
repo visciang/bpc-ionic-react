@@ -1,19 +1,23 @@
 import React from "react";
 import { IonItem, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
-import { ScaleBy } from "./Recipe";
+import { ScaleBy } from "./dataModel/Recipe";
 
 type Props = {
   value: ScaleBy;
+  valueOptions: Array<string>;
   onChange(scaleBy: ScaleBy): void;
 };
 
-const ScaleBySelector: React.FC<Props> = ({ value, onChange }) => {
+const ScaleBySelector: React.FC<Props> = ({ value, valueOptions, onChange }) => {
   return (
     <IonItem lines="none">
       <IonLabel>Scale by</IonLabel>
       <IonSelect interface="popover" value={value} onIonChange={(e) => onChange(e.detail.value)}>
-        <IonSelectOption value={ScaleBy.DOUGH}>DOUGH</IonSelectOption>
-        <IonSelectOption value={ScaleBy.FLOUR}>FLOUR</IonSelectOption>
+        {valueOptions.map((value) => (
+          <IonSelectOption key={value} value={value}>
+            {value}
+          </IonSelectOption>
+        ))}
       </IonSelect>
     </IonItem>
   );

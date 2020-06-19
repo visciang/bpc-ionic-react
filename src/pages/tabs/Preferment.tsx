@@ -1,43 +1,40 @@
 import React, { useState } from "react";
 import FormulaTab from "../../components/FormulaTab";
-import { Recipe, Preferment as Pref, Preferments, PrefermentKind, PrefermentName } from "../../components/Recipe";
 import NewItem from "../../components/NewItem";
 import PrefermentSelector from "../../components/PrefermentSelector";
 import PrefermentPercentage from "../../components/PrefermentPercentage";
+import { Recipe } from "../../components/dataModel/Recipe";
+import {
+  Preferments,
+  PrefermentKind,
+  Preferment as PrefermentT,
+  makePreferment,
+  PrefermentName,
+} from "../../components/dataModel/Preferment";
 
 type Props = {
   recipe: Recipe;
   onPrefermentsChange(preferments: Preferments): void;
 };
 
-const Preferment: React.FC<Props> = ({ recipe, onPrefermentsChange }) => {
+export const Preferment: React.FC<Props> = ({ recipe, onPrefermentsChange }) => {
   const [editable, setEditable] = useState(false);
   const [prefermentKind, setPreferment] = useState<PrefermentKind>(PrefermentKind.PREDOUGH);
 
   const onNewPreferment = (name: string) => {
-    let preferment: Pref;
+    let preferment: PrefermentT;
 
-    if (prefermentKind === PrefermentKind.PREDOUGH)
-      preferment = {
-        kind: PrefermentKind.PREDOUGH,
-        prefermentedFlour: undefined,
-        flours: new Map(),
-        ingredients: new Map(),
-      };
-    else
-      preferment = {
-        kind: PrefermentKind.SOURDOUGH,
-        prefermentedFlour: undefined,
-        flours: new Map(),
-        ingredients: new Map(),
-        seed: undefined,
-      };
+    if (prefermentKind === PrefermentKind.PREDOUGH) {
+      preferment = makePreferment({ kind: PrefermentKind.PREDOUGH });
+    } else {
+      preferment = makePreferment({ kind: PrefermentKind.SOURDOUGH });
+    }
 
-    onPrefermentsChange(new Map([...recipe.preferments, [name, preferment]]));
+    onPrefermentsChange(recipe.preferments.set(name, preferment));
   };
 
-  const onPrefermentChange = (name: PrefermentName, preferment: Pref) => {
-    onPrefermentsChange(new Map([...recipe.preferments, [name, preferment]]));
+  const onPrefermentChange = (name: PrefermentName, preferment: PrefermentT) => {
+    onPrefermentsChange(recipe.preferments.set(name, preferment));
   };
 
   return (
@@ -59,5 +56,3 @@ const Preferment: React.FC<Props> = ({ recipe, onPrefermentsChange }) => {
     </FormulaTab>
   );
 };
-
-export default Preferment;

@@ -2,87 +2,64 @@ import React, { useState } from "react";
 import { Redirect, Route } from "react-router-dom";
 import { IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, IonIcon } from "@ionic/react";
 import { calculatorOutline, restaurantOutline, arrowUndoOutline } from "ionicons/icons";
-import { Recipe, Ingredients, Preferments, PrefermentKind, Preferment as Pref } from "../components/Recipe";
-import Overall from "./tabs/Overall";
-import Preferment from "./tabs/Preferment";
-import FinalDough from "./tabs/FinalDough";
+import { OrderedMap, Set } from "immutable";
+import { Overall as OverallTab } from "./tabs/Overall";
+import { Preferment as PrefermentTab } from "./tabs/Preferment";
+import { FinalDough as FinalDoughTab } from "./tabs/FinalDough";
+import { makeRecipe, Recipe } from "../components/dataModel/Recipe";
+import { PrefermentKind, Preferments, makePreferment } from "../components/dataModel/Preferment";
+import { Ingredients } from "../components/dataModel/Ingredient";
 
-const untitledRecipe: Recipe = {
+const untitledRecipe: Recipe = makeRecipe({
   name: "Untitled",
-  flours: new Map([
+  flours: OrderedMap([
     ["Farina 00 W300", 80],
     ["Semola Rimacinata", 20],
   ]),
-  ingredients: new Map([
+  ingredients: OrderedMap([
     ["Acqua", 73],
     ["Lievito", 0.8],
     ["Sale", 2.5],
   ]),
-  preferments: new Map([
+  preferments: OrderedMap([
     [
       "Biga",
-      {
+      makePreferment({
         kind: PrefermentKind.PREDOUGH,
         prefermentedFlour: 80,
-        flours: new Map([
+        flours: OrderedMap([
           ["Farina 00 W300", 50],
           ["Semola Rimacinata", 50],
         ]),
-        ingredients: new Map([["Acqua", 45]]),
-      },
+        ingredients: OrderedMap([["Acqua", 45]]),
+      }),
     ],
   ]),
-};
+});
 
 const Tabs: React.FC = () => {
   const [recipe, setRecipe] = useState(untitledRecipe);
 
-  const onFloursChange = (flours: Ingredients) => {
-    let preferments: Preferments = new Map([...recipe.preferments]);
-
-    for (let [prefermentName, preferment] of recipe.preferments) {
-      preferments.set(prefermentName, updatePrefermentFlours(preferment, flours));
-    }
-
-    setRecipe({ ...recipe, flours: flours, preferments: preferments });
-  };
-
-  const onIngredientsChange = (ingredients: Ingredients) => {
-    let preferments: Preferments = new Map([...recipe.preferments]);
-
-    for (let [prefermentName, preferment] of recipe.preferments) {
-      preferments.set(prefermentName, updatePrefermentIngredients(preferment, ingredients));
-    }
-
-    setRecipe({ ...recipe, ingredients: ingredients, preferments: preferments });
-  };
-
   const onPrefermentsChange = (preferments: Preferments) => {
-    setRecipe({ ...recipe, preferments: preferments });
+    setRecipe(recipe.set("preferments", preferments));
   };
 
-  const updatePrefermentFlours = (preferment: Pref, flours: Ingredients): Pref => {
-    let result: Pref = { ...preferment, flours: new Map([...preferment.flours]) };
+  const onIngredientsChange = (kind: "flours" | "ingredients", ingredients: Ingredients) => {
+    let preferments: Preferments = recipe.preferments;
 
-    for (let prefermentFlour of result.flours.keys()) {
-      if (!flours.has(prefermentFlour)) {
-        result.flours.delete(prefermentFlour);
-      }
+    for (let [prefermentName, preferment] of recipe.preferments) {
+      preferments = preferments.setIn(
+        [prefermentName, kind],
+        updatePrefermentIngredients(preferment[kind], ingredients)
+      );
     }
 
-    return result;
+    setRecipe(recipe.set(kind, ingredients).set("preferments", preferments));
   };
 
-  const updatePrefermentIngredients = (preferment: Pref, ingredients: Ingredients): Pref => {
-    let result: Pref = { ...preferment, ingredients: new Map([...preferment.ingredients]) };
-
-    for (let prefermentIngredient of result.ingredients.keys()) {
-      if (!ingredients.has(prefermentIngredient)) {
-        result.ingredients.delete(prefermentIngredient);
-      }
-    }
-
-    return result;
+  const updatePrefermentIngredients = (prefermentFlours: Ingredients, flours: Ingredients): Ingredients => {
+    const removedFlours = Set(prefermentFlours.keys()).subtract(flours.keys());
+    return prefermentFlours.deleteAll(removedFlours);
   };
 
   return (
@@ -91,16 +68,20 @@ const Tabs: React.FC = () => {
         <Route
           path="/overallTab"
           render={() => (
-            <Overall recipe={recipe} onFloursChange={onFloursChange} onIngredientsChange={onIngredientsChange} />
+            <OverallTab
+              recipe={recipe}
+              onFloursChange={(flours) => onIngredientsChange("flours", flours)}
+              onIngredientsChange={(ingredients) => onIngredientsChange("ingredients", ingredients)}
+            />
           )}
           exact={true}
         />
         <Route
           path="/prefermentTab"
-          render={() => <Preferment recipe={recipe} onPrefermentsChange={onPrefermentsChange} />}
+          render={() => <PrefermentTab recipe={recipe} onPrefermentsChange={onPrefermentsChange} />}
           exact={true}
         />
-        <Route path="/finalDough" render={() => <FinalDough recipe={recipe} />} exact={true} />
+        <Route path="/finalDough" render={() => <FinalDoughTab recipe={recipe} />} exact={true} />
         <Route path="/" render={() => <Redirect to="/overallTab" />} exact={true} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">

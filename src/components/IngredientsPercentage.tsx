@@ -1,10 +1,11 @@
 import React from "react";
 import { IonList, IonReorderGroup, IonReorder } from "@ionic/react";
 import { ItemReorderEventDetail } from "@ionic/core";
-import { Ingredients, IngredientName, IngredientValue } from "./Recipe";
+import { OrderedMap, List } from "immutable";
 import IngredientsTitleToolbar from "./IngredientsTitleToolbar";
 import NewItem from "./NewItem";
 import IngredientsPercentageItem from "./IngredientsPercentageItem";
+import { IngredientName, Ingredients, IngredientValue } from "./dataModel/Ingredient";
 
 type Props = {
   title: string;
@@ -22,28 +23,24 @@ const IngredientsPercentage: React.FC<Props> = ({
   onIngredientsChange,
 }) => {
   const onIngredientChange = (name: IngredientName, value: IngredientValue) => {
-    onIngredientsChange(new Map([...ingredients, [name, value]]));
+    onIngredientsChange(ingredients.set(name, value));
   };
 
   const onIngredientReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
-    let orderedIngredients = [...ingredients];
+    let orderedIngredients = List(ingredients);
+    const movedIngredient = orderedIngredients.get(event.detail.from)!;
+    orderedIngredients = orderedIngredients.remove(event.detail.from).insert(event.detail.to, movedIngredient);
+    onIngredientsChange(OrderedMap(orderedIngredients));
 
-    const movedIngredient = orderedIngredients[event.detail.from];
-    orderedIngredients.splice(event.detail.from, 1);
-    orderedIngredients.splice(event.detail.to, 0, movedIngredient);
-
-    onIngredientsChange(new Map(orderedIngredients));
     event.detail.complete();
   };
 
   const onNewIngredient = (name: IngredientName) => {
-    onIngredientsChange(new Map([...ingredients, [name, undefined]]));
+    onIngredientsChange(ingredients.set(name, undefined));
   };
 
   const onDeleteIngredient = (name: IngredientName) => {
-    let newIngredients = new Map(ingredients);
-    newIngredients.delete(name);
-    onIngredientsChange(newIngredients);
+    onIngredientsChange(ingredients.delete(name));
   };
 
   return (
