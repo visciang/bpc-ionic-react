@@ -19,7 +19,7 @@ export const FinalDough: React.FC<Props> = ({ recipe }) => {
 
   return (
     <FormulaTab title={recipe.name}>
-      <ScaleBySelector value={scaleBy} valueOptions={Object.values(scaleBy)} onChange={setScaleBy} />
+      <ScaleBySelector value={scaleBy} onChange={setScaleBy} />
       <TotalAmount value={totalAmount} onChange={setTotalAmount} />
       <Calculate onClick={calculate} />
     </FormulaTab>

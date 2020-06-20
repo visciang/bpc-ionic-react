@@ -2,64 +2,68 @@ import React, { useState } from "react";
 import { Redirect, Route } from "react-router-dom";
 import { IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, IonIcon } from "@ionic/react";
 import { calculatorOutline, restaurantOutline, arrowUndoOutline } from "ionicons/icons";
-import { OrderedMap, Set } from "immutable";
+import { produce, Draft } from "immer";
 import { Overall as OverallTab } from "./tabs/Overall";
 import { Preferment as PrefermentTab } from "./tabs/Preferment";
 import { FinalDough as FinalDoughTab } from "./tabs/FinalDough";
-import { makeRecipe, Recipe } from "../components/dataModel/Recipe";
-import { PrefermentKind, Preferments, makePreferment } from "../components/dataModel/Preferment";
+import { Recipe } from "../components/dataModel/Recipe";
+import { PrefermentKind, Preferments } from "../components/dataModel/Preferment";
 import { Ingredients } from "../components/dataModel/Ingredient";
 
-const untitledRecipe: Recipe = makeRecipe({
+const untitledRecipe: Recipe = {
   name: "Untitled",
-  flours: OrderedMap([
+  flours: new Map([
     ["Farina 00 W300", 80],
     ["Semola Rimacinata", 20],
   ]),
-  ingredients: OrderedMap([
+  ingredients: new Map([
     ["Acqua", 73],
     ["Lievito", 0.8],
     ["Sale", 2.5],
   ]),
-  preferments: OrderedMap([
+  preferments: new Map([
     [
       "Biga",
-      makePreferment({
+      {
         kind: PrefermentKind.PREDOUGH,
         prefermentedFlour: 80,
-        flours: OrderedMap([
+        flours: new Map([
           ["Farina 00 W300", 50],
           ["Semola Rimacinata", 50],
         ]),
-        ingredients: OrderedMap([["Acqua", 45]]),
-      }),
+        ingredients: new Map([["Acqua", 45]]),
+      },
     ],
   ]),
-});
+};
 
 const Tabs: React.FC = () => {
   const [recipe, setRecipe] = useState(untitledRecipe);
 
   const onPrefermentsChange = (preferments: Preferments) => {
-    setRecipe(recipe.set("preferments", preferments));
+    setRecipe(
+      produce((draft: Draft<Recipe>) => {
+        draft.preferments = preferments;
+      })
+    );
   };
 
   const onIngredientsChange = (kind: "flours" | "ingredients", ingredients: Ingredients) => {
-    let preferments: Preferments = recipe.preferments;
+    setRecipe(
+      produce((draft: Draft<Recipe>) => {
+        draft[kind] = ingredients;
 
-    for (let [prefermentName, preferment] of recipe.preferments) {
-      preferments = preferments.setIn(
-        [prefermentName, kind],
-        updatePrefermentIngredients(preferment[kind], ingredients)
-      );
-    }
+        for (let preferment of draft.preferments.values()) {
+          const removedIngredients = [...preferment[kind].keys()].filter(
+            (prefermentIngredient) => !ingredients.has(prefermentIngredient)
+          );
 
-    setRecipe(recipe.set(kind, ingredients).set("preferments", preferments));
-  };
-
-  const updatePrefermentIngredients = (prefermentFlours: Ingredients, flours: Ingredients): Ingredients => {
-    const removedFlours = Set(prefermentFlours.keys()).subtract(flours.keys());
-    return prefermentFlours.deleteAll(removedFlours);
+          for (let removedIngredient of removedIngredients) {
+            preferment[kind].delete(removedIngredient);
+          }
+        }
+      })
+    );
   };
 
   return (
@@ -69,7 +73,9 @@ const Tabs: React.FC = () => {
           path="/overallTab"
           render={() => (
             <OverallTab
-              recipe={recipe}
+              title={recipe.name}
+              flours={recipe.flours}
+              ingredients={recipe.ingredients}
               onFloursChange={(flours) => onIngredientsChange("flours", flours)}
               onIngredientsChange={(ingredients) => onIngredientsChange("ingredients", ingredients)}
             />
@@ -78,7 +84,13 @@ const Tabs: React.FC = () => {
         />
         <Route
           path="/prefermentTab"
-          render={() => <PrefermentTab recipe={recipe} onPrefermentsChange={onPrefermentsChange} />}
+          render={() => (
+            <PrefermentTab
+              title={recipe.name}
+              preferments={recipe.preferments}
+              onPrefermentsChange={onPrefermentsChange}
+            />
+          )}
           exact={true}
         />
         <Route path="/finalDough" render={() => <FinalDoughTab recipe={recipe} />} exact={true} />

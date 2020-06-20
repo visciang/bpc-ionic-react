@@ -12,8 +12,11 @@ const PrefermentSelector: React.FC<Props> = ({ value, onChange }) => {
     <IonItem lines="none">
       <IonLabel>Kind</IonLabel>
       <IonSelect interface="popover" value={value} onIonChange={(e) => onChange(e.detail.value)}>
-        <IonSelectOption value={PrefermentKind.PREDOUGH}>{PrefermentKind.PREDOUGH}</IonSelectOption>
-        <IonSelectOption value={PrefermentKind.SOURDOUGH}>{PrefermentKind.SOURDOUGH}</IonSelectOption>
+        {Object.keys(PrefermentKind).map((value) => (
+          <IonSelectOption key={value} value={value}>
+            {value}
+          </IonSelectOption>
+        ))}
       </IonSelect>
     </IonItem>
   );

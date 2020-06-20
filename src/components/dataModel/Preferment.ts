@@ -1,8 +1,7 @@
-import { OrderedMap, Record, RecordOf } from "immutable";
 import { Ingredients, IngredientValue } from "./Ingredient";
 
 export enum PrefermentKind {
-  PREDOUGH = "PRE-DOUGH",
+  PREDOUGH = "PREDOUGH",
   SOURDOUGH = "SOURDOUGH",
 }
 
@@ -23,14 +22,5 @@ type SourdoughPreferment = {
 
 export type PrefermentName = string;
 
-type PrefermentProps = PreDoughPreferment | SourdoughPreferment;
-const prefermentDefaultValues: PrefermentProps = {
-  kind: PrefermentKind.PREDOUGH,
-  prefermentedFlour: undefined,
-  flours: OrderedMap(),
-  ingredients: OrderedMap(),
-};
-export type Preferment = RecordOf<PrefermentProps>;
-export const makePreferment: Record.Factory<PrefermentProps> = Record<PrefermentProps>(prefermentDefaultValues);
-
-export type Preferments = OrderedMap<PrefermentName, Preferment>;
+export type Preferment = PreDoughPreferment | SourdoughPreferment;
+export type Preferments = Map<PrefermentName, Preferment>;

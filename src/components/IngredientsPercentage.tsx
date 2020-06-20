@@ -1,7 +1,7 @@
 import React from "react";
 import { IonList, IonReorderGroup, IonReorder } from "@ionic/react";
 import { ItemReorderEventDetail } from "@ionic/core";
-import { OrderedMap, List } from "immutable";
+import produce from "immer";
 import IngredientsTitleToolbar from "./IngredientsTitleToolbar";
 import NewItem from "./NewItem";
 import IngredientsPercentageItem from "./IngredientsPercentageItem";
@@ -23,24 +23,40 @@ const IngredientsPercentage: React.FC<Props> = ({
   onIngredientsChange,
 }) => {
   const onIngredientChange = (name: IngredientName, value: IngredientValue) => {
-    onIngredientsChange(ingredients.set(name, value));
+    onIngredientsChange(
+      produce(ingredients, (draft) => {
+        draft.set(name, value);
+      })
+    );
   };
 
   const onIngredientReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
-    let orderedIngredients = List(ingredients);
-    const movedIngredient = orderedIngredients.get(event.detail.from)!;
-    orderedIngredients = orderedIngredients.remove(event.detail.from).insert(event.detail.to, movedIngredient);
-    onIngredientsChange(OrderedMap(orderedIngredients));
+    let orderedIngredients = [...ingredients];
+    const movedIngredient = orderedIngredients[event.detail.from];
+
+    orderedIngredients.splice(event.detail.from, 1);
+    orderedIngredients.splice(event.detail.to, 0, movedIngredient);
+
+    onIngredientsChange(new Map(orderedIngredients));
 
     event.detail.complete();
   };
 
   const onNewIngredient = (name: IngredientName) => {
-    onIngredientsChange(ingredients.set(name, undefined));
+    onIngredientsChange(
+      produce(ingredients, (draft) => {
+        draft.set(name, 0); // WORKAROUND https://github.com/immerjs/immer/issues/627
+        draft.set(name, undefined);
+      })
+    );
   };
 
   const onDeleteIngredient = (name: IngredientName) => {
-    onIngredientsChange(ingredients.delete(name));
+    onIngredientsChange(
+      produce(ingredients, (draft) => {
+        draft.delete(name);
+      })
+    );
   };
 
   return (

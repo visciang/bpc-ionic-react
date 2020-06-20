@@ -1,16 +1,14 @@
 import React from "react";
 import { IonList, IonReorderGroup, IonReorder } from "@ionic/react";
 import { ItemReorderEventDetail } from "@ionic/core";
-import { List, OrderedMap } from "immutable";
+import { produce } from "immer";
 import IngredientsTitleToolbar from "./IngredientsTitleToolbar";
 import IngredientsPercentageItem from "./IngredientsPercentageItem";
-import { Recipe } from "./dataModel/Recipe";
 import { Preferment, PrefermentKind } from "./dataModel/Preferment";
 import { IngredientName, IngredientValue } from "./dataModel/Ingredient";
 
 type Props = {
   title: string;
-  recipe: Recipe;
   preferment: Preferment;
   editable: boolean;
   onPrefermentChange(preferment: Preferment): void;
@@ -18,37 +16,51 @@ type Props = {
 
 const PrefermentPercentage: React.FC<Props> = ({ title, preferment, editable, onPrefermentChange }) => {
   const onPrefermentedFlourChange = (name: IngredientName, value: IngredientValue) => {
-    onPrefermentChange(preferment.setIn(["prefermentedFlour"], value));
+    onPrefermentChange(
+      produce(preferment, (draft) => {
+        draft.prefermentedFlour = value;
+      })
+    );
   };
 
   const onSeedChange = (name: IngredientName, value: IngredientValue) => {
     if (preferment.kind === PrefermentKind.SOURDOUGH) {
-      preferment.has("seed");
-      onPrefermentChange(preferment.setIn(["seed"], value));
+      onPrefermentChange(
+        produce(preferment, (draft) => {
+          draft.seed = value;
+        })
+      );
     }
   };
 
-  const onFlourChange = (name: IngredientName, value: IngredientValue) => {
-    onPrefermentChange(preferment.setIn(["flours", name], value));
+  const onIngredientChange = (kind: "flours" | "ingredients", name: IngredientName, value: IngredientValue) => {
+    onPrefermentChange(
+      produce(preferment, (draft) => {
+        draft[kind].set(name, value);
+      })
+    );
   };
 
-  const onFlourDelete = (name: IngredientName) => {
-    onPrefermentChange(preferment.deleteIn(["flours", name]));
-  };
-
-  const onIngredientChange = (name: IngredientName, value: IngredientValue) => {
-    onPrefermentChange(preferment.setIn(["ingredients", name], value));
-  };
-
-  const onIngredientDelete = (name: IngredientName) => {
-    onPrefermentChange(preferment.deleteIn(["ingredients", name]));
+  const onIngredientDelete = (kind: "flours" | "ingredients", name: IngredientName) => {
+    onPrefermentChange(
+      produce(preferment, (draft) => {
+        draft[kind].delete(name);
+      })
+    );
   };
 
   const onIngredientReorder = (kind: "flours" | "ingredients", event: CustomEvent<ItemReorderEventDetail>) => {
-    let orderedIngredients = List(preferment.get(kind));
-    const movedIngredient = orderedIngredients.get(event.detail.from)!;
-    orderedIngredients = orderedIngredients.remove(event.detail.from).insert(event.detail.to, movedIngredient);
-    onPrefermentChange(preferment.setIn(["kind"], OrderedMap(orderedIngredients)));
+    let orderedIngredients = [...preferment[kind]];
+    const movedIngredient = orderedIngredients[event.detail.from];
+
+    orderedIngredients.splice(event.detail.from, 1);
+    orderedIngredients.splice(event.detail.to, 0, movedIngredient);
+
+    onPrefermentChange(
+      produce(preferment, (draft) => {
+        draft[kind] = new Map(orderedIngredients);
+      })
+    );
 
     event.detail.complete();
   };
@@ -78,8 +90,8 @@ const PrefermentPercentage: React.FC<Props> = ({ title, preferment, editable, on
               name={name}
               value={value}
               maxPercentage={100}
-              onChange={onFlourChange}
-              onDelete={editable ? onFlourDelete : undefined}
+              onChange={(name, value) => onIngredientChange("flours", name, value)}
+              onDelete={editable ? (name) => onIngredientDelete("flours", name) : undefined}
             >
               <IonReorder slot="end" />
             </IngredientsPercentageItem>
@@ -94,8 +106,8 @@ const PrefermentPercentage: React.FC<Props> = ({ title, preferment, editable, on
               name={name}
               value={value}
               maxPercentage={100}
-              onChange={onIngredientChange}
-              onDelete={editable ? onIngredientDelete : undefined}
+              onChange={(name, value) => onIngredientChange("ingredients", name, value)}
+              onDelete={editable ? (name) => onIngredientDelete("ingredients", name) : undefined}
             >
               <IonReorder slot="end" />
             </IngredientsPercentageItem>
