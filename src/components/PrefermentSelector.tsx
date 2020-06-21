@@ -1,6 +1,6 @@
 import React from "react";
 import { IonItem, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
-import { PrefermentKind } from "components/dataModel/Preferment";
+import { PrefermentKind } from "dataModel/Preferment";
 
 type Props = {
   value: PrefermentKind;

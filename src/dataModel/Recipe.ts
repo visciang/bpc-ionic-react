@@ -1,5 +1,5 @@
-import { Ingredients } from "components/dataModel/Ingredient";
-import { Preferments } from "components/dataModel/Preferment";
+import { Ingredients } from "dataModel/Ingredient";
+import { Preferments } from "dataModel/Preferment";
 
 export enum ScaleBy {
   DOUGH = "DOUGH",

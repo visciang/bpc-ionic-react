@@ -9,7 +9,7 @@ import {
   PrefermentKind,
   Preferment as PrefermentT,
   PrefermentName,
-} from "components/dataModel/Preferment";
+} from "dataModel/Preferment";
 
 type Props = {
   title: string;

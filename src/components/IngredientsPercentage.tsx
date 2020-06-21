@@ -5,7 +5,7 @@ import produce from "immer";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import NewItem from "components/NewItem";
 import IngredientsPercentageItem from "components/IngredientsPercentageItem";
-import { IngredientName, Ingredients, IngredientValue } from "components/dataModel/Ingredient";
+import { IngredientName, Ingredients, IngredientValue } from "dataModel/Ingredient";
 
 type Props = {
   title: string;

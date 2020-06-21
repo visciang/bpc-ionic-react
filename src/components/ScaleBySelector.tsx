@@ -1,6 +1,6 @@
 import React from "react";
 import { IonItem, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
-import { ScaleBy } from "components/dataModel/Recipe";
+import { ScaleBy } from "dataModel/Recipe";
 
 type Props = {
   value: ScaleBy;

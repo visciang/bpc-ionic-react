@@ -4,8 +4,8 @@ import { ItemReorderEventDetail } from "@ionic/core";
 import { produce } from "immer";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import IngredientsPercentageItem from "components/IngredientsPercentageItem";
-import { Preferment, PrefermentKind } from "components/dataModel/Preferment";
-import { IngredientName, IngredientValue } from "components/dataModel/Ingredient";
+import { Preferment, PrefermentKind } from "dataModel/Preferment";
+import { IngredientName, IngredientValue } from "dataModel/Ingredient";
 
 type Props = {
   title: string;

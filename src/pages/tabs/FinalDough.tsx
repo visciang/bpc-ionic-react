@@ -3,7 +3,7 @@ import FormulaTab from "components/FormulaTab";
 import ScaleBySelector from "components/ScaleBySelector";
 import TotalAmount from "components/TotalAmount";
 import Calculate from "components/Calculate";
-import { ScaleBy, Recipe } from "components/dataModel/Recipe";
+import { ScaleBy, Recipe } from "dataModel/Recipe";
 
 type Props = {
   recipe: Recipe;

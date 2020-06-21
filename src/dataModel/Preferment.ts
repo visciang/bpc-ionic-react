@@ -1,4 +1,4 @@
-import { Ingredients, IngredientValue } from "components/dataModel/Ingredient";
+import { Ingredients, IngredientValue } from "dataModel/Ingredient";
 
 export enum PrefermentKind {
   PREDOUGH = "PREDOUGH",

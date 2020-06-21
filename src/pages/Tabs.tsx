@@ -6,9 +6,9 @@ import { produce, Draft } from "immer";
 import { Overall as OverallTab } from "pages/tabs/Overall";
 import { Preferment as PrefermentTab } from "pages/tabs/Preferment";
 import { FinalDough as FinalDoughTab } from "pages/tabs/FinalDough";
-import { Recipe } from "components/dataModel/Recipe";
-import { PrefermentKind, Preferments } from "components/dataModel/Preferment";
-import { Ingredients } from "components/dataModel/Ingredient";
+import { Recipe } from "dataModel/Recipe";
+import { PrefermentKind, Preferments } from "dataModel/Preferment";
+import { Ingredients } from "dataModel/Ingredient";
 
 const untitledRecipe: Recipe = {
   name: "Untitled",

@@ -2,7 +2,7 @@ import React from "react";
 import { IonItem, IonLabel, IonInput, IonText, IonButton, IonIcon } from "@ionic/react";
 import { trashOutline } from "ionicons/icons";
 import { onIonChangeFloat } from "components/utils";
-import { IngredientName, IngredientValue } from "components/dataModel/Ingredient";
+import { IngredientName, IngredientValue } from "dataModel/Ingredient";
 
 type Props = {
   name: IngredientName;
