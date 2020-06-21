@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { produce } from "immer";
-import FormulaTab from "../../components/FormulaTab";
-import NewItem from "../../components/NewItem";
-import PrefermentSelector from "../../components/PrefermentSelector";
-import PrefermentPercentage from "../../components/PrefermentPercentage";
+import FormulaTab from "components/FormulaTab";
+import NewItem from "components/NewItem";
+import PrefermentSelector from "components/PrefermentSelector";
+import PrefermentPercentage from "components/PrefermentPercentage";
 import {
   Preferments,
   PrefermentKind,
   Preferment as PrefermentT,
   PrefermentName,
-} from "../../components/dataModel/Preferment";
+} from "components/dataModel/Preferment";
 
 type Props = {
   title: string;

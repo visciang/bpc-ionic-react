@@ -1,8 +1,8 @@
 import React from "react";
 import { IonItem, IonLabel, IonInput, IonText, IonButton, IonIcon } from "@ionic/react";
 import { trashOutline } from "ionicons/icons";
-import { onIonChangeFloat } from "./utils";
-import { IngredientName, IngredientValue } from "./dataModel/Ingredient";
+import { onIonChangeFloat } from "components/utils";
+import { IngredientName, IngredientValue } from "components/dataModel/Ingredient";
 
 type Props = {
   name: IngredientName;

@@ -2,10 +2,10 @@ import React from "react";
 import { IonList, IonReorderGroup, IonReorder } from "@ionic/react";
 import { ItemReorderEventDetail } from "@ionic/core";
 import produce from "immer";
-import IngredientsTitleToolbar from "./IngredientsTitleToolbar";
-import NewItem from "./NewItem";
-import IngredientsPercentageItem from "./IngredientsPercentageItem";
-import { IngredientName, Ingredients, IngredientValue } from "./dataModel/Ingredient";
+import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
+import NewItem from "components/NewItem";
+import IngredientsPercentageItem from "components/IngredientsPercentageItem";
+import { IngredientName, Ingredients, IngredientValue } from "components/dataModel/Ingredient";
 
 type Props = {
   title: string;

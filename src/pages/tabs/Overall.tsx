@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import FormulaTab from "../../components/FormulaTab";
-import IngredientsPercentage from "../../components/IngredientsPercentage";
-import { Ingredients } from "../../components/dataModel/Ingredient";
+import FormulaTab from "components/FormulaTab";
+import IngredientsPercentage from "components/IngredientsPercentage";
+import { Ingredients } from "components/dataModel/Ingredient";
 
 type Props = {
   title: string;

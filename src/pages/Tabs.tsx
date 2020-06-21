@@ -3,12 +3,12 @@ import { Redirect, Route } from "react-router-dom";
 import { IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, IonIcon } from "@ionic/react";
 import { calculatorOutline, restaurantOutline, arrowUndoOutline } from "ionicons/icons";
 import { produce, Draft } from "immer";
-import { Overall as OverallTab } from "./tabs/Overall";
-import { Preferment as PrefermentTab } from "./tabs/Preferment";
-import { FinalDough as FinalDoughTab } from "./tabs/FinalDough";
-import { Recipe } from "../components/dataModel/Recipe";
-import { PrefermentKind, Preferments } from "../components/dataModel/Preferment";
-import { Ingredients } from "../components/dataModel/Ingredient";
+import { Overall as OverallTab } from "pages/tabs/Overall";
+import { Preferment as PrefermentTab } from "pages/tabs/Preferment";
+import { FinalDough as FinalDoughTab } from "pages/tabs/FinalDough";
+import { Recipe } from "components/dataModel/Recipe";
+import { PrefermentKind, Preferments } from "components/dataModel/Preferment";
+import { Ingredients } from "components/dataModel/Ingredient";
 
 const untitledRecipe: Recipe = {
   name: "Untitled",
