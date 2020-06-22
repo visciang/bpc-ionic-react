@@ -45,7 +45,6 @@ const IngredientsPercentage: React.FC<Props> = ({
   const onNewIngredient = (name: IngredientName) => {
     onIngredientsChange(
       produce(ingredients, (draft) => {
-        draft.set(name, 0); // WORKAROUND https://github.com/immerjs/immer/issues/627
         draft.set(name, undefined);
       })
     );

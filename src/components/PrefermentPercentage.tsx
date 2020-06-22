@@ -78,7 +78,6 @@ const PrefermentPercentage: React.FC<Props> = ({
   const onNewIngredient = (kind: "flours" | "ingredients", name: IngredientName) => {
     onPrefermentChange(
       produce(preferment, (draft) => {
-        draft[kind].set(name, 0); // workaround
         draft[kind].set(name, undefined);
       })
     );
