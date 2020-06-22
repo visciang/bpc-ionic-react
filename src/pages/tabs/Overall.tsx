@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Tab from "pages/tabs/Tab";
-import IngredientsPercentage from "components/IngredientsPercentage";
+import IngredientsPercentageList from "components/IngredientsPercentageList";
 import { Ingredients } from "dataModel/Ingredient";
 
 type Props = {
@@ -16,14 +16,14 @@ export const Overall: React.FC<Props> = ({ title, flours, ingredients, onFloursC
 
   return (
     <Tab title={title} onEditToggle={() => setEditable(!editable)}>
-      <IngredientsPercentage
+      <IngredientsPercentageList
         title="FLOURS"
         ingredients={flours}
         maxPercentage={100}
         onIngredientsChange={onFloursChange}
         editable={editable}
       />
-      <IngredientsPercentage
+      <IngredientsPercentageList
         title="INGREDIENTS"
         ingredients={ingredients}
         maxPercentage={undefined}

@@ -5,7 +5,7 @@ type Prop = {
   onClick(): void;
 };
 
-const Calculate: React.FC<Prop> = ({ onClick }) => {
+const CalculateButton: React.FC<Prop> = ({ onClick }) => {
   return (
     <IonButton size="large" expand="full" onClick={onClick}>
       Calculate
@@ -13,4 +13,4 @@ const Calculate: React.FC<Prop> = ({ onClick }) => {
   );
 };
 
-export default Calculate;
+export default CalculateButton;

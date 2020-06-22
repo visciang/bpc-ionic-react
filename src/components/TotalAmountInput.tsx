@@ -7,7 +7,7 @@ type Props = {
   onChange(value?: number): void;
 };
 
-const TotalAmount: React.FC<Props> = ({ value, onChange }) => {
+const TotalAmountInput: React.FC<Props> = ({ value, onChange }) => {
   return (
     <IonItem lines="none">
       <IonLabel>Total amount</IonLabel>
@@ -24,4 +24,4 @@ const TotalAmount: React.FC<Props> = ({ value, onChange }) => {
   );
 };
 
-export default TotalAmount;
+export default TotalAmountInput;

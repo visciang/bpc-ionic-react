@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { produce } from "immer";
 import Tab from "pages/tabs/Tab";
-import NewItem from "components/NewItem";
+import NewItemInput from "components/NewItemInput";
 import PrefermentSelector from "components/PrefermentSelector";
-import PrefermentPercentage from "components/PrefermentPercentage";
+import PrefermentPercentageList from "components/PrefermentPercentageList";
 import { Preferments, PrefermentKind, Preferment as PrefermentT, PrefermentName } from "dataModel/Preferment";
 import { IngredientName } from "dataModel/Ingredient";
 
@@ -57,11 +57,11 @@ export const Preferment: React.FC<Props> = ({ title, flours, ingredients, prefer
 
   return (
     <Tab title={title} onEditToggle={() => setEditable(!editable)}>
-      <NewItem onNewItem={prefermentKind ? onNewPreferment : undefined} />
+      <NewItemInput onNewItem={prefermentKind ? onNewPreferment : undefined} />
       <PrefermentSelector value={prefermentKind} onSelect={setPrefermentKind} />
       {[...preferments.entries()].map(([name, preferment]) => {
         return (
-          <PrefermentPercentage
+          <PrefermentPercentageList
             key={name}
             title={name}
             flours={flours}

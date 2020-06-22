@@ -17,7 +17,7 @@ type Props = {
   onPrefermentChange(preferment: Preferment): void;
 };
 
-const PrefermentPercentage: React.FC<Props> = ({
+const PrefermentPercentageList: React.FC<Props> = ({
   title,
   flours,
   ingredients,
@@ -151,4 +151,4 @@ const PrefermentPercentage: React.FC<Props> = ({
   );
 };
 
-export default PrefermentPercentage;
+export default PrefermentPercentageList;

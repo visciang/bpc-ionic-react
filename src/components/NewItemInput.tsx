@@ -6,7 +6,7 @@ type Props = {
   onNewItem?(name: string): void;
 };
 
-const NewItem: React.FC<Props> = ({ onNewItem }) => {
+const NewItemInput: React.FC<Props> = ({ onNewItem }) => {
   const [newItem, setNewItem] = useState<string | undefined>(undefined);
 
   const onClick = () => {
@@ -34,4 +34,4 @@ const parseNewItem = (value: string | undefined | null) => {
   return value?.trim() ? value.trim() : undefined;
 };
 
-export default NewItem;
+export default NewItemInput;

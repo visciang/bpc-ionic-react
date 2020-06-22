@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Tab from "pages/tabs/Tab";
 import ScaleBySelector from "components/ScaleBySelector";
-import TotalAmount from "components/TotalAmount";
-import Calculate from "components/Calculate";
+import TotalAmountInput from "components/TotalAmountInput";
+import CalculateButton from "components/CalculateButton";
 import { ScaleBy, Recipe } from "dataModel/Recipe";
 
 type Props = {
@@ -20,8 +20,8 @@ export const FinalDough: React.FC<Props> = ({ recipe }) => {
   return (
     <Tab title={recipe.name}>
       <ScaleBySelector onSelect={setScaleBy} />
-      <TotalAmount value={totalAmount} onChange={setTotalAmount} />
-      <Calculate onClick={calculate} />
+      <TotalAmountInput value={totalAmount} onChange={setTotalAmount} />
+      <CalculateButton onClick={calculate} />
     </Tab>
   );
 };
