@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FormulaTab from "pages/tabs/FormulaTab";
+import Tab from "pages/tabs/Tab";
 import IngredientsPercentage from "components/IngredientsPercentage";
 import { Ingredients } from "dataModel/Ingredient";
 
@@ -15,7 +15,7 @@ export const Overall: React.FC<Props> = ({ title, flours, ingredients, onFloursC
   const [editable, setEditable] = useState(false);
 
   return (
-    <FormulaTab title={title} onEditToggle={() => setEditable(!editable)}>
+    <Tab title={title} onEditToggle={() => setEditable(!editable)}>
       <IngredientsPercentage
         title="FLOURS"
         ingredients={flours}
@@ -30,6 +30,6 @@ export const Overall: React.FC<Props> = ({ title, flours, ingredients, onFloursC
         onIngredientsChange={onIngredientsChange}
         editable={editable}
       />
-    </FormulaTab>
+    </Tab>
   );
 };

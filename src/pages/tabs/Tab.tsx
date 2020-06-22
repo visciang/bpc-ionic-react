@@ -17,7 +17,7 @@ type Props = {
   onEditToggle?(): void;
 };
 
-const FormulaTab: React.FC<Props> = ({ title, onEditToggle, children }) => {
+const Tab: React.FC<Props> = ({ title, onEditToggle, children }) => {
   const editButton = onEditToggle ? (
     <IonButtons slot="end">
       <IonButton onClick={() => onEditToggle()}>
@@ -51,4 +51,4 @@ const FormulaTab: React.FC<Props> = ({ title, onEditToggle, children }) => {
   );
 };
 
-export default FormulaTab;
+export default Tab;

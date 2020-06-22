@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FormulaTab from "pages/tabs/FormulaTab";
+import Tab from "pages/tabs/Tab";
 import ScaleBySelector from "components/ScaleBySelector";
 import TotalAmount from "components/TotalAmount";
 import Calculate from "components/Calculate";
@@ -18,10 +18,10 @@ export const FinalDough: React.FC<Props> = ({ recipe }) => {
   };
 
   return (
-    <FormulaTab title={recipe.name}>
+    <Tab title={recipe.name}>
       <ScaleBySelector onSelect={setScaleBy} />
       <TotalAmount value={totalAmount} onChange={setTotalAmount} />
       <Calculate onClick={calculate} />
-    </FormulaTab>
+    </Tab>
   );
 };
