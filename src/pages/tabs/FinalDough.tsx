@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FormulaTab from "components/FormulaTab";
+import FormulaTab from "pages/tabs/FormulaTab";
 import ScaleBySelector from "components/ScaleBySelector";
 import TotalAmount from "components/TotalAmount";
 import Calculate from "components/Calculate";

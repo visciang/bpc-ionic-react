@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FormulaTab from "components/FormulaTab";
+import FormulaTab from "pages/tabs/FormulaTab";
 import IngredientsPercentage from "components/IngredientsPercentage";
 import { Ingredients } from "dataModel/Ingredient";
 

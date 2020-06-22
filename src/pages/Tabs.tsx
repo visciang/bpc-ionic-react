@@ -7,35 +7,11 @@ import { Overall as OverallTab } from "pages/tabs/Overall";
 import { Preferment as PrefermentTab } from "pages/tabs/Preferment";
 import { FinalDough as FinalDoughTab } from "pages/tabs/FinalDough";
 import { Recipe } from "dataModel/Recipe";
-import { PrefermentKind, Preferments } from "dataModel/Preferment";
+import { Preferments } from "dataModel/Preferment";
 import { Ingredients } from "dataModel/Ingredient";
+import { recipe } from "dataModel/SampleRecipe";
 
-const untitledRecipe: Recipe = {
-  name: "Untitled",
-  flours: new Map([
-    ["Farina 00 W300", 80],
-    ["Semola Rimacinata", 20],
-  ]),
-  ingredients: new Map([
-    ["Acqua", 73],
-    ["Lievito", 0.8],
-    ["Sale", 2.5],
-  ]),
-  preferments: new Map([
-    [
-      "Biga",
-      {
-        kind: PrefermentKind.PREDOUGH,
-        prefermentedFlour: 80,
-        flours: new Map([
-          ["Farina 00 W300", 50],
-          ["Semola Rimacinata", 50],
-        ]),
-        ingredients: new Map([["Acqua", 45]]),
-      },
-    ],
-  ]),
-};
+const untitledRecipe = recipe;
 
 const Tabs: React.FC = () => {
   const [recipe, setRecipe] = useState(untitledRecipe);

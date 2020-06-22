@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { produce } from "immer";
-import FormulaTab from "components/FormulaTab";
+import FormulaTab from "pages/tabs/FormulaTab";
 import NewItem from "components/NewItem";
 import PrefermentSelector from "components/PrefermentSelector";
 import PrefermentPercentage from "components/PrefermentPercentage";
