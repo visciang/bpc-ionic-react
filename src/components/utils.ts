@@ -1,7 +1,7 @@
 import { InputChangeEventDetail } from "@ionic/core";
 
 type OnIonChange = (value: CustomEvent<InputChangeEventDetail>) => void;
-type OnChangeFloat = (value: number | undefined) => void;
+type OnChangeFloat = (value?: number) => void;
 
 export const onIonChangeFloat = (onChangeFloat: OnChangeFloat): OnIonChange => {
   return (event: CustomEvent<InputChangeEventDetail>): void => {

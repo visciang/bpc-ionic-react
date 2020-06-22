@@ -3,14 +3,14 @@ import { IonItem, IonInput, IonButton, IonIcon } from "@ionic/react";
 import { addOutline } from "ionicons/icons";
 
 type Props = {
-  onNewItem(name: string): void;
+  onNewItem?(name: string): void;
 };
 
 const NewItem: React.FC<Props> = ({ onNewItem }) => {
   const [newItem, setNewItem] = useState<string | undefined>(undefined);
 
   const onClick = () => {
-    onNewItem(newItem!);
+    onNewItem!(newItem!);
     setNewItem(undefined);
   };
 
@@ -23,7 +23,7 @@ const NewItem: React.FC<Props> = ({ onNewItem }) => {
         value={newItem}
         onIonChange={(e) => setNewItem(parseNewItem(e.detail.value))}
       />
-      <IonButton onClick={onClick} fill="clear" disabled={!newItem}>
+      <IonButton onClick={onClick} fill="clear" disabled={!(newItem && onNewItem !== undefined)}>
         <IonIcon slot="icon-only" icon={addOutline} />
       </IonButton>
     </IonItem>

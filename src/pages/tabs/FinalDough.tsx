@@ -14,12 +14,12 @@ export const FinalDough: React.FC<Props> = ({ recipe }) => {
   const [totalAmount, setTotalAmount] = useState<number | undefined>(undefined);
 
   const calculate = () => {
-    console.log("TODO calculation!");
+    console.log(`TODO calculation! ${scaleBy} ${totalAmount}`);
   };
 
   return (
     <FormulaTab title={recipe.name}>
-      <ScaleBySelector value={scaleBy} onChange={setScaleBy} />
+      <ScaleBySelector onSelect={setScaleBy} />
       <TotalAmount value={totalAmount} onChange={setTotalAmount} />
       <Calculate onClick={calculate} />
     </FormulaTab>

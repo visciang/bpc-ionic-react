@@ -87,6 +87,8 @@ const Tabs: React.FC = () => {
           render={() => (
             <PrefermentTab
               title={recipe.name}
+              flours={new Set(recipe.flours.keys())}
+              ingredients={new Set(recipe.ingredients.keys())}
               preferments={recipe.preferments}
               onPrefermentsChange={onPrefermentsChange}
             />

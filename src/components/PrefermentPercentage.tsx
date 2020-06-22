@@ -6,15 +6,25 @@ import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import IngredientsPercentageItem from "components/IngredientsPercentageItem";
 import { Preferment, PrefermentKind } from "dataModel/Preferment";
 import { IngredientName, IngredientValue } from "dataModel/Ingredient";
+import IngredientPicker from "./IngredientPicker";
 
 type Props = {
   title: string;
+  flours: Set<IngredientName>;
+  ingredients: Set<IngredientName>;
   preferment: Preferment;
   editable: boolean;
   onPrefermentChange(preferment: Preferment): void;
 };
 
-const PrefermentPercentage: React.FC<Props> = ({ title, preferment, editable, onPrefermentChange }) => {
+const PrefermentPercentage: React.FC<Props> = ({
+  title,
+  flours,
+  ingredients,
+  preferment,
+  editable,
+  onPrefermentChange,
+}) => {
   const onPrefermentedFlourChange = (name: IngredientName, value: IngredientValue) => {
     onPrefermentChange(
       produce(preferment, (draft) => {
@@ -65,6 +75,20 @@ const PrefermentPercentage: React.FC<Props> = ({ title, preferment, editable, on
     event.detail.complete();
   };
 
+  const onNewIngredient = (kind: "flours" | "ingredients", name: IngredientName) => {
+    onPrefermentChange(
+      produce(preferment, (draft) => {
+        draft[kind].set(name, 0); // workaround
+        draft[kind].set(name, undefined);
+      })
+    );
+  };
+
+  const selectableFlours = new Set([...flours.values()].filter((flour) => !preferment.flours.has(flour)));
+  const selectableIngredients = new Set(
+    [...ingredients.values()].filter((ingredient) => !preferment.ingredients.has(ingredient))
+  );
+
   return (
     <IonList lines="none">
       <IngredientsTitleToolbar title={title} />
@@ -114,6 +138,16 @@ const PrefermentPercentage: React.FC<Props> = ({ title, preferment, editable, on
           );
         })}
       </IonReorderGroup>
+      <IngredientPicker
+        label="Pick flour"
+        values={selectableFlours}
+        onPick={(name) => onNewIngredient("flours", name)}
+      />
+      <IngredientPicker
+        label="Pick ingredient"
+        values={selectableIngredients}
+        onPick={(name) => onNewIngredient("ingredients", name)}
+      />
     </IonList>
   );
 };

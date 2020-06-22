@@ -4,22 +4,20 @@ import FormulaTab from "components/FormulaTab";
 import NewItem from "components/NewItem";
 import PrefermentSelector from "components/PrefermentSelector";
 import PrefermentPercentage from "components/PrefermentPercentage";
-import {
-  Preferments,
-  PrefermentKind,
-  Preferment as PrefermentT,
-  PrefermentName,
-} from "dataModel/Preferment";
+import { Preferments, PrefermentKind, Preferment as PrefermentT, PrefermentName } from "dataModel/Preferment";
+import { IngredientName } from "dataModel/Ingredient";
 
 type Props = {
   title: string;
+  flours: Set<IngredientName>;
+  ingredients: Set<IngredientName>;
   preferments: Preferments;
   onPrefermentsChange(preferments: Preferments): void;
 };
 
-export const Preferment: React.FC<Props> = ({ title, preferments, onPrefermentsChange }) => {
+export const Preferment: React.FC<Props> = ({ title, flours, ingredients, preferments, onPrefermentsChange }) => {
   const [editable, setEditable] = useState(false);
-  const [prefermentKind, setPrefermentKind] = useState(PrefermentKind.PREDOUGH);
+  const [prefermentKind, setPrefermentKind] = useState<PrefermentKind | undefined>(undefined);
 
   const onNewPreferment = (name: string) => {
     let newPreferment: PrefermentT;
@@ -45,6 +43,8 @@ export const Preferment: React.FC<Props> = ({ title, preferments, onPrefermentsC
         draft.set(name, newPreferment);
       })
     );
+
+    setPrefermentKind(undefined);
   };
 
   const onPrefermentChange = (name: PrefermentName, preferment: PrefermentT) => {
@@ -57,13 +57,15 @@ export const Preferment: React.FC<Props> = ({ title, preferments, onPrefermentsC
 
   return (
     <FormulaTab title={title} onEditToggle={() => setEditable(!editable)}>
-      <NewItem onNewItem={onNewPreferment} />
-      <PrefermentSelector value={prefermentKind} onChange={setPrefermentKind} />
+      <NewItem onNewItem={prefermentKind ? onNewPreferment : undefined} />
+      <PrefermentSelector value={prefermentKind} onSelect={setPrefermentKind} />
       {[...preferments.entries()].map(([name, preferment]) => {
         return (
           <PrefermentPercentage
             key={name}
             title={name}
+            flours={flours}
+            ingredients={ingredients}
             preferment={preferment}
             editable={editable}
             onPrefermentChange={(preferment) => onPrefermentChange(name, preferment)}

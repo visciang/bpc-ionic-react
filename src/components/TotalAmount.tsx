@@ -3,8 +3,8 @@ import { IonItem, IonLabel, IonInput, IonText } from "@ionic/react";
 import { onIonChangeFloat } from "components/utils";
 
 type Props = {
-  value: number | undefined;
-  onChange(value: number | undefined): void;
+  value?: number;
+  onChange(value?: number): void;
 };
 
 const TotalAmount: React.FC<Props> = ({ value, onChange }) => {
