@@ -12,7 +12,7 @@ const IngredientPicker: React.FC<Props> = ({ label, values, onPick }) => {
   const [value, setValue] = useState<string | undefined>(undefined);
 
   return (
-    <IonItem lines="none">
+    <IonItem lines="none" color="light">
       <IonLabel>{label}</IonLabel>
       <IonSelect
         interface="popover"

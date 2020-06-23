@@ -8,7 +8,7 @@ type Props = {
 
 const ScaleBySelector: React.FC<Props> = ({ onSelect }) => {
   return (
-    <IonItem lines="none">
+    <IonItem lines="none" color="light">
       <IonLabel>Scale by</IonLabel>
       <IonSelect interface="popover" onIonChange={(e) => onSelect(e.detail.value)}>
         {Object.keys(ScaleBy).map((value) => (

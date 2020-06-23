@@ -9,7 +9,7 @@ type Props = {
 
 const PrefermentSelector: React.FC<Props> = ({ value, onSelect: onChange }) => {
   return (
-    <IonItem lines="none">
+    <IonItem lines="none" color="light">
       <IonLabel>Kind</IonLabel>
       <IonSelect
         interface="popover"
