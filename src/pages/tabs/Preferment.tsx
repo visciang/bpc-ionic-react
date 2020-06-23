@@ -57,19 +57,22 @@ export const Preferment: React.FC<Props> = ({ title, flours, ingredients, prefer
 
   return (
     <Tab title={title} onEditToggle={() => setEditable(!editable)}>
-      <NewItemInput onNewItem={prefermentKind ? onNewPreferment : undefined} />
-      <PrefermentSelector value={prefermentKind} onSelect={setPrefermentKind} />
+      <div className="ion-padding-bottom">
+        <NewItemInput onNewItem={prefermentKind ? onNewPreferment : undefined} />
+        <PrefermentSelector value={prefermentKind} onSelect={setPrefermentKind} />
+      </div>
       {[...preferments.entries()].map(([name, preferment]) => {
         return (
-          <PrefermentPercentageList
-            key={name}
-            title={name}
-            flours={flours}
-            ingredients={ingredients}
-            preferment={preferment}
-            editable={editable}
-            onPrefermentChange={(preferment) => onPrefermentChange(name, preferment)}
-          />
+          <div key={name} className="border-top ion-padding-vertical">
+            <PrefermentPercentageList
+              title={name}
+              flours={flours}
+              ingredients={ingredients}
+              preferment={preferment}
+              editable={editable}
+              onPrefermentChange={(preferment) => onPrefermentChange(name, preferment)}
+            />
+          </div>
         );
       })}
     </Tab>

@@ -6,7 +6,7 @@ import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import IngredientsPercentageItem from "components/IngredientsPercentageItem";
 import { Preferment, PrefermentKind } from "dataModel/Preferment";
 import { IngredientName, IngredientValue } from "dataModel/Ingredient";
-import IngredientPicker from "./IngredientPicker";
+import IngredientPicker from "components/IngredientPicker";
 
 type Props = {
   title: string;
