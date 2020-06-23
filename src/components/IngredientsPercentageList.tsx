@@ -1,5 +1,5 @@
 import React from "react";
-import { IonList, IonReorderGroup, IonReorder } from "@ionic/react";
+import { IonList, IonReorderGroup } from "@ionic/react";
 import { ItemReorderEventDetail } from "@ionic/core";
 import produce from "immer";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
@@ -69,11 +69,10 @@ const IngredientsPercentageList: React.FC<Props> = ({
               name={name}
               value={value}
               maxPercentage={maxPercentage}
+              reordable={true}
               onChange={onIngredientChange}
               onDelete={editable ? onDeleteIngredient : undefined}
-            >
-              <IonReorder slot="end" />
-            </IngredientsPercentageItem>
+            />
           );
         })}
       </IonReorderGroup>

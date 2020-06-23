@@ -14,13 +14,14 @@ import { pencil } from "ionicons/icons";
 
 type Props = {
   title: string;
+  editActive?: boolean;
   onEditToggle?(): void;
 };
 
-const Tab: React.FC<Props> = ({ title, onEditToggle, children }) => {
+const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, children }) => {
   const editButton = onEditToggle ? (
     <IonButtons slot="end">
-      <IonButton onClick={() => onEditToggle()}>
+      <IonButton fill={editActive ? "solid" : undefined} onClick={onEditToggle}>
         <IonIcon icon={pencil} />
       </IonButton>
     </IonButtons>

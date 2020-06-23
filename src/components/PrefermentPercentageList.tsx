@@ -1,5 +1,5 @@
 import React from "react";
-import { IonList, IonReorderGroup, IonReorder } from "@ionic/react";
+import { IonList, IonReorderGroup } from "@ionic/react";
 import { ItemReorderEventDetail } from "@ionic/core";
 import { produce } from "immer";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
@@ -15,6 +15,7 @@ type Props = {
   preferment: Preferment;
   editable: boolean;
   onPrefermentChange(preferment: Preferment): void;
+  onPrefermentDelete(): void;
 };
 
 const PrefermentPercentageList: React.FC<Props> = ({
@@ -24,6 +25,7 @@ const PrefermentPercentageList: React.FC<Props> = ({
   preferment,
   editable,
   onPrefermentChange,
+  onPrefermentDelete,
 }) => {
   const onPrefermentedFlourChange = (name: IngredientName, value: IngredientValue) => {
     onPrefermentChange(
@@ -90,7 +92,7 @@ const PrefermentPercentageList: React.FC<Props> = ({
 
   return (
     <IonList lines="none">
-      <IngredientsTitleToolbar title={title} />
+      <IngredientsTitleToolbar title={title} onDelete={editable ? onPrefermentDelete : undefined} />
       <IngredientsPercentageItem
         name="Prefermented flour"
         value={preferment.prefermentedFlour}
@@ -113,11 +115,10 @@ const PrefermentPercentageList: React.FC<Props> = ({
               name={name}
               value={value}
               maxPercentage={100}
+              reordable={true}
               onChange={(name, value) => onIngredientChange("flours", name, value)}
               onDelete={editable ? (name) => onIngredientDelete("flours", name) : undefined}
-            >
-              <IonReorder slot="end" />
-            </IngredientsPercentageItem>
+            />
           );
         })}
       </IonReorderGroup>
@@ -129,11 +130,10 @@ const PrefermentPercentageList: React.FC<Props> = ({
               name={name}
               value={value}
               maxPercentage={100}
+              reordable={true}
               onChange={(name, value) => onIngredientChange("ingredients", name, value)}
               onDelete={editable ? (name) => onIngredientDelete("ingredients", name) : undefined}
-            >
-              <IonReorder slot="end" />
-            </IngredientsPercentageItem>
+            />
           );
         })}
       </IonReorderGroup>

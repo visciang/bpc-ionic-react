@@ -23,7 +23,12 @@ const NewItemInput: React.FC<Props> = ({ onNewItem }) => {
         value={newItem}
         onIonChange={(e) => setNewItem(parseNewItem(e.detail.value))}
       />
-      <IonButton onClick={onClick} fill="clear" disabled={!(newItem && onNewItem !== undefined)}>
+      <IonButton
+        className="ion-no-padding"
+        onClick={onClick}
+        fill="clear"
+        disabled={!(newItem && onNewItem !== undefined)}
+      >
         <IonIcon slot="icon-only" icon={addOutline} />
       </IonButton>
     </IonItem>

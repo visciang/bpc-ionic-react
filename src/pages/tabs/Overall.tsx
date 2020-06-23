@@ -15,7 +15,7 @@ export const Overall: React.FC<Props> = ({ title, flours, ingredients, onFloursC
   const [editable, setEditable] = useState(false);
 
   return (
-    <Tab title={title} onEditToggle={() => setEditable(!editable)}>
+    <Tab title={title} editActive={editable} onEditToggle={() => setEditable(!editable)}>
       <IngredientsPercentageList
         title="FLOURS"
         ingredients={flours}

@@ -55,11 +55,19 @@ export const Preferment: React.FC<Props> = ({ title, flours, ingredients, prefer
     );
   };
 
+  const onPrefermentDelete = (name: PrefermentName) => {
+    onPrefermentsChange(
+      produce(preferments, (draft) => {
+        draft.delete(name);
+      })
+    );
+  };
+
   return (
-    <Tab title={title} onEditToggle={() => setEditable(!editable)}>
+    <Tab title={title} editActive={editable} onEditToggle={() => setEditable(!editable)}>
       <div className="ion-padding-bottom">
-        <NewItemInput onNewItem={prefermentKind ? onNewPreferment : undefined} />
         <PrefermentSelector value={prefermentKind} onSelect={setPrefermentKind} />
+        <NewItemInput onNewItem={prefermentKind ? onNewPreferment : undefined} />
       </div>
       {[...preferments.entries()].map(([name, preferment]) => {
         return (
@@ -71,6 +79,7 @@ export const Preferment: React.FC<Props> = ({ title, flours, ingredients, prefer
               preferment={preferment}
               editable={editable}
               onPrefermentChange={(preferment) => onPrefermentChange(name, preferment)}
+              onPrefermentDelete={() => onPrefermentDelete(name)}
             />
           </div>
         );
