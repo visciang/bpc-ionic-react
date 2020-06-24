@@ -34,16 +34,14 @@ const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, children }) => 
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle className="ion-text-center">{title}</IonTitle>
+          <IonTitle>{title}</IonTitle>
           {editButton}
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen={true} className="ion-padding">
         <IonHeader collapse="condense" className="ion-padding-bottom">
           <IonToolbar>
-            <IonTitle className="ion-text-center" size="large">
-              {title}
-            </IonTitle>
+            <IonTitle size="large">{title}</IonTitle>
           </IonToolbar>
         </IonHeader>
         {children}
