@@ -15,6 +15,7 @@ const IngredientPicker: React.FC<Props> = ({ label, values, onPick }) => {
     <IonItem lines="none" color="light">
       <IonLabel>{label}</IonLabel>
       <IonSelect
+        disabled={values.size === 0}
         interface="popover"
         value={value}
         onIonChange={(e) => {
