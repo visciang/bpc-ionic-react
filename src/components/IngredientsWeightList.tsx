@@ -14,7 +14,7 @@ const IngredientsWeightList: React.FC<Props> = ({ title, ingredientsPercentage, 
     <IonList lines="none">
       <IngredientsTitleToolbar title={title} />
       <IonGrid>
-        <IonRow>
+        <IonRow color="light">
           <IonCol className="ion-text-start">
             <strong>INGREDIENT</strong>
           </IonCol>
@@ -25,8 +25,8 @@ const IngredientsWeightList: React.FC<Props> = ({ title, ingredientsPercentage, 
             <strong>WEIGHT</strong>
           </IonCol>
         </IonRow>
-        {[...ingredientsPercentage.entries()].map(([name, percentage]) => (
-          <IonRow key={name}>
+        {[...ingredientsPercentage.entries()].map(([name, percentage], idx) => (
+          <IonRow key={`${idx}-${name}`} className={idx % 2 === 0 ? "background-light" : undefined}>
             <IonCol className="ion-text-start">{name}</IonCol>
             <IonCol size="2" className="ion-text-end">{percentage}</IonCol>
             <IonCol className="ion-text-end">{ingredientsWeight.get(name)!.toFixed(2)}</IonCol>
