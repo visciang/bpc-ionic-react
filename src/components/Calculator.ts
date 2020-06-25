@@ -2,7 +2,7 @@ import produce from "immer";
 import { Recipe, ScaleBy } from "dataModel/Recipe";
 import { Ingredients } from "dataModel/Ingredient";
 
-export const calculate = (recipe: Recipe, scaleBy: ScaleBy, totalAmount: number): Recipe => {
+export const calculateFinalDough = (recipe: Recipe, scaleBy: ScaleBy, totalAmount: number): Recipe => {
   const scaleFactor = calculateScaleFactor(recipe.flours, recipe.ingredients, scaleBy);
   const scaleDoughFactor = totalAmount / scaleFactor;
 
@@ -22,6 +22,9 @@ const calculateWeigths = (recipe: Recipe, scaleDoughFactor: number) => {
 };
 
 const calculateScaleFactor = (flours: Ingredients, ingredients: Ingredients, scaleBy: ScaleBy): number => {
-  if (scaleBy === ScaleBy.FLOUR) return 100;
-  else return [...flours.values(), ...ingredients.values()].reduce((sum, value) => sum! + value!, 0)!;
+  if (scaleBy === ScaleBy.FLOUR) {
+    return 100;
+  } else {
+    return [...flours.values(), ...ingredients.values()].reduce((sum, value) => sum! + value!, 0)!;
+  }
 };

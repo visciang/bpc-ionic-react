@@ -1,18 +1,38 @@
 import React from "react";
-import { IonList } from "@ionic/react";
+import { IonList, IonGrid, IonRow, IonCol } from "@ionic/react";
 import { Ingredients } from "dataModel/Ingredient";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 
 type Props = {
   title: string;
-  ingredients: Ingredients;
+  ingredientsPercentage: Ingredients;
+  ingredientsWeight: Ingredients;
 };
 
-const IngredientsWeightList: React.FC<Props> = ({ title, ingredients }) => {
+const IngredientsWeightList: React.FC<Props> = ({ title, ingredientsPercentage, ingredientsWeight }) => {
   return (
     <IonList lines="none">
       <IngredientsTitleToolbar title={title} />
-      {/* TODO table */}
+      <IonGrid>
+        <IonRow>
+          <IonCol className="ion-text-start">
+            <strong>INGREDIENT</strong>
+          </IonCol>
+          <IonCol size="2" className="ion-text-end">
+            <strong>%</strong>
+          </IonCol>
+          <IonCol className="ion-text-end">
+            <strong>WEIGHT</strong>
+          </IonCol>
+        </IonRow>
+        {[...ingredientsPercentage.entries()].map(([name, percentage]) => (
+          <IonRow key={name}>
+            <IonCol className="ion-text-start">{name}</IonCol>
+            <IonCol size="2" className="ion-text-end">{percentage}</IonCol>
+            <IonCol className="ion-text-end">{ingredientsWeight.get(name)!.toFixed(2)}</IonCol>
+          </IonRow>
+        ))}
+      </IonGrid>
     </IonList>
   );
 };
