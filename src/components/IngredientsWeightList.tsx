@@ -2,6 +2,7 @@ import React from "react";
 import { IonList, IonGrid, IonRow, IonCol } from "@ionic/react";
 import { Ingredients } from "dataModel/Ingredient";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
+import { sum } from "components/utils";
 
 type Props = {
   title: string;
@@ -10,6 +11,8 @@ type Props = {
 };
 
 const IngredientsWeightList: React.FC<Props> = ({ title, ingredientsPercentage, ingredientsWeight }) => {
+  const totalWeight = sum(ingredientsWeight.values());
+
   return (
     <IonList lines="none">
       <IngredientsTitleToolbar title={title} />
@@ -34,6 +37,11 @@ const IngredientsWeightList: React.FC<Props> = ({ title, ingredientsPercentage, 
             <IonCol className="ion-text-end">{ingredientsWeight.get(name)!.toFixed(2)}</IonCol>
           </IonRow>
         ))}
+        <IonRow>
+          <IonCol className="ion-text-start"></IonCol>
+          <IonCol size="2" className="ion-text-end"></IonCol>
+          <IonCol className="ion-text-end">{totalWeight!.toFixed(2)}</IonCol>
+        </IonRow>
       </IonGrid>
     </IonList>
   );

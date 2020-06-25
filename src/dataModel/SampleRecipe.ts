@@ -5,7 +5,7 @@ export const recipe: Recipe = {
   name: "Untitled",
   flours: new Map([
     ["Farina 00 W300", 80],
-    ["Semola Rimacinata", 20],
+    ["Semola", 20],
   ]),
   ingredients: new Map([
     ["Acqua", 73],
@@ -20,7 +20,7 @@ export const recipe: Recipe = {
         prefermentedFlour: 80,
         flours: new Map([
           ["Farina 00 W300", 50],
-          ["Semola Rimacinata", 50],
+          ["Semola", 50],
         ]),
         ingredients: new Map([["Acqua", 45]]),
       },
