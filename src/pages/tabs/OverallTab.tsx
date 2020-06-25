@@ -11,7 +11,7 @@ type Props = {
   onIngredientsChange(flours: Ingredients): void;
 };
 
-export const Overall: React.FC<Props> = ({ title, flours, ingredients, onFloursChange, onIngredientsChange }) => {
+const OverallTab: React.FC<Props> = ({ title, flours, ingredients, onFloursChange, onIngredientsChange }) => {
   const [editable, setEditable] = useState(false);
 
   return (
@@ -33,3 +33,5 @@ export const Overall: React.FC<Props> = ({ title, flours, ingredients, onFloursC
     </Tab>
   );
 };
+
+export default OverallTab;

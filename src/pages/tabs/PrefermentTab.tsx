@@ -15,7 +15,7 @@ type Props = {
   onPrefermentsChange(preferments: Preferments): void;
 };
 
-export const Preferment: React.FC<Props> = ({ title, flours, ingredients, preferments, onPrefermentsChange }) => {
+const PrefermentTab: React.FC<Props> = ({ title, flours, ingredients, preferments, onPrefermentsChange }) => {
   const [editable, setEditable] = useState(false);
   const [prefermentKind, setPrefermentKind] = useState<PrefermentKind | undefined>(undefined);
 
@@ -87,3 +87,5 @@ export const Preferment: React.FC<Props> = ({ title, flours, ingredients, prefer
     </Tab>
   );
 };
+
+export default PrefermentTab;

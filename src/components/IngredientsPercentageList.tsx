@@ -11,7 +11,7 @@ type Props = {
   title: string;
   ingredients: Ingredients;
   maxPercentage?: number;
-  editable: boolean;
+  editable?: boolean;
   onIngredientsChange(ingredients: Ingredients): void;
 };
 
