@@ -26,6 +26,6 @@ const calculateScaleFactor = (flours: Ingredients, ingredients: Ingredients, sca
   if (scaleBy === ScaleBy.FLOUR) {
     return 100;
   } else {
-    return sum(flours.values(), ingredients.values())!;
+    return sum(flours.values(), ingredients.values());
   }
 };
