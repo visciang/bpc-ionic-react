@@ -4,7 +4,7 @@ import { IngredientName } from "dataModel/Ingredient";
 
 type Props = {
   label: string;
-  values: Set<IngredientName>;
+  values: IngredientName[];
   onPick(value: IngredientName): void;
 };
 
@@ -15,7 +15,7 @@ const IngredientPicker: React.FC<Props> = ({ label, values, onPick }) => {
     <IonItem lines="none" color="light">
       <IonLabel>{label}</IonLabel>
       <IonSelect
-        disabled={values.size === 0}
+        disabled={values.length === 0}
         interface="popover"
         value={value}
         onIonChange={(e) => {

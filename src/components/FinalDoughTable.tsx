@@ -12,16 +12,20 @@ type Props = {
 const FinalDoughTable: React.FC<Props> = ({ recipe, scaleBy, totalAmount }) => {
   const finalDough = calculateFinalDough(recipe, scaleBy, totalAmount);
 
-  return (
-    <div>
-      <IngredientsWeightList
-        title="OVERALL"
-        ingredientsPercentage={new Map([...recipe.flours.entries(), ...recipe.ingredients.entries()])}
-        ingredientsWeight={new Map([...finalDough.flours.entries(), ...finalDough.ingredients.entries()])}
-      />
-      {/* TODO preferments and dough */}
-    </div>
-  );
+  if (finalDough) {
+    return (
+      <div>
+        <IngredientsWeightList
+          title="OVERALL"
+          ingredientsPercentage={new Map([...recipe.flours.entries(), ...recipe.ingredients.entries()])}
+          ingredientsWeight={new Map([...finalDough.flours.entries(), ...finalDough.ingredients.entries()])}
+        />
+        {/* TODO preferments and dough */}
+      </div>
+    );
+  } else {
+    return <strong>RECIPE NOT VALID</strong>;
+  }
 };
 
 export default FinalDoughTable;

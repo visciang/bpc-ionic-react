@@ -2,8 +2,13 @@ import produce from "immer";
 import { Recipe, ScaleBy } from "dataModel/Recipe";
 import { Ingredients } from "dataModel/Ingredient";
 import { sum } from "components/utils";
+import { isValidRecipe } from "components/RecipeValidator";
 
-export const calculateFinalDough = (recipe: Recipe, scaleBy: ScaleBy, totalAmount: number): Recipe => {
+export const calculateFinalDough = (recipe: Recipe, scaleBy: ScaleBy, totalAmount: number): Recipe | undefined => {
+  if (!isValidRecipe(recipe)) {
+    return undefined;
+  }
+
   const scaleFactor = calculateScaleFactor(recipe.flours, recipe.ingredients, scaleBy);
   const scaleDoughFactor = totalAmount / scaleFactor;
 

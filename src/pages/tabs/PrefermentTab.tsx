@@ -4,18 +4,19 @@ import Tab from "pages/tabs/Tab";
 import NewItemInput from "components/NewItemInput";
 import PrefermentSelector from "components/PrefermentSelector";
 import PrefermentPercentageList from "components/PrefermentPercentageList";
+import { propsShallowCompare } from "components/utils";
 import { Preferments, PrefermentKind, Preferment as PrefermentT, PrefermentName } from "dataModel/Preferment";
-import { IngredientName } from "dataModel/Ingredient";
+import { Ingredients } from "dataModel/Ingredient";
 
 type Props = {
   title: string;
-  flours: Set<IngredientName>;
-  ingredients: Set<IngredientName>;
+  flours: Ingredients;
+  ingredients: Ingredients;
   preferments: Preferments;
   onPrefermentsChange(preferments: Preferments): void;
 };
 
-const PrefermentTab: React.FC<Props> = ({ title, flours, ingredients, preferments, onPrefermentsChange }) => {
+const Component: React.FC<Props> = ({ title, flours, ingredients, preferments, onPrefermentsChange }) => {
   const [editable, setEditable] = useState(false);
   const [prefermentKind, setPrefermentKind] = useState<PrefermentKind | undefined>(undefined);
 
@@ -86,4 +87,7 @@ const PrefermentTab: React.FC<Props> = ({ title, flours, ingredients, preferment
   );
 };
 
+const PrefermentTab = React.memo(Component, (p: Props, n: Props) =>
+  propsShallowCompare(p, n, ["title", "flours", "ingredients", "preferments"])
+);
 export default PrefermentTab;

@@ -5,13 +5,13 @@ import { produce } from "immer";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import IngredientsPercentageItem from "components/IngredientsPercentageItem";
 import { Preferment, PrefermentKind } from "dataModel/Preferment";
-import { IngredientName, IngredientValue } from "dataModel/Ingredient";
+import { IngredientName, IngredientValue, Ingredients } from "dataModel/Ingredient";
 import IngredientPicker from "components/IngredientPicker";
 
 type Props = {
   title: string;
-  flours: Set<IngredientName>;
-  ingredients: Set<IngredientName>;
+  flours: Ingredients;
+  ingredients: Ingredients;
   preferment: Preferment;
   editable: boolean;
   onPrefermentChange(preferment: Preferment): void;
@@ -85,10 +85,8 @@ const PrefermentPercentageList: React.FC<Props> = ({
     );
   };
 
-  const selectableFlours = new Set([...flours.values()].filter((flour) => !preferment.flours.has(flour)));
-  const selectableIngredients = new Set(
-    [...ingredients.values()].filter((ingredient) => !preferment.ingredients.has(ingredient))
-  );
+  const selectableFlours = [...flours.keys()].filter((flour) => !preferment.flours.has(flour));
+  const selectableIngredients = [...ingredients.keys()].filter((ingredient) => !preferment.ingredients.has(ingredient));
 
   return (
     <IonList lines="none">

@@ -29,3 +29,12 @@ export const sum = (...iterables: Iterable<IngredientValue>[]): NonNullable<Ingr
 
   return s;
 };
+
+export const propsShallowCompare = <T, K extends keyof T>(prevProps: T, nextProps: T, props: K[]): boolean => {
+  for (let prop of props) {
+    if (prevProps[prop] !== nextProps[prop]) {
+      return false;
+    }
+  }
+  return true;
+};

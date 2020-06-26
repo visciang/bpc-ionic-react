@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Tab from "pages/tabs/Tab";
 import IngredientsPercentageList from "components/IngredientsPercentageList";
+import { propsShallowCompare } from "components/utils";
 import { Ingredients } from "dataModel/Ingredient";
 
 type Props = {
@@ -11,7 +12,7 @@ type Props = {
   onIngredientsChange(flours: Ingredients): void;
 };
 
-const OverallTab: React.FC<Props> = ({ title, flours, ingredients, onFloursChange, onIngredientsChange }) => {
+const Component: React.FC<Props> = ({ title, flours, ingredients, onFloursChange, onIngredientsChange }) => {
   const [editable, setEditable] = useState(false);
 
   return (
@@ -34,4 +35,7 @@ const OverallTab: React.FC<Props> = ({ title, flours, ingredients, onFloursChang
   );
 };
 
+const OverallTab = React.memo(Component, (p: Props, n: Props) =>
+  propsShallowCompare(p, n, ["title", "flours", "ingredients"])
+);
 export default OverallTab;
