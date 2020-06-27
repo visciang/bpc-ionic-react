@@ -10,9 +10,9 @@ const Tabs: React.FC = () => {
   return (
     <IonTabs>
       <IonRouterOutlet id="main">
-        <Route path="/overallTab" render={() => <OverallTab />} exact={true} />
-        <Route path="/prefermentTab" render={() => <PrefermentTab />} exact={true} />
-        <Route path="/finalDough" render={() => <FinalDoughTab />} exact={true} />
+        <Route path="/overallTab" component={OverallTab} exact={true} />
+        <Route path="/prefermentTab" component={PrefermentTab} exact={true} />
+        <Route path="/finalDough" component={FinalDoughTab} exact={true} />
         <Route path="/" render={() => <Redirect to="/overallTab" />} exact={true} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">
