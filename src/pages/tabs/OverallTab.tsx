@@ -1,41 +1,32 @@
-import React, { useState } from "react";
+import React from "react";
+import { useRecoilState } from "recoil";
 import Tab from "pages/tabs/Tab";
 import IngredientsPercentageList from "components/IngredientsPercentageList";
-import { propsShallowCompare } from "components/utils";
-import { Ingredients } from "dataModel/Ingredient";
+import { floursState, ingredientsState, editableState } from "state/State";
 
-type Props = {
-  title: string;
-  flours: Ingredients;
-  ingredients: Ingredients;
-  onFloursChange(flours: Ingredients): void;
-  onIngredientsChange(flours: Ingredients): void;
-};
-
-const Component: React.FC<Props> = ({ title, flours, ingredients, onFloursChange, onIngredientsChange }) => {
-  const [editable, setEditable] = useState(false);
+const OverallTab: React.FC = React.memo(() => {
+  const [editable] = useRecoilState(editableState);
+  const [flours, setFlours] = useRecoilState(floursState);
+  const [ingredients, setIngredients] = useRecoilState(ingredientsState);
 
   return (
-    <Tab title={title} editActive={editable} onEditToggle={() => setEditable(!editable)}>
+    <Tab editVisible={true}>
       <IngredientsPercentageList
         title="FLOURS"
         ingredients={flours}
         maxPercentage={100}
-        onIngredientsChange={onFloursChange}
+        onIngredientsChange={setFlours}
         editable={editable}
       />
       <IngredientsPercentageList
         title="INGREDIENTS"
         ingredients={ingredients}
         maxPercentage={undefined}
-        onIngredientsChange={onIngredientsChange}
+        onIngredientsChange={setIngredients}
         editable={editable}
       />
     </Tab>
   );
-};
+});
 
-const OverallTab = React.memo(Component, (p: Props, n: Props) =>
-  propsShallowCompare(p, n, ["title", "flours", "ingredients"])
-);
 export default OverallTab;

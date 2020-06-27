@@ -6,7 +6,7 @@ const Menu: React.FC = () => {
     <IonMenu contentId="main">
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Start Menu</IonTitle>
+          <IonTitle>B % C</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>

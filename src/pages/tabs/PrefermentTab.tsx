@@ -1,24 +1,16 @@
 import React, { useState } from "react";
+import { useRecoilState } from "recoil";
 import { produce } from "immer";
 import Tab from "pages/tabs/Tab";
 import NewItemInput from "components/NewItemInput";
 import PrefermentSelector from "components/PrefermentSelector";
 import PrefermentPercentageList from "components/PrefermentPercentageList";
-import { propsShallowCompare } from "components/utils";
-import { Preferments, PrefermentKind, Preferment as PrefermentT, PrefermentName } from "dataModel/Preferment";
-import { Ingredients } from "dataModel/Ingredient";
+import { PrefermentKind, Preferment as PrefermentT } from "dataModel/Preferment";
+import { prefermentsState } from "state/State";
 
-type Props = {
-  title: string;
-  flours: Ingredients;
-  ingredients: Ingredients;
-  preferments: Preferments;
-  onPrefermentsChange(preferments: Preferments): void;
-};
-
-const Component: React.FC<Props> = ({ title, flours, ingredients, preferments, onPrefermentsChange }) => {
-  const [editable, setEditable] = useState(false);
+const PrefermentTab: React.FC = React.memo(() => {
   const [prefermentKind, setPrefermentKind] = useState<PrefermentKind | undefined>(undefined);
+  const [preferments, setPreferments] = useRecoilState(prefermentsState);
 
   const onNewPreferment = (name: string) => {
     let newPreferment: PrefermentT;
@@ -39,7 +31,7 @@ const Component: React.FC<Props> = ({ title, flours, ingredients, preferments, o
         seed: undefined,
       };
 
-    onPrefermentsChange(
+    setPreferments(
       produce(preferments, (draft) => {
         draft.set(name, newPreferment);
       })
@@ -48,46 +40,19 @@ const Component: React.FC<Props> = ({ title, flours, ingredients, preferments, o
     setPrefermentKind(undefined);
   };
 
-  const onPrefermentChange = (name: PrefermentName, preferment: PrefermentT) => {
-    onPrefermentsChange(
-      produce(preferments, (draft) => {
-        draft.set(name, preferment);
-      })
-    );
-  };
-
-  const onPrefermentDelete = (name: PrefermentName) => {
-    onPrefermentsChange(
-      produce(preferments, (draft) => {
-        draft.delete(name);
-      })
-    );
-  };
-
   return (
-    <Tab title={title} editActive={editable} onEditToggle={() => setEditable(!editable)}>
+    <Tab editVisible={true}>
       <div className="ion-padding-bottom">
         <PrefermentSelector value={prefermentKind} onSelect={setPrefermentKind} />
         <NewItemInput onNewItem={prefermentKind ? onNewPreferment : undefined} />
       </div>
-      {[...preferments.entries()].map(([name, preferment]) => (
+      {[...preferments.keys()].map((name) => (
         <div key={name} className="border-top ion-padding-vertical">
-          <PrefermentPercentageList
-            title={name}
-            flours={flours}
-            ingredients={ingredients}
-            preferment={preferment}
-            editable={editable}
-            onPrefermentChange={(preferment) => onPrefermentChange(name, preferment)}
-            onPrefermentDelete={() => onPrefermentDelete(name)}
-          />
+          <PrefermentPercentageList prefermentName={name} />
         </div>
       ))}
     </Tab>
   );
-};
+});
 
-const PrefermentTab = React.memo(Component, (p: Props, n: Props) =>
-  propsShallowCompare(p, n, ["title", "flours", "ingredients", "preferments"])
-);
 export default PrefermentTab;
