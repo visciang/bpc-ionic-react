@@ -8,17 +8,17 @@ import IngredientsPercentageItem from "components/IngredientsPercentageItem";
 import { PrefermentKind, PrefermentName } from "dataModel/Preferment";
 import { IngredientName, IngredientValue } from "dataModel/Ingredient";
 import IngredientPicker from "components/IngredientPicker";
-import { floursState, ingredientsState, prefermentsState, editableState } from "state/State";
+import * as State from "state/State";
 
 type Props = {
   prefermentName: string;
 };
 
 const PrefermentPercentageList: React.FC<Props> = ({ prefermentName }) => {
-  const [editable] = useRecoilState(editableState);
-  const [flours] = useRecoilState(floursState);
-  const [ingredients] = useRecoilState(ingredientsState);
-  const [preferments, setPreferments] = useRecoilState(prefermentsState);
+  const [editable] = useRecoilState(State.editable);
+  const [flours] = useRecoilState(State.flours);
+  const [ingredients] = useRecoilState(State.ingredients);
+  const [preferments, setPreferments] = useRecoilState(State.preferments);
 
   const preferment = preferments.get(prefermentName)!;
 

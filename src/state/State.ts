@@ -1,27 +1,27 @@
 import { atom } from "recoil";
 import { recipe } from "dataModel/SampleRecipe";
 
-export const titleState = atom({
+export const title = atom({
   key: "titleState",
   default: "Untitled",
 });
 
-export const floursState = atom({
+export const flours = atom({
   key: "floursState",
   default: recipe.flours,
 });
 
-export const ingredientsState = atom({
+export const ingredients = atom({
   key: "ingredientsState",
   default: recipe.ingredients,
 });
 
-export const prefermentsState = atom({
+export const preferments = atom({
   key: "prefermentsState",
   default: recipe.preferments,
 });
 
-export const editableState = atom({
+export const editable = atom({
   key: "editableState",
   default: false,
 });

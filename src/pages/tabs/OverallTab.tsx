@@ -2,12 +2,12 @@ import React from "react";
 import { useRecoilState } from "recoil";
 import Tab from "pages/tabs/Tab";
 import IngredientsPercentageList from "components/IngredientsPercentageList";
-import { floursState, ingredientsState, editableState } from "state/State";
+import * as State from "state/State";
 
 const OverallTab: React.FC = React.memo(() => {
-  const [editable] = useRecoilState(editableState);
-  const [flours, setFlours] = useRecoilState(floursState);
-  const [ingredients, setIngredients] = useRecoilState(ingredientsState);
+  const [editable] = useRecoilState(State.editable);
+  const [flours, setFlours] = useRecoilState(State.flours);
+  const [ingredients, setIngredients] = useRecoilState(State.ingredients);
 
   return (
     <Tab editVisible={true}>

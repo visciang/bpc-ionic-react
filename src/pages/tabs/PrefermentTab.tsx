@@ -6,11 +6,11 @@ import NewItemInput from "components/NewItemInput";
 import PrefermentSelector from "components/PrefermentSelector";
 import PrefermentPercentageList from "components/PrefermentPercentageList";
 import { PrefermentKind, Preferment as PrefermentT } from "dataModel/Preferment";
-import { prefermentsState } from "state/State";
+import * as State from "state/State";
 
 const PrefermentTab: React.FC = React.memo(() => {
   const [prefermentKind, setPrefermentKind] = useState<PrefermentKind | undefined>(undefined);
-  const [preferments, setPreferments] = useRecoilState(prefermentsState);
+  const [preferments, setPreferments] = useRecoilState(State.preferments);
 
   const onNewPreferment = (name: string) => {
     let newPreferment: PrefermentT;

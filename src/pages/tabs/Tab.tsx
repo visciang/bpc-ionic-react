@@ -12,15 +12,15 @@ import {
   IonIcon,
 } from "@ionic/react";
 import { pencil } from "ionicons/icons";
-import { titleState, editableState } from "state/State";
+import * as State from "state/State";
 
 type Props = {
   editVisible: boolean;
 };
 
 const Tab: React.FC<Props> = ({ editVisible, children }) => {
-  const [title] = useRecoilState(titleState);
-  const [editable, setEditable] = useRecoilState(editableState);
+  const [title] = useRecoilState(State.title);
+  const [editable, setEditable] = useRecoilState(State.editable);
 
   const editButton = editVisible ? (
     <IonButtons slot="end">
