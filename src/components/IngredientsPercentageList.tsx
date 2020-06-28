@@ -70,7 +70,7 @@ const IngredientsPercentageList: React.FC<Props> = ({
             maxPercentage={maxPercentage}
             reordable={true}
             onChange={onIngredientChange}
-            onDelete={editable ? onDeleteIngredient : undefined}
+            onDelete={onDeleteIngredient}
           />
         ))}
       </IonReorderGroup>

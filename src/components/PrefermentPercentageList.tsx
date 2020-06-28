@@ -95,10 +95,7 @@ const PrefermentPercentageList: React.FC<Props> = ({ prefermentName }) => {
 
   return (
     <IonList lines="none">
-      <IngredientsTitleToolbar
-        title={prefermentName}
-        onDelete={editable ? () => onPrefermentDelete(prefermentName) : undefined}
-      />
+      <IngredientsTitleToolbar title={prefermentName} onDelete={() => onPrefermentDelete(prefermentName)} />
       <IngredientsPercentageItem
         name="Prefermented flour"
         value={preferment.prefermentedFlour}
@@ -122,7 +119,7 @@ const PrefermentPercentageList: React.FC<Props> = ({ prefermentName }) => {
             maxPercentage={100}
             reordable={true}
             onChange={(name, value) => onIngredientChange("flours", name, value)}
-            onDelete={editable ? (name) => onIngredientDelete("flours", name) : undefined}
+            onDelete={(name) => onIngredientDelete("flours", name)}
           />
         ))}
       </IonReorderGroup>
@@ -136,7 +133,7 @@ const PrefermentPercentageList: React.FC<Props> = ({ prefermentName }) => {
               maxPercentage={100}
               reordable={true}
               onChange={(name, value) => onIngredientChange("ingredients", name, value)}
-              onDelete={editable ? (name) => onIngredientDelete("ingredients", name) : undefined}
+              onDelete={(name) => onIngredientDelete("ingredients", name)}
             />
           );
         })}
