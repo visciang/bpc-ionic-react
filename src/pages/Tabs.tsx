@@ -1,77 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import { Redirect, Route } from "react-router-dom";
 import { IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, IonIcon } from "@ionic/react";
 import { calculatorOutline, restaurantOutline, arrowUndoOutline } from "ionicons/icons";
-import { produce, Draft } from "immer";
 import OverallTab from "pages/tabs/OverallTab";
 import PrefermentTab from "pages/tabs/PrefermentTab";
 import FinalDoughTab from "pages/tabs/FinalDoughTab";
-import { Recipe } from "dataModel/Recipe";
-import { Preferments } from "dataModel/Preferment";
-import { Ingredients } from "dataModel/Ingredient";
-import { recipe } from "dataModel/SampleRecipe";
-
-const untitledRecipe = recipe;
 
 const Tabs: React.FC = () => {
-  const [recipe, setRecipe] = useState(untitledRecipe);
-
-  const onPrefermentsChange = (preferments: Preferments) => {
-    setRecipe(
-      produce((draft: Draft<Recipe>) => {
-        draft.preferments = preferments;
-      })
-    );
-  };
-
-  const onIngredientsChange = (kind: "flours" | "ingredients", ingredients: Ingredients) => {
-    setRecipe(
-      produce((draft: Draft<Recipe>) => {
-        draft[kind] = ingredients;
-
-        for (let preferment of draft.preferments.values()) {
-          const removedIngredients = [...preferment[kind].keys()].filter(
-            (prefermentIngredient) => !ingredients.has(prefermentIngredient)
-          );
-
-          for (let removedIngredient of removedIngredients) {
-            preferment[kind].delete(removedIngredient);
-          }
-        }
-      })
-    );
-  };
-
   return (
     <IonTabs>
       <IonRouterOutlet id="main">
-        <Route
-          path="/overallTab"
-          render={() => (
-            <OverallTab
-              title={recipe.name}
-              flours={recipe.flours}
-              ingredients={recipe.ingredients}
-              onFloursChange={(flours) => onIngredientsChange("flours", flours)}
-              onIngredientsChange={(ingredients) => onIngredientsChange("ingredients", ingredients)}
-            />
-          )}
-          exact={true}
-        />
-        <Route
-          path="/prefermentTab"
-          render={() => (
-            <PrefermentTab
-              title={recipe.name}
-              flours={recipe.flours}
-              ingredients={recipe.ingredients}
-              preferments={recipe.preferments}
-              onPrefermentsChange={onPrefermentsChange}
-            />
-          )}
-          exact={true}
-        />
-        <Route path="/finalDough" render={() => <FinalDoughTab recipe={recipe} />} exact={true} />
+        <Route path="/overallTab" component={OverallTab} exact={true} />
+        <Route path="/prefermentTab" component={PrefermentTab} exact={true} />
+        <Route path="/finalDough" component={FinalDoughTab} exact={true} />
         <Route path="/" render={() => <Redirect to="/overallTab" />} exact={true} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">

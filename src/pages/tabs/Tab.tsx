@@ -1,4 +1,5 @@
 import React from "react";
+import { useRecoilState } from "recoil";
 import {
   IonContent,
   IonHeader,
@@ -11,17 +12,19 @@ import {
   IonIcon,
 } from "@ionic/react";
 import { pencil } from "ionicons/icons";
+import * as State from "state/State";
 
 type Props = {
-  title: string;
-  editActive?: boolean;
-  onEditToggle?(): void;
+  editVisible: boolean;
 };
 
-const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, children }) => {
-  const editButton = onEditToggle ? (
+const Tab: React.FC<Props> = ({ editVisible, children }) => {
+  const [title] = useRecoilState(State.title);
+  const [editable, setEditable] = useRecoilState(State.editable);
+
+  const editButton = editVisible ? (
     <IonButtons slot="end">
-      <IonButton fill={editActive ? "solid" : undefined} onClick={onEditToggle}>
+      <IonButton fill={editable ? "solid" : undefined} onClick={() => setEditable(!editable)}>
         <IonIcon icon={pencil} />
       </IonButton>
     </IonButtons>

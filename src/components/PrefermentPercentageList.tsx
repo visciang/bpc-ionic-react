@@ -1,62 +1,59 @@
 import React from "react";
+import { useRecoilState } from "recoil";
 import { IonList, IonReorderGroup } from "@ionic/react";
 import { ItemReorderEventDetail } from "@ionic/core";
 import { produce } from "immer";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import IngredientsPercentageItem from "components/IngredientsPercentageItem";
-import { Preferment, PrefermentKind } from "dataModel/Preferment";
-import { IngredientName, IngredientValue, Ingredients } from "dataModel/Ingredient";
+import { PrefermentKind, PrefermentName } from "dataModel/Preferment";
+import { IngredientName, IngredientValue } from "dataModel/Ingredient";
 import IngredientPicker from "components/IngredientPicker";
+import * as State from "state/State";
 
 type Props = {
-  title: string;
-  flours: Ingredients;
-  ingredients: Ingredients;
-  preferment: Preferment;
-  editable: boolean;
-  onPrefermentChange(preferment: Preferment): void;
-  onPrefermentDelete(): void;
+  prefermentName: string;
 };
 
-const PrefermentPercentageList: React.FC<Props> = ({
-  title,
-  flours,
-  ingredients,
-  preferment,
-  editable,
-  onPrefermentChange,
-  onPrefermentDelete,
-}) => {
+const PrefermentPercentageList: React.FC<Props> = ({ prefermentName }) => {
+  const [editable] = useRecoilState(State.editable);
+  const [flours] = useRecoilState(State.flours);
+  const [ingredients] = useRecoilState(State.ingredients);
+  const [preferments, setPreferments] = useRecoilState(State.preferments);
+
+  const preferment = preferments.get(prefermentName)!;
+
   const onPrefermentedFlourChange = (name: IngredientName, value: IngredientValue) => {
-    onPrefermentChange(
-      produce(preferment, (draft) => {
-        draft.prefermentedFlour = value;
+    setPreferments(
+      produce(preferments, (draft) => {
+        draft.get(prefermentName)!.prefermentedFlour = value;
       })
     );
   };
 
   const onSeedChange = (name: IngredientName, value: IngredientValue) => {
-    if (preferment.kind === PrefermentKind.SOURDOUGH) {
-      onPrefermentChange(
-        produce(preferment, (draft) => {
-          draft.seed = value;
-        })
-      );
-    }
+    setPreferments(
+      produce(preferments, (draft) => {
+        const preferment = draft.get(prefermentName)!;
+
+        if (preferment.kind === PrefermentKind.SOURDOUGH) {
+          preferment.seed = value;
+        }
+      })
+    );
   };
 
   const onIngredientChange = (kind: "flours" | "ingredients", name: IngredientName, value: IngredientValue) => {
-    onPrefermentChange(
-      produce(preferment, (draft) => {
-        draft[kind].set(name, value);
+    setPreferments(
+      produce(preferments, (draft) => {
+        draft.get(prefermentName)![kind].set(name, value);
       })
     );
   };
 
   const onIngredientDelete = (kind: "flours" | "ingredients", name: IngredientName) => {
-    onPrefermentChange(
-      produce(preferment, (draft) => {
-        draft[kind].delete(name);
+    setPreferments(
+      produce(preferments, (draft) => {
+        draft.get(prefermentName)![kind].delete(name);
       })
     );
   };
@@ -68,19 +65,27 @@ const PrefermentPercentageList: React.FC<Props> = ({
     orderedIngredients.splice(event.detail.from, 1);
     orderedIngredients.splice(event.detail.to, 0, movedIngredient);
 
-    onPrefermentChange(
-      produce(preferment, (draft) => {
-        draft[kind] = new Map(orderedIngredients);
+    setPreferments(
+      produce(preferments, (draft) => {
+        draft.get(prefermentName)![kind] = new Map(orderedIngredients);
       })
     );
 
     event.detail.complete();
   };
 
+  const onPrefermentDelete = (name: PrefermentName) => {
+    setPreferments(
+      produce(preferments, (draft) => {
+        draft.delete(name);
+      })
+    );
+  };
+
   const onNewIngredient = (kind: "flours" | "ingredients", name: IngredientName) => {
-    onPrefermentChange(
-      produce(preferment, (draft) => {
-        draft[kind].set(name, undefined);
+    setPreferments(
+      produce(preferments, (draft) => {
+        draft.get(prefermentName)![kind].set(name, undefined);
       })
     );
   };
@@ -90,7 +95,7 @@ const PrefermentPercentageList: React.FC<Props> = ({
 
   return (
     <IonList lines="none">
-      <IngredientsTitleToolbar title={title} onDelete={editable ? onPrefermentDelete : undefined} />
+      <IngredientsTitleToolbar title={prefermentName} onDelete={() => onPrefermentDelete(prefermentName)} />
       <IngredientsPercentageItem
         name="Prefermented flour"
         value={preferment.prefermentedFlour}
@@ -114,7 +119,7 @@ const PrefermentPercentageList: React.FC<Props> = ({
             maxPercentage={100}
             reordable={true}
             onChange={(name, value) => onIngredientChange("flours", name, value)}
-            onDelete={editable ? (name) => onIngredientDelete("flours", name) : undefined}
+            onDelete={(name) => onIngredientDelete("flours", name)}
           />
         ))}
       </IonReorderGroup>
@@ -128,7 +133,7 @@ const PrefermentPercentageList: React.FC<Props> = ({
               maxPercentage={100}
               reordable={true}
               onChange={(name, value) => onIngredientChange("ingredients", name, value)}
-              onDelete={editable ? (name) => onIngredientDelete("ingredients", name) : undefined}
+              onDelete={(name) => onIngredientDelete("ingredients", name)}
             />
           );
         })}
