@@ -2,26 +2,29 @@ import { Recipe } from "dataModel/Recipe";
 import { Ingredients } from "dataModel/Ingredient";
 import { sum } from "components/utils";
 
-export const isValidRecipe = (recipe: Recipe): boolean => {
-  return checkFlours(recipe.flours) && checkIngredients(recipe.ingredients);
+export type RecipeValidationErrors = string[];
+
+export const validateRecipe = (recipe: Recipe): RecipeValidationErrors => {
+  return checkFlours(recipe.flours).concat(checkIngredients(recipe.ingredients));
 };
 
-const checkFlours = (flours: Ingredients): boolean => {
+const checkFlours = (flours: Ingredients): RecipeValidationErrors => {
+  const errors: RecipeValidationErrors = [];
+
   for (let [flourName, flourValue] of flours.entries()) {
     if (flourValue === undefined) {
-      console.log(`Undefined flour value: '${flourName}'`);
-      return false;
+      errors.push(`Undefined flour value: '${flourName}'`);
     }
   }
 
   if (sum(flours.values()) !== 100) {
-    console.log("Bad flours percentage, the sum should be 100%");
-    return false;
+    errors.push("Bad flours percentage, the sum should be 100%");
   }
 
-  return true;
+  return errors;
 };
 
-const checkIngredients = (ingredients: Ingredients): boolean => {
-  return true;
+const checkIngredients = (ingredients: Ingredients): RecipeValidationErrors => {
+  const errors: RecipeValidationErrors = [];
+  return errors;
 };
