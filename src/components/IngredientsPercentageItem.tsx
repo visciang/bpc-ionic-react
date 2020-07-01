@@ -13,7 +13,8 @@ type Props = {
   onDelete?(name: IngredientName): void;
 };
 
-const IngredientsPercentageItem: React.FC<Props> = ({ name, value, maxPercentage, onChange, onDelete, children }) => {
+const IngredientsPercentageItem: React.FC<Props> = ({ name, value, maxPercentage, onChange, onDelete }) => {
+
   if (onDelete) {
     return (
       <IonItem>
