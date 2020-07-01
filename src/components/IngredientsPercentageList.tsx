@@ -68,7 +68,6 @@ const IngredientsPercentageList: React.FC<Props> = ({
             name={name}
             value={value}
             maxPercentage={maxPercentage}
-            reordable={true}
             onChange={onIngredientChange}
             onDelete={onDeleteIngredient}
           />

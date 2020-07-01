@@ -5,7 +5,7 @@ import { ItemReorderEventDetail } from "@ionic/core";
 import { produce } from "immer";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import IngredientsPercentageItem from "components/IngredientsPercentageItem";
-import { PrefermentKind, PrefermentName } from "dataModel/Preferment";
+import { PrefermentKind } from "dataModel/Preferment";
 import { IngredientName, IngredientValue } from "dataModel/Ingredient";
 import IngredientPicker from "components/IngredientPicker";
 import * as State from "state/State";
@@ -74,10 +74,10 @@ const PrefermentPercentageList: React.FC<Props> = ({ prefermentName }) => {
     event.detail.complete();
   };
 
-  const onPrefermentDelete = (name: PrefermentName) => {
+  const onPrefermentDelete = () => {
     setPreferments(
       produce(preferments, (draft) => {
-        draft.delete(name);
+        draft.delete(prefermentName);
       })
     );
   };
@@ -95,7 +95,7 @@ const PrefermentPercentageList: React.FC<Props> = ({ prefermentName }) => {
 
   return (
     <IonList lines="none">
-      <IngredientsTitleToolbar title={prefermentName} onDelete={() => onPrefermentDelete(prefermentName)} />
+      <IngredientsTitleToolbar title={prefermentName} onDelete={onPrefermentDelete} />
       <IngredientsPercentageItem
         name="Prefermented flour"
         value={preferment.prefermentedFlour}
@@ -117,7 +117,6 @@ const PrefermentPercentageList: React.FC<Props> = ({ prefermentName }) => {
             name={name}
             value={value}
             maxPercentage={100}
-            reordable={true}
             onChange={(name, value) => onIngredientChange("flours", name, value)}
             onDelete={(name) => onIngredientDelete("flours", name)}
           />
@@ -131,7 +130,6 @@ const PrefermentPercentageList: React.FC<Props> = ({ prefermentName }) => {
               name={name}
               value={value}
               maxPercentage={100}
-              reordable={true}
               onChange={(name, value) => onIngredientChange("ingredients", name, value)}
               onDelete={(name) => onIngredientDelete("ingredients", name)}
             />

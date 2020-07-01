@@ -10,7 +10,6 @@ type Props = {
   name: IngredientName;
   value: IngredientValue;
   maxPercentage?: number;
-  reordable?: boolean;
   onChange(name: IngredientName, value: IngredientValue): void;
   onDelete?(name: IngredientName): void;
 };
