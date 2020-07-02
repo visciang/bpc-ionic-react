@@ -1,18 +1,22 @@
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
-import { produce } from "immer";
 import Tab from "pages/tabs/Tab";
 import NewItemInput from "components/NewItemInput";
 import PrefermentSelector from "components/PrefermentSelector";
 import PrefermentPercentageList from "components/PrefermentPercentageList";
+import { propsShallowCompare } from "components/utils";
 import { PrefermentKind, Preferment as PrefermentT } from "dataModel/Preferment";
 import * as State from "state/State";
 
-const PrefermentTab: React.FC = React.memo(() => {
+type Props = {};
+
+const Component: React.FC<Props> = () => {
   const [prefermentKind, setPrefermentKind] = useState<PrefermentKind | undefined>(undefined);
   const [preferments, setPreferments] = useRecoilState(State.preferments);
 
   const onNewPreferment = (name: string) => {
+    if (preferments.has(name)) return;
+
     let newPreferment: PrefermentT;
 
     if (prefermentKind === PrefermentKind.PREDOUGH)
@@ -31,11 +35,7 @@ const PrefermentTab: React.FC = React.memo(() => {
         seed: undefined,
       };
 
-    setPreferments(
-      produce(preferments, (draft) => {
-        draft.set(name, newPreferment);
-      })
-    );
+    setPreferments(new Map([...preferments, [name, newPreferment]]));
 
     setPrefermentKind(undefined);
   };
@@ -53,6 +53,7 @@ const PrefermentTab: React.FC = React.memo(() => {
       ))}
     </Tab>
   );
-});
+};
 
+const PrefermentTab = React.memo(Component, (p: Props, n: Props) => propsShallowCompare(p, n, []));
 export default PrefermentTab;

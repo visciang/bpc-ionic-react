@@ -1,10 +1,10 @@
 import React from "react";
 import { IonList, IonReorderGroup } from "@ionic/react";
 import { ItemReorderEventDetail } from "@ionic/core";
-import produce from "immer";
-import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import NewItemInput from "components/NewItemInput";
+import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import IngredientsPercentageItem from "components/IngredientsPercentageItem";
+import { propsShallowCompare } from "components/utils";
 import { IngredientName, Ingredients, IngredientValue } from "dataModel/Ingredient";
 
 type Props = {
@@ -15,19 +15,12 @@ type Props = {
   onIngredientsChange(ingredients: Ingredients): void;
 };
 
-const IngredientsPercentageList: React.FC<Props> = ({
-  title,
-  ingredients,
-  maxPercentage,
-  editable,
-  onIngredientsChange,
-}) => {
+const Component: React.FC<Props> = ({ title, ingredients, maxPercentage, editable, onIngredientsChange }) => {
+  console.log(`IngredientsPercentageList ${title}`);
+
   const onIngredientChange = (name: IngredientName, value: IngredientValue) => {
-    onIngredientsChange(
-      produce(ingredients, (draft) => {
-        draft.set(name, value);
-      })
-    );
+    if (!(ingredients.has(name) && ingredients.get(name) === value))
+      onIngredientsChange(new Map([...ingredients, [name, value]]));
   };
 
   const onIngredientReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
@@ -43,19 +36,16 @@ const IngredientsPercentageList: React.FC<Props> = ({
   };
 
   const onNewIngredient = (name: IngredientName) => {
-    onIngredientsChange(
-      produce(ingredients, (draft) => {
-        draft.set(name, undefined);
-      })
-    );
+    if (ingredients.has(name)) return;
+    onIngredientsChange(new Map([...ingredients, [name, undefined]]));
   };
 
   const onDeleteIngredient = (name: IngredientName) => {
-    onIngredientsChange(
-      produce(ingredients, (draft) => {
-        draft.delete(name);
-      })
-    );
+    if (!ingredients.has(name)) return;
+
+    let res = new Map([...ingredients]);
+    res.delete(name);
+    onIngredientsChange(res);
   };
 
   return (
@@ -78,4 +68,7 @@ const IngredientsPercentageList: React.FC<Props> = ({
   );
 };
 
+const IngredientsPercentageList = React.memo(Component, (p: Props, n: Props) =>
+  propsShallowCompare(p, n, ["title", "ingredients", "maxPercentage", "editable"])
+);
 export default IngredientsPercentageList;

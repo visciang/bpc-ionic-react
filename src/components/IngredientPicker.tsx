@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { IonItem, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
 import { IngredientName } from "dataModel/Ingredient";
+import { propsShallowCompare } from "components/utils";
 
 type Props = {
   label: string;
@@ -8,7 +9,7 @@ type Props = {
   onPick(value: IngredientName): void;
 };
 
-const IngredientPicker: React.FC<Props> = ({ label, values, onPick }) => {
+const Component: React.FC<Props> = ({ label, values, onPick }) => {
   const [value, setValue] = useState<string | undefined>(undefined);
 
   return (
@@ -35,4 +36,5 @@ const IngredientPicker: React.FC<Props> = ({ label, values, onPick }) => {
   );
 };
 
+const IngredientPicker = React.memo(Component, (p: Props, n: Props) => propsShallowCompare(p, n, ["label", "values"]));
 export default IngredientPicker;

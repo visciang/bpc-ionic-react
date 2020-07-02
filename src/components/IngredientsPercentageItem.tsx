@@ -1,8 +1,8 @@
 import React from "react";
 import { IonItem, IonLabel, IonInput, IonText, IonButton, IonIcon, IonReorder } from "@ionic/react";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { trashOutline } from "ionicons/icons";
-import { onIonChangeFloat } from "components/utils";
+import { onIonChangeFloat, propsShallowCompare } from "components/utils";
 import { IngredientName, IngredientValue } from "dataModel/Ingredient";
 import * as State from "state/State";
 
@@ -14,8 +14,10 @@ type Props = {
   onDelete?(name: IngredientName): void;
 };
 
-const IngredientsPercentageItem: React.FC<Props> = ({ name, value, maxPercentage, onChange, onDelete }) => {
-  const [editable] = useRecoilState(State.editable);
+const Component: React.FC<Props> = ({ name, value, maxPercentage, onChange, onDelete }) => {
+  console.log(`IngredientsPercentageItem ${name}`);
+
+  const editable = useRecoilValue(State.editable);
 
   let children: JSX.Element = <></>;
 
@@ -55,4 +57,7 @@ const IngredientsPercentageItem: React.FC<Props> = ({ name, value, maxPercentage
   );
 };
 
+const IngredientsPercentageItem = React.memo(Component, (p: Props, n: Props) =>
+  propsShallowCompare(p, n, ["name", "value", "maxPercentage"])
+);
 export default IngredientsPercentageItem;

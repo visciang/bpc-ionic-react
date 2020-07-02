@@ -1,5 +1,5 @@
 import React from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
   IonContent,
   IonHeader,
@@ -19,7 +19,7 @@ type Props = {
 };
 
 const Tab: React.FC<Props> = ({ editVisible, children }) => {
-  const [title] = useRecoilState(State.title);
+  const title = useRecoilValue(State.title);
   const [editable, setEditable] = useRecoilState(State.editable);
 
   const editButton = editVisible ? (

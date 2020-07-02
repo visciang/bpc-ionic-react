@@ -1,5 +1,5 @@
 import React from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { ScaleBy, Recipe } from "dataModel/Recipe";
 import IngredientsWeightList from "components/IngredientsWeightList";
 import { calculateFinalDough } from "components/Calculator";
@@ -12,10 +12,10 @@ type Props = {
 };
 
 const FinalDoughTable: React.FC<Props> = ({ scaleBy, totalAmount }) => {
-  const [title] = useRecoilState(State.title);
-  const [flours] = useRecoilState(State.flours);
-  const [ingredients] = useRecoilState(State.ingredients);
-  const [preferments] = useRecoilState(State.preferments);
+  const title = useRecoilValue(State.title);
+  const flours = useRecoilValue(State.flours);
+  const ingredients = useRecoilValue(State.ingredients);
+  const preferments = useRecoilValue(State.preferments);
 
   const percentageRecipe: Recipe = { name: title, flours: flours, ingredients: ingredients, preferments: preferments };
   const recipeValidationErrors = validateRecipe(percentageRecipe);

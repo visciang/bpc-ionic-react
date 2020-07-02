@@ -1,4 +1,5 @@
 import { InputChangeEventDetail } from "@ionic/core";
+import React from "react";
 import { IngredientValue } from "dataModel/Ingredient";
 
 type OnIonChange = (value: CustomEvent<InputChangeEventDetail>) => void;
@@ -30,7 +31,18 @@ export const sum = (...iterables: Iterable<IngredientValue>[]): NonNullable<Ingr
   return s;
 };
 
-export const propsShallowCompare = <T, K extends keyof T>(prevProps: T, nextProps: T, props: K[]): boolean => {
+export const memo = <T, K extends keyof T>(
+  Component: Parameters<typeof React.memo>[0],
+  props?: K[]
+): ReturnType<typeof React.memo> => {
+  const propsDefaulted = props || [];
+
+  return React.memo(Component, (prevProps: T, nextProps: T): boolean =>
+    propsShallowCompare(prevProps, nextProps, propsDefaulted)
+  );
+};
+
+const propsShallowCompare = <T, K extends keyof T>(prevProps: T, nextProps: T, props: K[]): boolean => {
   for (let prop of props) {
     if (prevProps[prop] !== nextProps[prop]) {
       return false;

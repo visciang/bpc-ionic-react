@@ -1,4 +1,3 @@
-import produce from "immer";
 import { Recipe, ScaleBy } from "dataModel/Recipe";
 import { Ingredients } from "dataModel/Ingredient";
 import { sum } from "components/utils";
@@ -11,21 +10,16 @@ export const calculateFinalDough = (recipe: Recipe, scaleBy: ScaleBy, totalAmoun
 };
 
 const calculateWeigths = (recipe: Recipe, scaleDoughFactor: number) => {
-  return produce(recipe, (draft) => {
-    for (let [name, value] of draft.flours.entries()) {
-      draft.flours.set(name, value! * scaleDoughFactor);
-    }
+  const calculatedRecipe: Recipe = {
+    name: recipe.name,
+    flours: new Map([...recipe.flours.entries()].map(([name, value]) => [name, value! * scaleDoughFactor])),
+    ingredients: new Map([...recipe.ingredients.entries()].map(([name, value]) => [name, value! * scaleDoughFactor])),
+    preferments: new Map(), // TODO
+  };
 
-    for (let [name, value] of draft.ingredients.entries()) {
-      draft.ingredients.set(name, value! * scaleDoughFactor);
-    }
-  });
+  return calculatedRecipe;
 };
 
 const calculateScaleFactor = (flours: Ingredients, ingredients: Ingredients, scaleBy: ScaleBy): number => {
-  if (scaleBy === ScaleBy.FLOUR) {
-    return 100;
-  } else {
-    return sum(flours.values(), ingredients.values());
-  }
+  return scaleBy === ScaleBy.FLOUR ? 100 : sum(flours.values(), ingredients.values());
 };

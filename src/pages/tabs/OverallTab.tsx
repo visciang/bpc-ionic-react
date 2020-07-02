@@ -1,11 +1,16 @@
 import React from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import Tab from "pages/tabs/Tab";
 import IngredientsPercentageList from "components/IngredientsPercentageList";
 import * as State from "state/State";
+import { propsShallowCompare } from "components/utils";
 
-const OverallTab: React.FC = React.memo(() => {
-  const [editable] = useRecoilState(State.editable);
+type Props = {};
+
+const Component: React.FC<Props> = () => {
+  console.log("OverallTab");
+
+  const editable = useRecoilValue(State.editable);
   const [flours, setFlours] = useRecoilState(State.flours);
   const [ingredients, setIngredients] = useRecoilState(State.ingredients);
 
@@ -27,6 +32,7 @@ const OverallTab: React.FC = React.memo(() => {
       />
     </Tab>
   );
-});
+};
 
+const OverallTab = React.memo(Component, (p: Props, n: Props) => propsShallowCompare(p, n, []));
 export default OverallTab;
