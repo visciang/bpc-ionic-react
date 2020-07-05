@@ -1,18 +1,38 @@
-import React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import React, { useCallback } from "react";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import Tab from "pages/tabs/Tab";
 import IngredientsPercentageList from "components/IngredientsPercentageList";
 import * as State from "state/State";
-import { propsShallowCompare } from "components/utils";
+import { Ingredients } from "dataModel/Ingredient";
+import { Preferments } from "dataModel/Preferment";
 
 type Props = {};
 
-const Component: React.FC<Props> = () => {
+let OverallTab: React.FC<Props> = () => {
   console.log("OverallTab");
 
   const editable = useRecoilValue(State.editable);
   const [flours, setFlours] = useRecoilState(State.flours);
   const [ingredients, setIngredients] = useRecoilState(State.ingredients);
+  const setPreferments = useSetRecoilState(State.preferments);
+
+  const onFloursChange = useCallback(
+    (flours: Ingredients) => {
+      const prefermentUpdater = removeDeletedIngredientsFromPreferments("flours", flours);
+      setPreferments(prefermentUpdater);
+      setFlours(flours);
+    },
+    [setPreferments, setFlours]
+  );
+
+  const onIngredientsChange = useCallback(
+    (ingredients: Ingredients) => {
+      const prefermentUpdater = removeDeletedIngredientsFromPreferments("ingredients", ingredients);
+      setPreferments(prefermentUpdater);
+      setIngredients(ingredients);
+    },
+    [setPreferments, setIngredients]
+  );
 
   return (
     <Tab editVisible={true}>
@@ -20,19 +40,39 @@ const Component: React.FC<Props> = () => {
         title="FLOURS"
         ingredients={flours}
         maxPercentage={100}
-        onIngredientsChange={setFlours}
+        onIngredientsChange={onFloursChange}
         editable={editable}
       />
       <IngredientsPercentageList
         title="INGREDIENTS"
         ingredients={ingredients}
         maxPercentage={undefined}
-        onIngredientsChange={setIngredients}
+        onIngredientsChange={onIngredientsChange}
         editable={editable}
       />
     </Tab>
   );
 };
 
-const OverallTab = React.memo(Component, (p: Props, n: Props) => propsShallowCompare(p, n, []));
-export default OverallTab;
+export default OverallTab = React.memo(OverallTab, () => true);
+
+const removeDeletedIngredientsFromPreferments = (kind: "flours" | "ingredients", ingredients: Ingredients) => {
+  const prefermentUpdater = (preferments: Preferments) => {
+    let updatedPreferments = preferments;
+
+    for (let [prefermentName, preferment] of preferments.entries()) {
+      const updatedIngredients = new Map(
+        [...preferment[kind].entries()].filter(([ingredientName, ingredientValue]) => ingredients.has(ingredientName))
+      );
+
+      if (updatedIngredients.size !== preferment[kind].size) {
+        const updatedPreferment = { ...preferment, [kind]: updatedIngredients };
+        updatedPreferments = new Map([...updatedPreferments, [prefermentName, updatedPreferment]]);
+      }
+    }
+
+    return updatedPreferments;
+  };
+
+  return prefermentUpdater;
+};

@@ -1,44 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useRecoilState } from "recoil";
 import Tab from "pages/tabs/Tab";
 import NewItemInput from "components/NewItemInput";
 import PrefermentSelector from "components/PrefermentSelector";
 import PrefermentPercentageList from "components/PrefermentPercentageList";
-import { propsShallowCompare } from "components/utils";
 import { PrefermentKind, Preferment as PrefermentT } from "dataModel/Preferment";
 import * as State from "state/State";
 
 type Props = {};
 
-const Component: React.FC<Props> = () => {
+let PrefermentTab: React.FC<Props> = () => {
+  console.log("PrefermentTab");
+
   const [prefermentKind, setPrefermentKind] = useState<PrefermentKind | undefined>(undefined);
   const [preferments, setPreferments] = useRecoilState(State.preferments);
 
-  const onNewPreferment = (name: string) => {
-    if (preferments.has(name)) return;
+  const onNewPreferment = useCallback((name: string) => {
+    console.log("onNewPreferment");
 
-    let newPreferment: PrefermentT;
+    if (!preferments.has(name)) {
+      let newPreferment: PrefermentT;
 
-    if (prefermentKind === PrefermentKind.PREDOUGH)
-      newPreferment = {
-        kind: PrefermentKind.PREDOUGH,
-        prefermentedFlour: undefined,
-        flours: new Map(),
-        ingredients: new Map(),
-      };
-    else
-      newPreferment = {
-        kind: PrefermentKind.SOURDOUGH,
-        prefermentedFlour: undefined,
-        flours: new Map(),
-        ingredients: new Map(),
-        seed: undefined,
-      };
+      if (prefermentKind === PrefermentKind.PREDOUGH)
+        newPreferment = {
+          kind: PrefermentKind.PREDOUGH,
+          prefermentedFlour: undefined,
+          flours: new Map(),
+          ingredients: new Map(),
+        };
+      else
+        newPreferment = {
+          kind: PrefermentKind.SOURDOUGH,
+          prefermentedFlour: undefined,
+          flours: new Map(),
+          ingredients: new Map(),
+          seed: undefined,
+        };
 
-    setPreferments(new Map([...preferments, [name, newPreferment]]));
+      setPreferments(new Map([...preferments, [name, newPreferment]]));
+    }
 
     setPrefermentKind(undefined);
-  };
+  }, [preferments, setPreferments, prefermentKind, setPrefermentKind]);
 
   return (
     <Tab editVisible={true}>
@@ -55,5 +58,4 @@ const Component: React.FC<Props> = () => {
   );
 };
 
-const PrefermentTab = React.memo(Component, (p: Props, n: Props) => propsShallowCompare(p, n, []));
-export default PrefermentTab;
+export default PrefermentTab = React.memo(PrefermentTab, () => true);

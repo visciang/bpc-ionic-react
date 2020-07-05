@@ -9,7 +9,7 @@ type Props = {
   onPick(value: IngredientName): void;
 };
 
-const Component: React.FC<Props> = ({ label, values, onPick }) => {
+let IngredientPicker: React.FC<Props> = ({ label, values, onPick }) => {
   const [value, setValue] = useState<string | undefined>(undefined);
 
   return (
@@ -36,5 +36,6 @@ const Component: React.FC<Props> = ({ label, values, onPick }) => {
   );
 };
 
-const IngredientPicker = React.memo(Component, (p: Props, n: Props) => propsShallowCompare(p, n, ["label", "values"]));
-export default IngredientPicker;
+export default IngredientPicker = React.memo(IngredientPicker, (p: Props, n: Props) =>
+  propsShallowCompare(p, n, ["label", "values"])
+);

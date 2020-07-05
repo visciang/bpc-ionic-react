@@ -10,7 +10,7 @@ type Props = {
   onDelete?(): void;
 };
 
-const Component: React.FC<Props> = ({ title, onDelete }) => {
+let IngredientsTitleToolbar: React.FC<Props> = ({ title, onDelete }) => {
   const editable = useRecoilValue(State.editable);
 
   const deleteButton =
@@ -28,5 +28,6 @@ const Component: React.FC<Props> = ({ title, onDelete }) => {
   );
 };
 
-const IngredientsTitleToolbar = React.memo(Component, (p: Props, n: Props) => propsShallowCompare(p, n, []));
-export default IngredientsTitleToolbar;
+export default IngredientsTitleToolbar = React.memo(IngredientsTitleToolbar, (p: Props, n: Props) =>
+  propsShallowCompare(p, n, [])
+);

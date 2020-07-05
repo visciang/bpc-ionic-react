@@ -4,7 +4,6 @@ import { ItemReorderEventDetail } from "@ionic/core";
 import NewItemInput from "components/NewItemInput";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import IngredientsPercentageItem from "components/IngredientsPercentageItem";
-import { propsShallowCompare } from "components/utils";
 import { IngredientName, Ingredients, IngredientValue } from "dataModel/Ingredient";
 
 type Props = {
@@ -15,7 +14,13 @@ type Props = {
   onIngredientsChange(ingredients: Ingredients): void;
 };
 
-const Component: React.FC<Props> = ({ title, ingredients, maxPercentage, editable, onIngredientsChange }) => {
+let IngredientsPercentageList: React.FC<Props> = ({
+  title,
+  ingredients,
+  maxPercentage,
+  editable,
+  onIngredientsChange,
+}) => {
   console.log(`IngredientsPercentageList ${title}`);
 
   const onIngredientChange = (name: IngredientName, value: IngredientValue) => {
@@ -68,7 +73,4 @@ const Component: React.FC<Props> = ({ title, ingredients, maxPercentage, editabl
   );
 };
 
-const IngredientsPercentageList = React.memo(Component, (p: Props, n: Props) =>
-  propsShallowCompare(p, n, ["title", "ingredients", "maxPercentage", "editable"])
-);
-export default IngredientsPercentageList;
+export default IngredientsPercentageList = React.memo(IngredientsPercentageList);

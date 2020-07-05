@@ -14,9 +14,7 @@ type Props = {
   onDelete?(name: IngredientName): void;
 };
 
-const Component: React.FC<Props> = ({ name, value, maxPercentage, onChange, onDelete }) => {
-  console.log(`IngredientsPercentageItem ${name}`);
-
+let IngredientsPercentageItem: React.FC<Props> = ({ name, value, maxPercentage, onChange, onDelete }) => {
   const editable = useRecoilValue(State.editable);
 
   let children: JSX.Element = <></>;
@@ -57,7 +55,6 @@ const Component: React.FC<Props> = ({ name, value, maxPercentage, onChange, onDe
   );
 };
 
-const IngredientsPercentageItem = React.memo(Component, (p: Props, n: Props) =>
-  propsShallowCompare(p, n, ["name", "value", "maxPercentage"])
+export default IngredientsPercentageItem = React.memo(IngredientsPercentageItem, (p: Props, n: Props) =>
+  propsShallowCompare(p, n, ["name", "value", "maxPercentage", "onChange", "onDelete"])
 );
-export default IngredientsPercentageItem;

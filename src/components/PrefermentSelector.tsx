@@ -7,7 +7,9 @@ type Props = {
   onSelect(prefermentType: PrefermentKind): void;
 };
 
-const PrefermentSelector: React.FC<Props> = ({ value, onSelect: onChange }) => {
+let PrefermentSelector: React.FC<Props> = ({ value, onSelect: onChange }) => {
+  console.log("PrefermentSelector");
+
   return (
     <IonItem lines="none" color="light">
       <IonLabel>Kind</IonLabel>
@@ -28,4 +30,4 @@ const PrefermentSelector: React.FC<Props> = ({ value, onSelect: onChange }) => {
   );
 };
 
-export default PrefermentSelector;
+export default PrefermentSelector = React.memo(PrefermentSelector);
