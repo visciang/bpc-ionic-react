@@ -3,14 +3,13 @@ import Tab from "pages/tabs/Tab";
 import ScaleBySelector from "components/ScaleBySelector";
 import TotalAmountInput from "components/TotalAmountInput";
 import FinalDoughTable from "components/FinalDoughTable";
-import { propsShallowCompare } from "components/utils";
 import { ScaleBy, Recipe } from "dataModel/Recipe";
 
 type Props = {
   recipe: Recipe;
 };
 
-const Component: React.FC<Props> = ({ recipe }) => {
+const FinalDoughTab: React.FC<Props> = ({ recipe }) => {
   const [scaleBy, setScaleBy] = useState<ScaleBy | undefined>(undefined);
   const [totalAmount, setTotalAmount] = useState<number | undefined>(undefined);
 
@@ -30,5 +29,4 @@ const Component: React.FC<Props> = ({ recipe }) => {
   );
 };
 
-const FinalDoughTab = React.memo(Component, (p: Props, n: Props) => propsShallowCompare(p, n, ["recipe"]));
 export default FinalDoughTab;

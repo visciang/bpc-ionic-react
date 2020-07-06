@@ -1,22 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import Tab from "pages/tabs/Tab";
 import IngredientsPercentageList from "components/IngredientsPercentageList";
-import { propsShallowCompare } from "components/utils";
 import { Ingredients } from "dataModel/Ingredient";
 
 type Props = {
   title: string;
   flours: Ingredients;
   ingredients: Ingredients;
+  editable: boolean;
   onFloursChange(flours: Ingredients): void;
   onIngredientsChange(flours: Ingredients): void;
+  onEditToggle(): void;
 };
 
-const Component: React.FC<Props> = ({ title, flours, ingredients, onFloursChange, onIngredientsChange }) => {
-  const [editable, setEditable] = useState(false);
-
+const OverallTab: React.FC<Props> = ({
+  title,
+  flours,
+  ingredients,
+  editable,
+  onFloursChange,
+  onIngredientsChange,
+  onEditToggle,
+}) => {
   return (
-    <Tab title={title} editActive={editable} onEditToggle={() => setEditable(!editable)}>
+    <Tab title={title} editActive={editable} onEditToggle={onEditToggle}>
       <IngredientsPercentageList
         title="FLOURS"
         ingredients={flours}
@@ -35,7 +42,4 @@ const Component: React.FC<Props> = ({ title, flours, ingredients, onFloursChange
   );
 };
 
-const OverallTab = React.memo(Component, (p: Props, n: Props) =>
-  propsShallowCompare(p, n, ["title", "flours", "ingredients"])
-);
 export default OverallTab;

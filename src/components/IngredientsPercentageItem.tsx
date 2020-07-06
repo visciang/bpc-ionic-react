@@ -14,7 +14,6 @@ type Props = {
 };
 
 const IngredientsPercentageItem: React.FC<Props> = ({ name, value, maxPercentage, onChange, onDelete }) => {
-
   if (onDelete) {
     return (
       <IonItem>

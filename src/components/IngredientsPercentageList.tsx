@@ -1,7 +1,6 @@
 import React from "react";
 import { IonList, IonReorderGroup } from "@ionic/react";
 import { ItemReorderEventDetail } from "@ionic/core";
-import produce from "immer";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import NewItemInput from "components/NewItemInput";
 import IngredientsPercentageItem from "components/IngredientsPercentageItem";
@@ -22,13 +21,8 @@ const IngredientsPercentageList: React.FC<Props> = ({
   editable,
   onIngredientsChange,
 }) => {
-  const onIngredientChange = (name: IngredientName, value: IngredientValue) => {
-    onIngredientsChange(
-      produce(ingredients, (draft) => {
-        draft.set(name, value);
-      })
-    );
-  };
+  const onIngredientChange = (name: IngredientName, value: IngredientValue) =>
+    onIngredientsChange(new Map([...ingredients, [name, value]]));
 
   const onIngredientReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
     let orderedIngredients = [...ingredients];
@@ -42,20 +36,12 @@ const IngredientsPercentageList: React.FC<Props> = ({
     event.detail.complete();
   };
 
-  const onNewIngredient = (name: IngredientName) => {
-    onIngredientsChange(
-      produce(ingredients, (draft) => {
-        draft.set(name, undefined);
-      })
-    );
-  };
+  const onNewIngredient = (name: IngredientName) => onIngredientsChange(new Map([...ingredients, [name, undefined]]));
 
   const onDeleteIngredient = (name: IngredientName) => {
-    onIngredientsChange(
-      produce(ingredients, (draft) => {
-        draft.delete(name);
-      })
-    );
+    let newIngredients = new Map(ingredients);
+    newIngredients.delete(name);
+    onIngredientsChange(newIngredients);
   };
 
   return (

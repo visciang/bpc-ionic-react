@@ -1,7 +1,6 @@
 import React from "react";
 import { IonList, IonReorderGroup } from "@ionic/react";
 import { ItemReorderEventDetail } from "@ionic/core";
-import { produce } from "immer";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import IngredientsPercentageItem from "components/IngredientsPercentageItem";
 import { Preferment, PrefermentKind } from "dataModel/Preferment";
@@ -27,38 +26,20 @@ const PrefermentPercentageList: React.FC<Props> = ({
   onPrefermentChange,
   onPrefermentDelete,
 }) => {
-  const onPrefermentedFlourChange = (name: IngredientName, value: IngredientValue) => {
-    onPrefermentChange(
-      produce(preferment, (draft) => {
-        draft.prefermentedFlour = value;
-      })
-    );
-  };
+  const onPrefermentedFlourChange = (name: IngredientName, value: IngredientValue) =>
+    onPrefermentChange({ ...preferment, prefermentedFlour: value });
 
   const onSeedChange = (name: IngredientName, value: IngredientValue) => {
-    if (preferment.kind === PrefermentKind.SOURDOUGH) {
-      onPrefermentChange(
-        produce(preferment, (draft) => {
-          draft.seed = value;
-        })
-      );
-    }
+    if (preferment.kind === PrefermentKind.SOURDOUGH) onPrefermentChange({ ...preferment, seed: value });
   };
 
-  const onIngredientChange = (kind: "flours" | "ingredients", name: IngredientName, value: IngredientValue) => {
-    onPrefermentChange(
-      produce(preferment, (draft) => {
-        draft[kind].set(name, value);
-      })
-    );
-  };
+  const onIngredientChange = (kind: "flours" | "ingredients", name: IngredientName, value: IngredientValue) =>
+    onPrefermentChange({ ...preferment, [kind]: new Map([...preferment[kind], [name, value]]) });
 
   const onIngredientDelete = (kind: "flours" | "ingredients", name: IngredientName) => {
-    onPrefermentChange(
-      produce(preferment, (draft) => {
-        draft[kind].delete(name);
-      })
-    );
+    let newIngredients = new Map(preferment[kind]);
+    newIngredients.delete(name);
+    onPrefermentChange({ ...preferment, [kind]: newIngredients });
   };
 
   const onIngredientReorder = (kind: "flours" | "ingredients", event: CustomEvent<ItemReorderEventDetail>) => {
@@ -68,21 +49,13 @@ const PrefermentPercentageList: React.FC<Props> = ({
     orderedIngredients.splice(event.detail.from, 1);
     orderedIngredients.splice(event.detail.to, 0, movedIngredient);
 
-    onPrefermentChange(
-      produce(preferment, (draft) => {
-        draft[kind] = new Map(orderedIngredients);
-      })
-    );
+    onPrefermentChange({ ...preferment, [kind]: new Map(orderedIngredients) });
 
     event.detail.complete();
   };
 
   const onNewIngredient = (kind: "flours" | "ingredients", name: IngredientName) => {
-    onPrefermentChange(
-      produce(preferment, (draft) => {
-        draft[kind].set(name, undefined);
-      })
-    );
+    onPrefermentChange({ ...preferment, [kind]: new Map([...preferment[kind], [name, undefined]]) });
   };
 
   const selectableFlours = [...flours.keys()].filter((flour) => !preferment.flours.has(flour));
