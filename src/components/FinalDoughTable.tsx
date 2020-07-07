@@ -17,8 +17,8 @@ const FinalDoughTable: React.FC<Props> = ({ recipe, scaleBy, totalAmount }) => {
       <div>
         <IngredientsWeightList
           title="OVERALL"
-          ingredientsPercentage={new Map([...recipe.flours.entries(), ...recipe.ingredients.entries()])}
-          ingredientsWeight={new Map([...finalDough.flours.entries(), ...finalDough.ingredients.entries()])}
+          ingredientsPercentage={new Map([...recipe.flours, ...recipe.ingredients])}
+          ingredientsWeight={new Map([...finalDough.flours, ...finalDough.ingredients])}
         />
         {/* TODO preferments and dough */}
       </div>
