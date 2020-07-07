@@ -10,7 +10,7 @@ type Props = {
   title: string;
   ingredients: Ingredients;
   maxPercentage?: number;
-  editable?: boolean;
+  editable: boolean;
   onIngredientsChange(ingredients: Ingredients): void;
 };
 
@@ -54,9 +54,9 @@ const IngredientsPercentageList: React.FC<Props> = ({
             name={name}
             value={value}
             maxPercentage={maxPercentage}
-            reordable={true}
+            editable={editable}
             onChange={onIngredientChange}
-            onDelete={editable ? onDeleteIngredient : undefined}
+            onDelete={onDeleteIngredient}
           />
         ))}
       </IonReorderGroup>

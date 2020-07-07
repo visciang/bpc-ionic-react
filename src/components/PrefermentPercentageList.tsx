@@ -68,6 +68,7 @@ const PrefermentPercentageList: React.FC<Props> = ({
         name="Prefermented flour"
         value={preferment.prefermentedFlour}
         maxPercentage={100}
+        editable={editable}
         onChange={onPrefermentedFlourChange}
       />
       {preferment.kind === PrefermentKind.SOURDOUGH ? (
@@ -75,6 +76,7 @@ const PrefermentPercentageList: React.FC<Props> = ({
           name="Sourdough starter"
           value={preferment.seed}
           maxPercentage={100}
+          editable={editable}
           onChange={onSeedChange}
         />
       ) : undefined}
@@ -85,9 +87,9 @@ const PrefermentPercentageList: React.FC<Props> = ({
             name={name}
             value={value}
             maxPercentage={100}
-            reordable={true}
+            editable={editable}
             onChange={(name, value) => onIngredientChange("flours", name, value)}
-            onDelete={editable ? (name) => onIngredientDelete("flours", name) : undefined}
+            onDelete={(name) => onIngredientDelete("flours", name)}
           />
         ))}
       </IonReorderGroup>
@@ -99,9 +101,9 @@ const PrefermentPercentageList: React.FC<Props> = ({
               name={name}
               value={value}
               maxPercentage={100}
-              reordable={true}
+              editable={editable}
               onChange={(name, value) => onIngredientChange("ingredients", name, value)}
-              onDelete={editable ? (name) => onIngredientDelete("ingredients", name) : undefined}
+              onDelete={(name) => onIngredientDelete("ingredients", name)}
             />
           );
         })}

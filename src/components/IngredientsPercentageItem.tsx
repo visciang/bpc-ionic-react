@@ -8,26 +8,28 @@ type Props = {
   name: IngredientName;
   value: IngredientValue;
   maxPercentage?: number;
-  reordable?: boolean;
+  editable: boolean;
   onChange(name: IngredientName, value: IngredientValue): void;
   onDelete?(name: IngredientName): void;
 };
 
-const IngredientsPercentageItem: React.FC<Props> = ({ name, value, maxPercentage, onChange, onDelete }) => {
-  if (onDelete) {
-    return (
-      <IonItem>
-        <IonLabel>{name}</IonLabel>
-        <IonButton slot="end" onClick={() => onDelete(name)} fill="clear">
-          <IonIcon slot="icon-only" icon={trashOutline} />
-        </IonButton>
-        <IonReorder slot="end" className="ion-no-margin" />
-      </IonItem>
-    );
+const IngredientsPercentageItem: React.FC<Props> = ({ name, value, maxPercentage, editable, onChange, onDelete }) => {
+  let children: JSX.Element = <></>;
+
+  if (editable) {
+    if (onDelete) {
+      children = (
+        <>
+          <IonButton slot="end" onClick={() => onDelete(name)} fill="clear">
+            <IonIcon slot="icon-only" icon={trashOutline} />
+          </IonButton>
+          <IonReorder slot="end" className="ion-no-margin" />
+        </>
+      );
+    }
   } else {
-    return (
-      <IonItem>
-        <IonLabel>{name}</IonLabel>
+    children = (
+      <>
         <IonInput
           className="ion-padding-horizontal ion-text-right"
           type="number"
@@ -38,9 +40,16 @@ const IngredientsPercentageItem: React.FC<Props> = ({ name, value, maxPercentage
           onIonChange={onIonChangeFloat((v) => onChange(name, v))}
         />
         <IonText>%</IonText>
-      </IonItem>
+      </>
     );
   }
+
+  return (
+    <IonItem>
+      <IonLabel>{name}</IonLabel>
+      {children}
+    </IonItem>
+  );
 };
 
 export default IngredientsPercentageItem;
