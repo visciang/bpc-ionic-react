@@ -8,10 +8,16 @@ type Props = {
   title: string;
   ingredientsPercentage: Ingredients;
   ingredientsWeight: Ingredients;
+  totalWeightSubtract?: number;
 };
 
-const IngredientsWeightList: React.FC<Props> = ({ title, ingredientsPercentage, ingredientsWeight }) => {
-  const totalWeight = sum(ingredientsWeight.values());
+const IngredientsWeightList: React.FC<Props> = ({
+  title,
+  ingredientsPercentage,
+  ingredientsWeight,
+  totalWeightSubtract,
+}) => {
+  const totalWeight = sum(ingredientsWeight.values()) - (totalWeightSubtract || 0);
 
   return (
     <IonList lines="none">
