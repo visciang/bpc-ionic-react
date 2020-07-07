@@ -18,7 +18,7 @@ const FinalDoughTable: React.FC<Props> = ({ recipe, scaleBy, totalAmount }) => {
     console.log(recipeValidationErrors);
     return <strong>RECIPE NOT VALID</strong>;
   }
-  
+
   const finalDough = calculateFinalDough(recipe, scaleBy, totalAmount);
 
   return (
