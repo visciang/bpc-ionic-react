@@ -28,7 +28,7 @@ const IngredientsWeightList: React.FC<Props> = ({ title, ingredientsPercentage, 
             <strong>WEIGHT</strong>
           </IonCol>
         </IonRow>
-        {[...ingredientsPercentage.entries()].map(([name, percentage], idx) => (
+        {[...ingredientsPercentage].map(([name, percentage], idx) => (
           <IonRow key={`${idx}-${name}`} className={idx % 2 === 0 ? "background-light" : undefined}>
             <IonCol className="ion-text-start">{name}</IonCol>
             <IonCol size="2" className="ion-text-end">

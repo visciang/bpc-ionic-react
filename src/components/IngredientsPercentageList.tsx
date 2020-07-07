@@ -48,7 +48,7 @@ const IngredientsPercentageList: React.FC<Props> = ({
     <IonList lines="none">
       <IngredientsTitleToolbar title={title} />
       <IonReorderGroup disabled={!editable} onIonItemReorder={onIngredientReorder}>
-        {[...ingredients.entries()].map(([name, value]) => (
+        {[...ingredients].map(([name, value]) => (
           <IngredientsPercentageItem
             key={name}
             name={name}

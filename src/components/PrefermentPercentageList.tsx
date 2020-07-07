@@ -81,7 +81,7 @@ const PrefermentPercentageList: React.FC<Props> = ({
         />
       ) : undefined}
       <IonReorderGroup disabled={!editable} onIonItemReorder={(e) => onIngredientReorder("flours", e)}>
-        {[...preferment.flours.entries()].map(([name, value]) => (
+        {[...preferment.flours].map(([name, value]) => (
           <IngredientsPercentageItem
             key={name}
             name={name}
@@ -94,7 +94,7 @@ const PrefermentPercentageList: React.FC<Props> = ({
         ))}
       </IonReorderGroup>
       <IonReorderGroup disabled={!editable} onIonItemReorder={(e) => onIngredientReorder("ingredients", e)}>
-        {[...preferment.ingredients.entries()].map(([name, value]) => {
+        {[...preferment.ingredients].map(([name, value]) => {
           return (
             <IngredientsPercentageItem
               key={name}

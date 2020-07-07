@@ -90,9 +90,9 @@ const removeDeletedIngredientsFromPreferments = (
 ) => {
   let updatedPreferments = preferments;
 
-  for (let [prefermentName, preferment] of preferments.entries()) {
+  for (let [prefermentName, preferment] of preferments) {
     const updatedIngredients = new Map(
-      [...preferment[kind].entries()].filter(([ingredientName, ingredientValue]) => ingredients.has(ingredientName))
+      [...preferment[kind]].filter(([ingredientName, ingredientValue]) => ingredients.has(ingredientName))
     );
 
     const updatedPreferment = { ...preferment, [kind]: updatedIngredients };

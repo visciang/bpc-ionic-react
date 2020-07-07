@@ -12,8 +12,8 @@ export const calculateFinalDough = (recipe: Recipe, scaleBy: ScaleBy, totalAmoun
 const calculateWeigths = (recipe: Recipe, scaleDoughFactor: number) => {
   const calculatedRecipe: Recipe = {
     name: recipe.name,
-    flours: new Map([...recipe.flours.entries()].map(([name, value]) => [name, value! * scaleDoughFactor])),
-    ingredients: new Map([...recipe.ingredients.entries()].map(([name, value]) => [name, value! * scaleDoughFactor])),
+    flours: new Map([...recipe.flours].map(([name, value]) => [name, value! * scaleDoughFactor])),
+    ingredients: new Map([...recipe.ingredients].map(([name, value]) => [name, value! * scaleDoughFactor])),
     preferments: new Map(), // TODO
   };
 

@@ -7,7 +7,7 @@ export const isValidRecipe = (recipe: Recipe): boolean => {
 };
 
 const checkFlours = (flours: Ingredients): boolean => {
-  for (let [flourName, flourValue] of flours.entries()) {
+  for (let [flourName, flourValue] of flours) {
     if (flourValue === undefined) {
       console.log(`Undefined flour value: '${flourName}'`);
       return false;

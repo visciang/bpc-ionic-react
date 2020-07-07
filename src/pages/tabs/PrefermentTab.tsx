@@ -65,7 +65,7 @@ const PrefermentTab: React.FC<Props> = ({
         <PrefermentSelector value={prefermentKind} onSelect={setPrefermentKind} />
         <NewItemInput onNewItem={prefermentKind ? onNewPreferment : undefined} />
       </div>
-      {[...preferments.entries()].map(([name, preferment]) => (
+      {[...preferments].map(([name, preferment]) => (
         <div key={name} className="border-top ion-padding-vertical">
           <PrefermentPercentageList
             title={name}
