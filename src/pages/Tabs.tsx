@@ -7,22 +7,23 @@ import PrefermentTab from "pages/tabs/PrefermentTab";
 import FinalDoughTab from "pages/tabs/FinalDoughTab";
 import { Preferments } from "dataModel/Preferment";
 import { Ingredients } from "dataModel/Ingredient";
-import { recipe } from "dataModel/SampleRecipe";
-
-const untitledRecipe = recipe;
+import { recipe as untitledRecipe } from "dataModel/SampleRecipe";
 
 const Tabs: React.FC = () => {
-  const [recipe, setRecipe] = useState(untitledRecipe);
   const [editable, setEditable] = useState(false);
-
-  const onPrefermentsChange = (preferments: Preferments) => setRecipe({ ...recipe, preferments: preferments });
+  const [name] = useState(untitledRecipe.name);
+  const [flours, setFlours] = useState(untitledRecipe.flours);
+  const [ingredients, setIngredients] = useState(untitledRecipe.ingredients);
+  const [preferments, setPreferments] = useState(untitledRecipe.preferments);
 
   const onIngredientsChange = (kind: "flours" | "ingredients", ingredients: Ingredients) => {
-    const preferments = removeDeletedIngredientsFromPreferments(recipe.preferments, kind, ingredients);
-    setRecipe({ ...recipe, [kind]: ingredients, preferments: preferments });
+    const _preferments = removeDeletedIngredientsFromPreferments(preferments, kind, ingredients);
+    (kind === "flours" ? setFlours : setIngredients)(ingredients);
+    setPreferments(_preferments);
   };
 
   const onEditToggle = () => setEditable(!editable);
+
   const resetEditable = () => {
     if (editable) setEditable(false);
   };
@@ -34,9 +35,9 @@ const Tabs: React.FC = () => {
           path="/overallTab"
           render={() => (
             <OverallTab
-              title={recipe.name}
-              flours={recipe.flours}
-              ingredients={recipe.ingredients}
+              title={name}
+              flours={flours}
+              ingredients={ingredients}
               editable={editable}
               onFloursChange={(flours) => onIngredientsChange("flours", flours)}
               onIngredientsChange={(ingredients) => onIngredientsChange("ingredients", ingredients)}
@@ -49,18 +50,24 @@ const Tabs: React.FC = () => {
           path="/prefermentTab"
           render={() => (
             <PrefermentTab
-              title={recipe.name}
-              flours={recipe.flours}
-              ingredients={recipe.ingredients}
-              preferments={recipe.preferments}
+              title={name}
+              flours={flours}
+              ingredients={ingredients}
+              preferments={preferments}
               editable={editable}
-              onPrefermentsChange={onPrefermentsChange}
+              onPrefermentsChange={setPreferments}
               onEditToggle={onEditToggle}
             />
           )}
           exact={true}
         />
-        <Route path="/finalDough" render={() => <FinalDoughTab recipe={recipe} />} exact={true} />
+        <Route
+          path="/finalDough"
+          render={() => (
+            <FinalDoughTab title={name} flours={flours} ingredients={ingredients} preferments={preferments} />
+          )}
+          exact={true}
+        />
         <Route path="/" render={() => <Redirect to="/overallTab" />} exact={true} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">

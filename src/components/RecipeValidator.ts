@@ -1,16 +1,19 @@
-import { Recipe } from "dataModel/Recipe";
 import { Ingredients } from "dataModel/Ingredient";
 import { sum } from "components/utils";
 import { Preferments } from "dataModel/Preferment";
 
 export type RecipeValidationErrors = string[];
 
-export const validateRecipe = (recipe: Recipe): RecipeValidationErrors => {
+export const validateRecipe = (
+  flours: Ingredients,
+  ingredients: Ingredients,
+  preferments: Preferments
+): RecipeValidationErrors => {
   const errors: RecipeValidationErrors = [];
 
-  errors.push(...checkFlours(recipe.flours, "OVERALL"));
-  errors.push(...checkIngredients(recipe.ingredients, "OVERALL"));
-  errors.push(...checkPreferments(recipe.preferments));
+  errors.push(...checkFlours(flours, "OVERALL"));
+  errors.push(...checkIngredients(ingredients, "OVERALL"));
+  errors.push(...checkPreferments(preferments));
 
   return errors;
 };

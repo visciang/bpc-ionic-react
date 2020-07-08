@@ -3,19 +3,30 @@ import { Ingredients } from "dataModel/Ingredient";
 import { sum } from "components/utils";
 import { Preferment, Preferments, PrefermentKind } from "dataModel/Preferment";
 
-export const calculateFinalDough = (recipe: Recipe, scaleBy: ScaleBy, totalAmount: number): Recipe => {
-  const scaleFactor = calculateScaleFactor(recipe.flours, recipe.ingredients, scaleBy);
+export const calculateFinalDough = (
+  flours: Ingredients,
+  ingredients: Ingredients,
+  preferments: Preferments,
+  scaleBy: ScaleBy,
+  totalAmount: number
+): Recipe => {
+  const scaleFactor = calculateScaleFactor(flours, ingredients, scaleBy);
   const scaleDoughFactor = totalAmount / scaleFactor;
 
-  return calculateWeigths(recipe, scaleDoughFactor);
+  return calculateWeigths(flours, ingredients, preferments, scaleDoughFactor);
 };
 
-const calculateWeigths = (recipe: Recipe, scaleDoughFactor: number) => {
+const calculateWeigths = (
+  flours: Ingredients,
+  ingredients: Ingredients,
+  preferments: Preferments,
+  scaleDoughFactor: number
+) => {
   const calculatedRecipe: Recipe = {
-    name: recipe.name,
-    flours: calculateIngredients(recipe.flours, scaleDoughFactor),
-    ingredients: calculateIngredients(recipe.ingredients, scaleDoughFactor),
-    preferments: calculatePreferments(recipe.preferments, scaleDoughFactor),
+    name: "",
+    flours: calculateIngredients(flours, scaleDoughFactor),
+    ingredients: calculateIngredients(ingredients, scaleDoughFactor),
+    preferments: calculatePreferments(preferments, scaleDoughFactor),
   };
 
   return calculatedRecipe;
