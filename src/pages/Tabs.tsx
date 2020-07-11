@@ -8,7 +8,7 @@ import FinalDoughTab from "pages/tabs/FinalDoughTab";
 import { Preferments } from "dataModel/Preferment";
 import { Ingredients, IngredientName } from "dataModel/Ingredient";
 import { recipe as untitledRecipe } from "dataModel/SampleRecipe";
-import { equals } from "components/utils";
+import { listEquals } from "components/utils";
 
 const Tabs: React.FC = () => {
   const [editable, setEditable] = useState(false);
@@ -23,7 +23,7 @@ const Tabs: React.FC = () => {
     (currentFlours: Ingredients) => {
       setFlours(currentFlours);
 
-      if (!equals([...currentFlours.keys()], [...flours.keys()])) {
+      if (!listEquals([...currentFlours.keys()], [...flours.keys()])) {
         setAvailableFlours([...currentFlours.keys()]);
       }
 
@@ -40,7 +40,7 @@ const Tabs: React.FC = () => {
     (currentIngredients: Ingredients) => {
       setIngredients(currentIngredients);
 
-      if (!equals([...currentIngredients.keys()], [...ingredients.keys()])) {
+      if (!listEquals([...currentIngredients.keys()], [...ingredients.keys()])) {
         setAvailableIngredients([...currentIngredients.keys()]);
       }
 

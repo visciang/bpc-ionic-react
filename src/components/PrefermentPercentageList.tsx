@@ -4,7 +4,7 @@ import { ItemReorderEventDetail } from "@ionic/core";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import IngredientPercentageItem from "components/IngredientPercentageItem";
 import IngredientPicker from "components/IngredientPicker";
-import { deleteIngredient, reorderIngredients } from "components/utils";
+import { mapDelete, mapMove } from "components/utils";
 import { Preferment, PrefermentKind } from "dataModel/Preferment";
 import { IngredientName, IngredientValue } from "dataModel/Ingredient";
 
@@ -52,13 +52,13 @@ let PrefermentPercentageList: React.FC<Props> = ({
   );
 
   const onFlourDelete = useCallback(
-    (name: IngredientName) => onPrefermentChange({ ...preferment, flours: deleteIngredient(preferment.flours, name) }),
+    (name: IngredientName) => onPrefermentChange({ ...preferment, flours: mapDelete(preferment.flours, name) }),
     [preferment, onPrefermentChange]
   );
 
   const onIngredientDelete = useCallback(
     (name: IngredientName) =>
-      onPrefermentChange({ ...preferment, ingredients: deleteIngredient(preferment.ingredients, name) }),
+      onPrefermentChange({ ...preferment, ingredients: mapDelete(preferment.ingredients, name) }),
     [preferment, onPrefermentChange]
   );
 
@@ -66,7 +66,7 @@ let PrefermentPercentageList: React.FC<Props> = ({
     (event: CustomEvent<ItemReorderEventDetail>) => {
       onPrefermentChange({
         ...preferment,
-        flours: reorderIngredients(preferment.flours, event.detail.from, event.detail.to),
+        flours: mapMove(preferment.flours, event.detail.from, event.detail.to),
       });
       event.detail.complete();
     },
@@ -77,7 +77,7 @@ let PrefermentPercentageList: React.FC<Props> = ({
     (event: CustomEvent<ItemReorderEventDetail>) => {
       onPrefermentChange({
         ...preferment,
-        ingredients: reorderIngredients(preferment.ingredients, event.detail.from, event.detail.to),
+        ingredients: mapMove(preferment.ingredients, event.detail.from, event.detail.to),
       });
       event.detail.complete();
     },

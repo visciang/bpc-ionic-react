@@ -4,7 +4,7 @@ import { ItemReorderEventDetail } from "@ionic/core";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import NewItemInput from "components/NewItemInput";
 import IngredientPercentageItem from "components/IngredientPercentageItem";
-import { reorderIngredients, deleteIngredient } from "components/utils";
+import { mapMove, mapDelete } from "components/utils";
 import { IngredientName, Ingredients, IngredientValue } from "dataModel/Ingredient";
 
 type Props = {
@@ -29,7 +29,7 @@ let IngredientsPercentageList: React.FC<Props> = ({
 
   const onIngredientReorder = useCallback(
     (event: CustomEvent<ItemReorderEventDetail>) => {
-      onIngredientsChange(reorderIngredients(ingredients, event.detail.from, event.detail.to));
+      onIngredientsChange(mapMove(ingredients, event.detail.from, event.detail.to));
       event.detail.complete();
     },
     [ingredients, onIngredientsChange]
@@ -40,10 +40,10 @@ let IngredientsPercentageList: React.FC<Props> = ({
     [ingredients, onIngredientsChange]
   );
 
-  const onDeleteIngredient = useCallback(
-    (name: IngredientName) => onIngredientsChange(deleteIngredient(ingredients, name)),
-    [ingredients, onIngredientsChange]
-  );
+  const onDeleteIngredient = useCallback((name: IngredientName) => onIngredientsChange(mapDelete(ingredients, name)), [
+    ingredients,
+    onIngredientsChange,
+  ]);
 
   return (
     <IonList lines="none">

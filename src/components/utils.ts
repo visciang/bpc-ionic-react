@@ -1,5 +1,5 @@
 import { InputChangeEventDetail } from "@ionic/core";
-import { IngredientValue, IngredientName, Ingredients } from "dataModel/Ingredient";
+import { IngredientValue } from "dataModel/Ingredient";
 
 type OnIonChange = (value: CustomEvent<InputChangeEventDetail>) => void;
 type OnChangeFloat = (value?: number) => void;
@@ -36,24 +36,32 @@ export const sum = (...iterables: Iterable<IngredientValue>[]): NonNullable<Ingr
   return s;
 };
 
-export const equals = (ingredientsA: IngredientName[], ingredientsB: IngredientName[]): boolean => {
-  return ingredientsA.length === ingredientsB.length && ingredientsA.every((elm) => ingredientsB.includes(elm));
+export const listEquals = <T>(listA: T[], listB: T[]): boolean => {
+  if (listA.length !== listB.length) return false;
+
+  for (let idx = 0; idx < listA.length; idx++) {
+    for (let jdx = 0; jdx < listB.length; jdx++) {
+      if (listA[idx] !== listB[jdx]) return false;
+    }
+  }
+
+  return true;
 };
 
 // TODO difference(ingredientsA: IngredientName[], ingredientsB: IngredientName[]): void
 
-export const deleteIngredient = (ingredients: Ingredients, name: IngredientName) => {
-  let newIngredients = new Map(ingredients);
-  newIngredients.delete(name);
-  return newIngredients;
+export const mapDelete = <K, V>(map: Map<K, V>, key: K): Map<K, V> => {
+  let newMap = new Map(map);
+  newMap.delete(key);
+  return newMap;
 };
 
-export const reorderIngredients = (ingredients: Ingredients, fromIdx: number, toIdx: number) => {
-  let orderedIngredients = [...ingredients];
-  const movedIngredient = orderedIngredients[fromIdx];
+export const mapMove = <K, V>(map: Map<K, V>, keyAtIdx: number, toIdx: number): Map<K, V> => {
+  let orderedKVPairs = [...map];
+  const movedKVPair = orderedKVPairs[keyAtIdx];
 
-  orderedIngredients.splice(fromIdx, 1);
-  orderedIngredients.splice(toIdx, 0, movedIngredient);
+  orderedKVPairs.splice(keyAtIdx, 1);
+  orderedKVPairs.splice(toIdx, 0, movedKVPair);
 
-  return new Map(orderedIngredients);
+  return new Map(orderedKVPairs);
 };
