@@ -7,7 +7,7 @@ type Props = {
   onDelete?(): void;
 };
 
-const IngredientsTitleToolbar: React.FC<Props> = ({ title, onDelete }) => {
+let IngredientsTitleToolbar: React.FC<Props> = ({ title, onDelete }) => {
   const deleteButton = onDelete ? (
     <IonButton size="small" slot="end" onClick={onDelete} fill="clear">
       <IonIcon slot="icon-only" icon={trashOutline} />
@@ -22,4 +22,4 @@ const IngredientsTitleToolbar: React.FC<Props> = ({ title, onDelete }) => {
   );
 };
 
-export default IngredientsTitleToolbar;
+export default IngredientsTitleToolbar = React.memo(IngredientsTitleToolbar);

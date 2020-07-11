@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { IonItem, IonLabel, IonInput, IonText, IonButton, IonIcon, IonReorder } from "@ionic/react";
 import { trashOutline } from "ionicons/icons";
 import { onIonChangeFloat } from "components/utils";
@@ -13,7 +13,12 @@ type Props = {
   onDelete?(name: IngredientName): void;
 };
 
-const IngredientsPercentageItem: React.FC<Props> = ({ name, value, maxPercentage, editable, onChange, onDelete }) => {
+let IngredientPercentageItem: React.FC<Props> = ({ name, value, maxPercentage, editable, onChange, onDelete }) => {
+  const onIonChange = useCallback(
+    onIonChangeFloat(value, (v) => onChange(name, v)),
+    [name, value, onChange]
+  );
+
   let children: JSX.Element = <></>;
 
   if (editable) {
@@ -37,7 +42,7 @@ const IngredientsPercentageItem: React.FC<Props> = ({ name, value, maxPercentage
           min="0"
           max={maxPercentage?.toString()}
           value={value}
-          onIonChange={onIonChangeFloat((v) => onChange(name, v))}
+          onIonChange={onIonChange}
         />
         <IonText>%</IonText>
       </>
@@ -52,4 +57,4 @@ const IngredientsPercentageItem: React.FC<Props> = ({ name, value, maxPercentage
   );
 };
 
-export default IngredientsPercentageItem;
+export default IngredientPercentageItem = React.memo(IngredientPercentageItem);

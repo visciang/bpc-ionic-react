@@ -8,7 +8,7 @@ type Props = {
   onPick(value: IngredientName): void;
 };
 
-const IngredientPicker: React.FC<Props> = ({ label, values, onPick }) => {
+let IngredientPicker: React.FC<Props> = ({ label, values, onPick }) => {
   const [value, setValue] = useState<string | undefined>(undefined);
 
   return (
@@ -35,4 +35,4 @@ const IngredientPicker: React.FC<Props> = ({ label, values, onPick }) => {
   );
 };
 
-export default IngredientPicker;
+export default IngredientPicker = React.memo(IngredientPicker);

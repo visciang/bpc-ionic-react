@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { IonItem, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
+import { SelectChangeEventDetail } from "@ionic/core";
 import { PrefermentKind } from "dataModel/Preferment";
 
 type Props = {
@@ -7,17 +8,16 @@ type Props = {
   onSelect(prefermentType: PrefermentKind): void;
 };
 
-const PrefermentSelector: React.FC<Props> = ({ value, onSelect: onChange }) => {
+let PrefermentSelector: React.FC<Props> = ({ value, onSelect }) => {
+  const onIonChange = useCallback(
+    (event: CustomEvent<SelectChangeEventDetail>) => event.detail.value && onSelect(event.detail.value),
+    [onSelect]
+  );
+
   return (
     <IonItem lines="none" color="light">
       <IonLabel>Kind</IonLabel>
-      <IonSelect
-        interface="popover"
-        value={value}
-        onIonChange={(e) => {
-          if (e.detail.value) onChange(e.detail.value);
-        }}
-      >
+      <IonSelect interface="popover" value={value} onIonChange={onIonChange}>
         {Object.keys(PrefermentKind).map((value) => (
           <IonSelectOption key={value} value={value}>
             {value}
@@ -28,4 +28,4 @@ const PrefermentSelector: React.FC<Props> = ({ value, onSelect: onChange }) => {
   );
 };
 
-export default PrefermentSelector;
+export default PrefermentSelector = React.memo(PrefermentSelector);

@@ -13,7 +13,7 @@ type Props = {
   onEditToggle(): void;
 };
 
-const OverallTab: React.FC<Props> = ({
+let OverallTab: React.FC<Props> = ({
   title,
   flours,
   ingredients,
@@ -42,4 +42,4 @@ const OverallTab: React.FC<Props> = ({
   );
 };
 
-export default OverallTab;
+export default OverallTab = React.memo(OverallTab);

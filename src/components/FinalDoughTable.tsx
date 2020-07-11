@@ -14,7 +14,7 @@ type Props = {
   totalAmount: number;
 };
 
-const FinalDoughTable: React.FC<Props> = ({ flours, ingredients, preferments, scaleBy, totalAmount }) => {
+let FinalDoughTable: React.FC<Props> = ({ flours, ingredients, preferments, scaleBy, totalAmount }) => {
   const recipeValidationErrors = validateRecipe(flours, ingredients, preferments);
 
   if (recipeValidationErrors.length > 0) {
@@ -65,4 +65,4 @@ const FinalDoughTable: React.FC<Props> = ({ flours, ingredients, preferments, sc
   );
 };
 
-export default FinalDoughTable;
+export default FinalDoughTable = React.memo(FinalDoughTable);

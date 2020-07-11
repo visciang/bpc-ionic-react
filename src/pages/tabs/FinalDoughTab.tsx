@@ -14,7 +14,7 @@ type Props = {
   preferments: Preferments;
 };
 
-const FinalDoughTab: React.FC<Props> = ({ title, flours, ingredients, preferments }) => {
+let FinalDoughTab: React.FC<Props> = ({ title, flours, ingredients, preferments }) => {
   const [scaleBy, setScaleBy] = useState<ScaleBy | undefined>(undefined);
   const [totalAmount, setTotalAmount] = useState<number | undefined>(undefined);
 
@@ -40,4 +40,4 @@ const FinalDoughTab: React.FC<Props> = ({ title, flours, ingredients, preferment
   );
 };
 
-export default FinalDoughTab;
+export default FinalDoughTab = React.memo(FinalDoughTab);

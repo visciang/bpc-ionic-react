@@ -11,7 +11,7 @@ type Props = {
   totalWeightSubtract?: number;
 };
 
-const IngredientsWeightList: React.FC<Props> = ({
+let IngredientsWeightList: React.FC<Props> = ({
   title,
   ingredientsPercentage,
   ingredientsWeight,
@@ -53,4 +53,4 @@ const IngredientsWeightList: React.FC<Props> = ({
   );
 };
 
-export default IngredientsWeightList;
+export default IngredientsWeightList = React.memo(IngredientsWeightList);
