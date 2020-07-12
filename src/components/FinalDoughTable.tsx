@@ -1,10 +1,10 @@
 import React from "react";
 import { ScaleBy } from "dataModel/Recipe";
 import IngredientsWeightList from "components/IngredientsWeightList";
-import { calculateFinalDough } from "components/Calculator";
+import { calculateDough } from "components/Calculator";
 import { validateRecipe } from "components/RecipeValidator";
-import { PrefermentKind, Preferments } from "dataModel/Preferment";
-import { Ingredients } from "dataModel/Ingredient";
+import { Preferments } from "dataModel/Preferment";
+import { Ingredients, IngredientName } from "dataModel/Ingredient";
 
 type Props = {
   flours: Ingredients;
@@ -23,31 +23,27 @@ let FinalDoughTable: React.FC<Props> = ({ flours, ingredients, preferments, scal
     return <strong>RECIPE NOT VALID</strong>;
   }
 
-  const finalDough = calculateFinalDough(flours, ingredients, preferments, scaleBy, totalAmount);
+  const dough = calculateDough(flours, ingredients, preferments, scaleBy, totalAmount);
+
+  const finalFlours = [...flours.keys()].map<[IngredientName, undefined]>((k) => [k, undefined]);
+  const finalIngredients = [...ingredients.keys()].map<[IngredientName, undefined]>((k) => [k, undefined]);
+  const finalIngredientsPercentage = new Map([...finalFlours, ...finalIngredients]);
 
   return (
     <div>
       <IngredientsWeightList
         title="OVERALL"
         ingredientsPercentage={new Map([...flours, ...ingredients])}
-        ingredientsWeight={new Map([...finalDough.flours, ...finalDough.ingredients])}
+        ingredientsWeight={dough.overall}
       />
-      {[...finalDough.preferments].map(([prefermentName, preferment]) => {
-        const recipePreferment = preferments.get(prefermentName)!;
-
-        const ingredientsPercentage = new Map([
+      {[...dough.preferments].map(([prefermentName, preferment]) => {
+        let ingredientsPercentage = new Map([
           ...preferments.get(prefermentName)!.flours,
           ...preferments.get(prefermentName)!.ingredients,
         ]);
-        const ingredientsWeight = new Map([...preferment.flours, ...preferment.ingredients]);
-        let totalWeightSubtract = 0;
 
-        if (recipePreferment.kind === PrefermentKind.SOURDOUGH) {
-          ingredientsPercentage.set("(sourdough seed)", recipePreferment.seed);
-        }
-        if (preferment.kind === PrefermentKind.SOURDOUGH) {
-          ingredientsWeight.set("(sourdough seed)", preferment.seed);
-          totalWeightSubtract = preferment.seed!;
+        if (preferment.seed) {
+          ingredientsPercentage.set("(sourdough seed)", preferment.seed);
         }
 
         return (
@@ -55,12 +51,16 @@ let FinalDoughTable: React.FC<Props> = ({ flours, ingredients, preferments, scal
             key={prefermentName}
             title={prefermentName}
             ingredientsPercentage={ingredientsPercentage}
-            ingredientsWeight={ingredientsWeight}
-            totalWeightSubtract={totalWeightSubtract}
+            ingredientsWeight={preferment.ingredients}
+            totalWeightSubtract={preferment.seed}
           />
         );
       })}
-      {/* TODO dough */}
+      <IngredientsWeightList
+        title="FINAL DOUGH"
+        ingredientsPercentage={finalIngredientsPercentage}
+        ingredientsWeight={dough.final}
+      />
     </div>
   );
 };

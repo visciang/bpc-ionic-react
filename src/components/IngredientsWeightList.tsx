@@ -1,5 +1,5 @@
 import React from "react";
-import { IonList, IonGrid, IonRow, IonCol } from "@ionic/react";
+import { IonList, IonGrid, IonRow, IonCol, IonText } from "@ionic/react";
 import { Ingredients } from "dataModel/Ingredient";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import { sum } from "components/utils";
@@ -40,13 +40,17 @@ let IngredientsWeightList: React.FC<Props> = ({
             <IonCol size="2" className="ion-text-end">
               {percentage}
             </IonCol>
-            <IonCol className="ion-text-end">{ingredientsWeight.get(name)!.toFixed(2)}</IonCol>
+            <IonCol className="ion-text-end">
+              {ingredientsWeight.get(name)?.toFixed(2) || <IonText color="danger">ERROR !</IonText>}
+            </IonCol>
           </IonRow>
         ))}
         <IonRow>
           <IonCol className="ion-text-start"></IonCol>
           <IonCol size="2" className="ion-text-end"></IonCol>
-          <IonCol className="ion-text-end">{totalWeight!.toFixed(2)}</IonCol>
+          <IonCol className="ion-text-end">
+            {totalWeight?.toFixed(2) || <IonText color="danger">ERROR !</IonText>}
+          </IonCol>
         </IonRow>
       </IonGrid>
     </IonList>
