@@ -18,11 +18,11 @@ export const recipe: Recipe = {
       {
         kind: PrefermentKind.PREDOUGH,
         prefermentedFlour: 80,
-        flours: new Map([
-          ["Farina 00 W300", 50],
-          ["Semola", 50],
+        flours: new Map([["Farina 00 W300", 100]]),
+        ingredients: new Map([
+          ["Acqua", 45],
+          ["Lievito", 1],
         ]),
-        ingredients: new Map([["Acqua", 45]]),
       },
     ],
   ]),
