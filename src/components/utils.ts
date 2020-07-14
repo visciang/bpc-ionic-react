@@ -48,8 +48,6 @@ export const listEquals = <T>(listA: T[], listB: T[]): boolean => {
   return true;
 };
 
-// TODO difference(ingredientsA: IngredientName[], ingredientsB: IngredientName[]): void
-
 export const mapDelete = <K, V>(map: Map<K, V>, key: K): Map<K, V> => {
   let newMap = new Map(map);
   newMap.delete(key);
