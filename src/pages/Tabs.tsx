@@ -1,23 +1,25 @@
 import React, { useState, useCallback } from "react";
 import { Redirect, Route } from "react-router-dom";
 import { IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, IonIcon } from "@ionic/react";
-import { calculatorOutline, restaurantOutline, arrowUndoOutline } from "ionicons/icons";
+import { calculatorOutline, restaurantOutline, arrowUndoOutline, bookOutline } from "ionicons/icons";
 import OverallTab from "pages/tabs/OverallTab";
 import PrefermentTab from "pages/tabs/PrefermentTab";
 import FinalDoughTab from "pages/tabs/FinalDoughTab";
+import RecipesTab from "pages/tabs/RecipesTab";
 import { Preferments } from "dataModel/Preferment";
 import { Ingredients, IngredientName } from "dataModel/Ingredient";
-import { recipe as untitledRecipe } from "dataModel/SampleRecipe";
+import { recipes as sampleRecipes } from "dataModel/SampleRecipes";
 import { listEquals } from "components/utils";
 
 const Tabs: React.FC = () => {
+  const [recipes, setRecipes] = useState(sampleRecipes);
   const [editable, setEditable] = useState(false);
-  const [name] = useState(untitledRecipe.name);
-  const [flours, setFlours] = useState(untitledRecipe.flours);
-  const [ingredients, setIngredients] = useState(untitledRecipe.ingredients);
-  const [preferments, setPreferments] = useState(untitledRecipe.preferments);
-  const [availableFlours, setAvailableFlours] = useState([...untitledRecipe.flours.keys()]);
-  const [availableIngredients, setAvailableIngredients] = useState([...untitledRecipe.ingredients.keys()]);
+  const [name, setName] = useState("Untitled");
+  const [flours, setFlours] = useState<Ingredients>(new Map());
+  const [ingredients, setIngredients] = useState<Ingredients>(new Map());
+  const [preferments, setPreferments] = useState<Preferments>(new Map());
+  const [availableFlours, setAvailableFlours] = useState<IngredientName[]>([]);
+  const [availableIngredients, setAvailableIngredients] = useState<IngredientName[]>([]);
 
   const onFloursChange = useCallback(
     (currentFlours: Ingredients) => {
@@ -63,6 +65,24 @@ const Tabs: React.FC = () => {
     <IonTabs onIonTabsDidChange={resetEditable}>
       <IonRouterOutlet id="main">
         <Route
+          path="/recipes"
+          render={() => (
+            <RecipesTab
+              title={name}
+              recipes={recipes}
+              editable={editable}
+              setName={setName}
+              setFlours={setFlours}
+              setIngredients={setIngredients}
+              setPreferments={setPreferments}
+              setAvailableFlours={setAvailableFlours}
+              setAvailableIngredients={setAvailableIngredients}
+              onEditToggle={onEditToggle}
+            />
+          )}
+          exact={true}
+        />
+        <Route
           path="/overallTab"
           render={() => (
             <OverallTab
@@ -103,6 +123,10 @@ const Tabs: React.FC = () => {
         <Route path="/" render={() => <Redirect to="/overallTab" />} exact={true} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">
+        <IonTabButton tab="recipes" href="/recipes">
+          <IonIcon icon={bookOutline} />
+          <IonLabel>RECIPES</IonLabel>
+        </IonTabButton>
         <IonTabButton tab="overallTab" href="/overallTab">
           <IonIcon icon={restaurantOutline} />
           <IonLabel>OVERALL</IonLabel>
@@ -113,7 +137,7 @@ const Tabs: React.FC = () => {
         </IonTabButton>
         <IonTabButton tab="finalDough" href="/finalDough">
           <IonIcon icon={calculatorOutline} />
-          <IonLabel>FINAL DOUGH</IonLabel>
+          <IonLabel>DOUGH</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>

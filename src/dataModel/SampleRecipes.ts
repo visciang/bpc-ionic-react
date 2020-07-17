@@ -1,8 +1,8 @@
-import { Recipe } from "./Recipe";
-import { PrefermentKind } from "./Preferment";
+import { Recipe } from "dataModel/Recipe";
+import { PrefermentKind } from "dataModel/Preferment";
 
-export const recipe: Recipe = {
-  name: "Untitled",
+const recipe1: Recipe = {
+  name: "Sample Recipe 1",
   flours: new Map([
     ["Farina 00 W300", 80],
     ["Semola", 20],
@@ -27,3 +27,16 @@ export const recipe: Recipe = {
     ],
   ]),
 };
+
+const recipe2: Recipe = {
+  name: "Sample Recipe 2",
+  flours: new Map([["Buratto", 100]]),
+  ingredients: new Map([
+    ["Acqua", 78],
+    ["Lievito", 1],
+    ["Sale", 2],
+  ]),
+  preferments: new Map([]),
+};
+
+export const recipes = [recipe1, recipe2];
