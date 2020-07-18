@@ -1,12 +1,14 @@
 import React, { useCallback } from "react";
-import { IonList, IonLabel, IonItem } from "@ionic/react";
+import { IonList } from "@ionic/react";
 import { IngredientName, Ingredients } from "dataModel/Ingredient";
 import { Preferments } from "dataModel/Preferment";
 import { Recipe } from "dataModel/Recipe";
+import RecipeItem from "./RecipeItem";
 
 type Props = {
   recipes: Recipe[];
   editable: boolean;
+  setRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>;
   setName: React.Dispatch<React.SetStateAction<string>>;
   setFlours: React.Dispatch<React.SetStateAction<Ingredients>>;
   setIngredients: React.Dispatch<React.SetStateAction<Ingredients>>;
@@ -18,6 +20,7 @@ type Props = {
 let RecipesList: React.FC<Props> = ({
   recipes,
   editable,
+  setRecipes,
   setName,
   setFlours,
   setIngredients,
@@ -37,12 +40,21 @@ let RecipesList: React.FC<Props> = ({
     [setName, setFlours, setIngredients, setPreferments, setAvailableFlours, setAvailableIngredients]
   );
 
+  const deleteRecipe = useCallback((recipe: Recipe): void => setRecipes(recipes.filter((x) => x !== recipe)), [
+    recipes,
+    setRecipes,
+  ]);
+
   return (
     <IonList>
       {recipes.map((recipe) => (
-        <IonItem key={recipe.name} button onClick={() => loadRecipe(recipe)} routerLink="/overallTab" routerDirection="none" detail={false}>
-          <IonLabel>{recipe.name}</IonLabel>
-        </IonItem>
+        <RecipeItem
+          key={recipe.name}
+          name={recipe.name}
+          editable={editable}
+          onLoad={() => loadRecipe(recipe)}
+          onDelete={() => deleteRecipe(recipe)}
+        />
       ))}
     </IonList>
   );

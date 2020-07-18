@@ -68,9 +68,9 @@ const Tabs: React.FC = () => {
           path="/recipes"
           render={() => (
             <RecipesTab
-              title={name}
               recipes={recipes}
               editable={editable}
+              setRecipes={setRecipes}
               setName={setName}
               setFlours={setFlours}
               setIngredients={setIngredients}

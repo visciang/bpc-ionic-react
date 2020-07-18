@@ -4,12 +4,11 @@ import { Ingredients, IngredientName } from "dataModel/Ingredient";
 import { Preferments } from "dataModel/Preferment";
 import { Recipe } from "dataModel/Recipe";
 import RecipesList from "components/RecipesList";
-import { recipes } from "dataModel/SampleRecipes";
 
 type Props = {
-  title: string;
   recipes: Recipe[];
   editable: boolean;
+  setRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>;
   setName: React.Dispatch<React.SetStateAction<string>>;
   setFlours: React.Dispatch<React.SetStateAction<Ingredients>>;
   setIngredients: React.Dispatch<React.SetStateAction<Ingredients>>;
@@ -20,8 +19,9 @@ type Props = {
 };
 
 let RecipesTab: React.FC<Props> = ({
-  title,
   editable,
+  recipes,
+  setRecipes,
   onEditToggle,
   setName,
   setFlours,
@@ -31,10 +31,11 @@ let RecipesTab: React.FC<Props> = ({
   setAvailableIngredients,
 }) => {
   return (
-    <Tab title={title} editActive={editable} onEditToggle={onEditToggle}>
+    <Tab title="Recipes" editActive={editable} onEditToggle={onEditToggle}>
       <RecipesList
         recipes={recipes}
         editable={editable}
+        setRecipes={setRecipes}
         setName={setName}
         setFlours={setFlours}
         setIngredients={setIngredients}
