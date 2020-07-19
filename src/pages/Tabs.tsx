@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 import { Redirect, Route } from "react-router-dom";
 import { IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, IonIcon } from "@ionic/react";
 import { calculatorOutline, restaurantOutline, arrowUndoOutline, bookOutline } from "ionicons/icons";
+import Tab from "pages/tabs/Tab";
 import OverallTab from "pages/tabs/OverallTab";
 import PrefermentTab from "pages/tabs/PrefermentTab";
 import FinalDoughTab from "pages/tabs/FinalDoughTab";
@@ -10,11 +11,12 @@ import { Preferments } from "dataModel/Preferment";
 import { Ingredients, IngredientName } from "dataModel/Ingredient";
 import { recipes as sampleRecipes } from "dataModel/SampleRecipes";
 import { listEquals } from "components/utils";
+import { Recipe } from "dataModel/Recipe";
 
 const Tabs: React.FC = () => {
   const [recipes, setRecipes] = useState(sampleRecipes);
   const [editable, setEditable] = useState(false);
-  const [name, setName] = useState("Untitled");
+  const [name, setName] = useState("");
   const [flours, setFlours] = useState<Ingredients>(new Map());
   const [ingredients, setIngredients] = useState<Ingredients>(new Map());
   const [preferments, setPreferments] = useState<Preferments>(new Map());
@@ -57,6 +59,16 @@ const Tabs: React.FC = () => {
 
   const onEditToggle = useCallback(() => setEditable(!editable), [setEditable, editable]);
 
+  const onSave = useCallback(() => {
+    const newRecipe: Recipe = {
+      name: name,
+      flours: flours,
+      ingredients: ingredients,
+      preferments: preferments,
+    };
+    setRecipes(recipes.map((recipe) => (recipe.name === name ? newRecipe : recipe)));
+  }, [name, flours, ingredients, preferments, recipes, setRecipes]);
+
   const resetEditable = useCallback(() => {
     if (editable) setEditable(false);
   }, [editable, setEditable]);
@@ -67,59 +79,61 @@ const Tabs: React.FC = () => {
         <Route
           path="/recipes"
           render={() => (
-            <RecipesTab
-              recipes={recipes}
-              editable={editable}
-              setRecipes={setRecipes}
-              setName={setName}
-              setFlours={setFlours}
-              setIngredients={setIngredients}
-              setPreferments={setPreferments}
-              setAvailableFlours={setAvailableFlours}
-              setAvailableIngredients={setAvailableIngredients}
-              onEditToggle={onEditToggle}
-            />
+            <Tab title="Recipes" editActive={editable} onEditToggle={onEditToggle}>
+              <RecipesTab
+                recipes={recipes}
+                editable={editable}
+                setRecipes={setRecipes}
+                setName={setName}
+                setFlours={setFlours}
+                setIngredients={setIngredients}
+                setPreferments={setPreferments}
+                setAvailableFlours={setAvailableFlours}
+                setAvailableIngredients={setAvailableIngredients}
+              />
+            </Tab>
           )}
           exact={true}
         />
         <Route
           path="/overallTab"
           render={() => (
-            <OverallTab
-              title={name}
-              flours={flours}
-              ingredients={ingredients}
-              editable={editable}
-              onFloursChange={onFloursChange}
-              onIngredientsChange={onIngredientsChange}
-              onEditToggle={onEditToggle}
-            />
+            <Tab title={name} editActive={editable} onEditToggle={onEditToggle} onSave={onSave}>
+              <OverallTab
+                flours={flours}
+                ingredients={ingredients}
+                editable={editable}
+                onFloursChange={onFloursChange}
+                onIngredientsChange={onIngredientsChange}
+              />
+            </Tab>
           )}
           exact={true}
         />
         <Route
           path="/prefermentTab"
           render={() => (
-            <PrefermentTab
-              title={name}
-              availableFlours={availableFlours}
-              availableIngredients={availableIngredients}
-              preferments={preferments}
-              editable={editable}
-              onPrefermentsChange={setPreferments}
-              onEditToggle={onEditToggle}
-            />
+            <Tab title={name} editActive={editable} onEditToggle={onEditToggle} onSave={onSave}>
+              <PrefermentTab
+                availableFlours={availableFlours}
+                availableIngredients={availableIngredients}
+                preferments={preferments}
+                editable={editable}
+                onPrefermentsChange={setPreferments}
+              />
+            </Tab>
           )}
           exact={true}
         />
         <Route
           path="/finalDough"
           render={() => (
-            <FinalDoughTab title={name} flours={flours} ingredients={ingredients} preferments={preferments} />
+            <Tab title={name} onSave={onSave}>
+              <FinalDoughTab flours={flours} ingredients={ingredients} preferments={preferments} />
+            </Tab>
           )}
           exact={true}
         />
-        {/* TODO check if needs a useCallback */}
         <Route path="/" render={() => <Redirect to="/overallTab" />} exact={true} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">

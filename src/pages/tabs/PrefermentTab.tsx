@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from "react";
-import Tab from "pages/tabs/Tab";
 import NewItemInput from "components/NewItemInput";
 import PrefermentSelector from "components/PrefermentSelector";
 import PrefermentPercentageList from "components/PrefermentPercentageList";
@@ -13,23 +12,19 @@ import {
 import { IngredientName } from "dataModel/Ingredient";
 
 type Props = {
-  title: string;
   availableFlours: IngredientName[];
   availableIngredients: IngredientName[];
   preferments: Preferments;
   editable: boolean;
   onPrefermentsChange(preferments: Preferments): void;
-  onEditToggle(): void;
 };
 
 let PrefermentTab: React.FC<Props> = ({
-  title,
   availableFlours,
   availableIngredients,
   preferments,
   editable,
   onPrefermentsChange,
-  onEditToggle,
 }) => {
   const [prefermentKind, setPrefermentKind] = useState<PrefermentKind | undefined>(undefined);
 
@@ -75,7 +70,7 @@ let PrefermentTab: React.FC<Props> = ({
   );
 
   return (
-    <Tab title={title} editActive={editable} onEditToggle={onEditToggle}>
+    <>
       <div className="ion-padding-bottom">
         <PrefermentSelector value={prefermentKind} onSelect={setPrefermentKind} />
         <NewItemInput onNewItem={prefermentKind ? onNewPreferment : undefined} />
@@ -93,7 +88,7 @@ let PrefermentTab: React.FC<Props> = ({
           />
         </div>
       ))}
-    </Tab>
+    </>
   );
 };
 

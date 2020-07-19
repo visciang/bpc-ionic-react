@@ -1,5 +1,4 @@
 import React from "react";
-import Tab from "pages/tabs/Tab";
 import { Ingredients, IngredientName } from "dataModel/Ingredient";
 import { Preferments } from "dataModel/Preferment";
 import { Recipe } from "dataModel/Recipe";
@@ -15,14 +14,12 @@ type Props = {
   setPreferments: React.Dispatch<React.SetStateAction<Preferments>>;
   setAvailableFlours: React.Dispatch<React.SetStateAction<IngredientName[]>>;
   setAvailableIngredients: React.Dispatch<React.SetStateAction<IngredientName[]>>;
-  onEditToggle(): void;
 };
 
 let RecipesTab: React.FC<Props> = ({
   editable,
   recipes,
   setRecipes,
-  onEditToggle,
   setName,
   setFlours,
   setIngredients,
@@ -31,19 +28,17 @@ let RecipesTab: React.FC<Props> = ({
   setAvailableIngredients,
 }) => {
   return (
-    <Tab title="Recipes" editActive={editable} onEditToggle={onEditToggle}>
-      <RecipesList
-        recipes={recipes}
-        editable={editable}
-        setRecipes={setRecipes}
-        setName={setName}
-        setFlours={setFlours}
-        setIngredients={setIngredients}
-        setPreferments={setPreferments}
-        setAvailableFlours={setAvailableFlours}
-        setAvailableIngredients={setAvailableIngredients}
-      />
-    </Tab>
+    <RecipesList
+      recipes={recipes}
+      editable={editable}
+      setRecipes={setRecipes}
+      setName={setName}
+      setFlours={setFlours}
+      setIngredients={setIngredients}
+      setPreferments={setPreferments}
+      setAvailableFlours={setAvailableFlours}
+      setAvailableIngredients={setAvailableIngredients}
+    />
   );
 };
 

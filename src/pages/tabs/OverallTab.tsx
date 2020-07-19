@@ -1,29 +1,18 @@
 import React from "react";
-import Tab from "pages/tabs/Tab";
 import IngredientsPercentageList from "components/IngredientsPercentageList";
 import { Ingredients } from "dataModel/Ingredient";
 
 type Props = {
-  title: string;
   flours: Ingredients;
   ingredients: Ingredients;
   editable: boolean;
   onFloursChange(flours: Ingredients): void;
   onIngredientsChange(flours: Ingredients): void;
-  onEditToggle(): void;
 };
 
-let OverallTab: React.FC<Props> = ({
-  title,
-  flours,
-  ingredients,
-  editable,
-  onFloursChange,
-  onIngredientsChange,
-  onEditToggle,
-}) => {
+let OverallTab: React.FC<Props> = ({ flours, ingredients, editable, onFloursChange, onIngredientsChange }) => {
   return (
-    <Tab title={title} editActive={editable} onEditToggle={onEditToggle}>
+    <>
       <IngredientsPercentageList
         title="FLOURS"
         ingredients={flours}
@@ -38,7 +27,7 @@ let OverallTab: React.FC<Props> = ({
         onIngredientsChange={onIngredientsChange}
         editable={editable}
       />
-    </Tab>
+    </>
   );
 };
 

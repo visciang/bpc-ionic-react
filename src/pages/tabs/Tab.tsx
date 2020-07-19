@@ -10,21 +10,26 @@ import {
   IonButton,
   IonIcon,
 } from "@ionic/react";
-import { pencil } from "ionicons/icons";
+import { saveOutline, pencilOutline } from "ionicons/icons";
 
 type Props = {
   title: string;
   editActive?: boolean;
   onEditToggle?(): void;
+  onSave?(): void;
 };
 
-const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, children }) => {
+const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, onSave, children }) => {
   const editButton = onEditToggle ? (
-    <IonButtons slot="end">
-      <IonButton fill={editActive ? "solid" : undefined} onClick={onEditToggle}>
-        <IonIcon icon={pencil} />
-      </IonButton>
-    </IonButtons>
+    <IonButton fill={editActive ? "solid" : undefined} onClick={onEditToggle}>
+      <IonIcon icon={pencilOutline} />
+    </IonButton>
+  ) : undefined;
+
+  const saveButton = onSave ? (
+    <IonButton onClick={onSave}>
+      <IonIcon icon={saveOutline} />
+    </IonButton>
   ) : undefined;
 
   return (
@@ -35,7 +40,10 @@ const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, children }) => 
             <IonMenuButton />
           </IonButtons>
           <IonTitle>{title}</IonTitle>
-          {editButton}
+          <IonButtons slot="end">
+            {saveButton}
+            {editButton}
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen={true} className="ion-padding">
