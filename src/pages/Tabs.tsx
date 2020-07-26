@@ -14,12 +14,16 @@ import { listEquals } from "components/utils";
 import { Recipe } from "dataModel/Recipe";
 
 const Tabs: React.FC = () => {
-  const [recipes, setRecipes] = useState(sampleRecipes);
   const [editable, setEditable] = useState(false);
-  const [name, setName] = useState("");
+
+  const [recipes, setRecipes] = useState(sampleRecipes);
+  const [saveAsAlert, setSaveAsAlert] = useState(false);
+
+  const [name, setName] = useState("Untitled");
   const [flours, setFlours] = useState<Ingredients>(new Map());
   const [ingredients, setIngredients] = useState<Ingredients>(new Map());
   const [preferments, setPreferments] = useState<Preferments>(new Map());
+
   const [availableFlours, setAvailableFlours] = useState<IngredientName[]>([]);
   const [availableIngredients, setAvailableIngredients] = useState<IngredientName[]>([]);
 
@@ -59,15 +63,22 @@ const Tabs: React.FC = () => {
 
   const onEditToggle = useCallback(() => setEditable(!editable), [setEditable, editable]);
 
+  const onSaveRecipe = useCallback(
+    ({ name }) => {
+      const newRecipe: Recipe = {
+        name: name,
+        flours: flours,
+        ingredients: ingredients,
+        preferments: preferments,
+      };
+      saveRecipe(newRecipe, recipes, setRecipes);
+    },
+    [recipes, flours, ingredients, preferments, setRecipes]
+  );
+
   const onSave = useCallback(() => {
-    const newRecipe: Recipe = {
-      name: name,
-      flours: flours,
-      ingredients: ingredients,
-      preferments: preferments,
-    };
-    setRecipes(recipes.map((recipe) => (recipe.name === name ? newRecipe : recipe)));
-  }, [name, flours, ingredients, preferments, recipes, setRecipes]);
+    setSaveAsAlert(true);
+  }, [setSaveAsAlert]);
 
   const resetEditable = useCallback(() => {
     if (editable) setEditable(false);
@@ -81,6 +92,7 @@ const Tabs: React.FC = () => {
           render={() => (
             <Tab title="Recipes" editActive={editable} onEditToggle={onEditToggle}>
               <RecipesTab
+                name={name}
                 recipes={recipes}
                 editable={editable}
                 setRecipes={setRecipes}
@@ -90,6 +102,9 @@ const Tabs: React.FC = () => {
                 setPreferments={setPreferments}
                 setAvailableFlours={setAvailableFlours}
                 setAvailableIngredients={setAvailableIngredients}
+                showSaveAsAlert={saveAsAlert}
+                setShowSaveAsAlert={setSaveAsAlert}
+                onSaveRecipe={onSaveRecipe}
               />
             </Tab>
           )}
@@ -179,5 +194,13 @@ const removeDeletedIngredientsFromPreferments = (
 
   if (updatedPreferments !== preferments) {
     setPreferments(updatedPreferments);
+  }
+};
+
+const saveRecipe = (recipe: Recipe, recipes: Recipe[], setRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>) => {
+  if (recipes.find((r) => r.name === recipe.name) !== undefined) {
+    setRecipes(recipes.map((r) => (r.name === recipe.name ? recipe : r)));
+  } else {
+    setRecipes([...recipes, recipe]);
   }
 };

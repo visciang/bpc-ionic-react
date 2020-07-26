@@ -3,8 +3,10 @@ import { Ingredients, IngredientName } from "dataModel/Ingredient";
 import { Preferments } from "dataModel/Preferment";
 import { Recipe } from "dataModel/Recipe";
 import RecipesList from "components/RecipesList";
+import RecipeSaveAsAlert from "components/RecipeSaveAsAlert";
 
 type Props = {
+  name: string;
   recipes: Recipe[];
   editable: boolean;
   setRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>;
@@ -14,11 +16,15 @@ type Props = {
   setPreferments: React.Dispatch<React.SetStateAction<Preferments>>;
   setAvailableFlours: React.Dispatch<React.SetStateAction<IngredientName[]>>;
   setAvailableIngredients: React.Dispatch<React.SetStateAction<IngredientName[]>>;
+  showSaveAsAlert: boolean;
+  setShowSaveAsAlert: React.Dispatch<React.SetStateAction<boolean>>;
+  onSaveRecipe(name: string): void;
 };
 
 let RecipesTab: React.FC<Props> = ({
-  editable,
+  name,
   recipes,
+  editable,
   setRecipes,
   setName,
   setFlours,
@@ -26,19 +32,30 @@ let RecipesTab: React.FC<Props> = ({
   setPreferments,
   setAvailableFlours,
   setAvailableIngredients,
+  showSaveAsAlert,
+  setShowSaveAsAlert,
+  onSaveRecipe,
 }) => {
   return (
-    <RecipesList
-      recipes={recipes}
-      editable={editable}
-      setRecipes={setRecipes}
-      setName={setName}
-      setFlours={setFlours}
-      setIngredients={setIngredients}
-      setPreferments={setPreferments}
-      setAvailableFlours={setAvailableFlours}
-      setAvailableIngredients={setAvailableIngredients}
-    />
+    <>
+      <RecipeSaveAsAlert
+        name={name}
+        showAlert={showSaveAsAlert}
+        setShowAlert={setShowSaveAsAlert}
+        onSave={onSaveRecipe}
+      />
+      <RecipesList
+        recipes={recipes}
+        editable={editable}
+        setRecipes={setRecipes}
+        setName={setName}
+        setFlours={setFlours}
+        setIngredients={setIngredients}
+        setPreferments={setPreferments}
+        setAvailableFlours={setAvailableFlours}
+        setAvailableIngredients={setAvailableIngredients}
+      />
+    </>
   );
 };
 

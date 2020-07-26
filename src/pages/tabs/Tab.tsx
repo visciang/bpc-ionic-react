@@ -27,7 +27,7 @@ const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, onSave, childre
   ) : undefined;
 
   const saveButton = onSave ? (
-    <IonButton onClick={onSave}>
+    <IonButton routerLink="/recipes" onClick={onSave}>
       <IonIcon icon={saveOutline} />
     </IonButton>
   ) : undefined;

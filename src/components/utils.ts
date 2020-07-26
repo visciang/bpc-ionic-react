@@ -5,7 +5,7 @@ type OnIonChange = (value: CustomEvent<InputChangeEventDetail>) => void;
 type OnChangeFloat = (value?: number) => void;
 
 export const onIonChangeFloat = (previousValue: number | undefined, onChangeFloat: OnChangeFloat): OnIonChange => {
-  return (event: CustomEvent<InputChangeEventDetail>): void => {
+  return (event: CustomEvent<InputChangeEventDetail>) => {
     if (event.detail.value?.endsWith(",") || event.detail.value?.endsWith(".")) {
       return;
     }

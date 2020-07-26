@@ -16,7 +16,7 @@ let NewItemInput: React.FC<Props> = ({ onNewItem }) => {
   }, [newItem, onNewItem, setNewItem]);
 
   const onIonChange = useCallback(
-    (event: CustomEvent<InputChangeEventDetail>): void => {
+    (event: CustomEvent<InputChangeEventDetail>) => {
       setNewItem(parseNewItem(event.detail.value));
     },
     [setNewItem]

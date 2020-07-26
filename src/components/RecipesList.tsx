@@ -29,7 +29,7 @@ let RecipesList: React.FC<Props> = ({
   setAvailableIngredients,
 }) => {
   const loadRecipe = useCallback(
-    (recipe: Recipe): void => {
+    (recipe: Recipe) => {
       setName(recipe.name);
       setFlours(recipe.flours);
       setIngredients(recipe.ingredients);
