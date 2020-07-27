@@ -20,7 +20,16 @@ let FinalDoughTable: React.FC<Props> = ({ flours, ingredients, preferments, scal
   if (recipeValidationErrors.length > 0) {
     // TODO diagnostic
     console.log(recipeValidationErrors);
-    return <strong>RECIPE NOT VALID</strong>;
+    return (
+      <div className="ion-padding">
+        <strong>RECIPE NOT VALID</strong>
+        <ul>
+          {recipeValidationErrors.map((error, idx) => (
+            <li key={idx}>{error}</li>
+          ))}
+        </ul>
+      </div>
+    );
   }
 
   const dough = calculateDough(flours, ingredients, preferments, scaleBy, totalAmount);
@@ -30,7 +39,7 @@ let FinalDoughTable: React.FC<Props> = ({ flours, ingredients, preferments, scal
   const finalIngredientsPercentage = new Map([...finalFlours, ...finalIngredients]);
 
   return (
-    <div>
+    <>
       <IngredientsWeightList
         title="OVERALL"
         ingredientsPercentage={new Map([...flours, ...ingredients])}
@@ -61,7 +70,7 @@ let FinalDoughTable: React.FC<Props> = ({ flours, ingredients, preferments, scal
         ingredientsPercentage={finalIngredientsPercentage}
         ingredientsWeight={dough.final}
       />
-    </div>
+    </>
   );
 };
 
