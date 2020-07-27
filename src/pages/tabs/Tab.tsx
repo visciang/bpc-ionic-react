@@ -1,25 +1,21 @@
-import React from "react";
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonButtons,
-  IonMenuButton,
-  IonButton,
-  IonIcon,
-} from "@ionic/react";
-import { saveOutline, pencilOutline } from "ionicons/icons";
+import React, { useState, useCallback } from "react";
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonButton, IonIcon } from "@ionic/react";
+import { saveOutline, pencilOutline, informationCircleOutline } from "ionicons/icons";
+import InfoAlert from "components/InfoAlert";
 
 type Props = {
   title: string;
   editActive?: boolean;
+  showInfo?: boolean;
   onEditToggle?(): void;
   onSave?(): void;
 };
 
-const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, onSave, children }) => {
+const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, onSave, showInfo, children }) => {
+  const [showInfoAlert, setShowInfoAlert] = useState(false);
+
+  const onInfo = useCallback(() => setShowInfoAlert(true), [setShowInfoAlert]);
+
   const editButton = onEditToggle ? (
     <IonButton fill={editActive ? "solid" : undefined} onClick={onEditToggle}>
       <IonIcon icon={pencilOutline} />
@@ -32,13 +28,19 @@ const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, onSave, childre
     </IonButton>
   ) : undefined;
 
+  const infoButton = showInfo ? (
+    <IonButton onClick={onInfo}>
+      <IonIcon icon={informationCircleOutline} />
+    </IonButton>
+  ) : undefined;
+
+  const infoAlert = showInfo ? <InfoAlert showAlert={showInfoAlert} setShowAlert={setShowInfoAlert} /> : undefined;
+
   return (
     <IonPage>
       <IonHeader translucent={true}>
         <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
+          <IonButtons slot="start">{infoButton}</IonButtons>
           <IonTitle>{title}</IonTitle>
           <IonButtons slot="end">
             {saveButton}
@@ -52,6 +54,7 @@ const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, onSave, childre
             <IonTitle size="large">{title}</IonTitle>
           </IonToolbar>
         </IonHeader>
+        {infoAlert}
         {children}
       </IonContent>
     </IonPage>

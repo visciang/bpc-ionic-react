@@ -113,7 +113,7 @@ const Tabs: React.FC = () => {
         <Route
           path="/overallTab"
           render={() => (
-            <Tab title={name} editActive={editable} onEditToggle={onEditToggle} onSave={onSave}>
+            <Tab title={name} editActive={editable} onEditToggle={onEditToggle} onSave={onSave} showInfo={true}>
               <OverallTab
                 flours={flours}
                 ingredients={ingredients}
