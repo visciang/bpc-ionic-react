@@ -18,9 +18,9 @@ let InfoAlert: React.FC<Props> = ({ showAlert, setShowAlert }) => {
     </p>
     <p style="width: auto; text-align: center;">
       <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=YWVFRGAC55UX4">
-        PAYPAL DONATE
+        <strong>PAYPAL DONATE</strong>
       </a>
-    </p>"
+    </p>
   `;
 
   return <IonAlert isOpen={showAlert} onDidDismiss={() => setShowAlert(false)} header={"Info"} message={message} />;
