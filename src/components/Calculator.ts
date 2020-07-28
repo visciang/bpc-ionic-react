@@ -95,6 +95,10 @@ const calculateFinal = (overall: Ingredients, preferments: CalcPreferments): Ing
       final.get(ingredient)! -
       sum([...preferments.values()].map((preferment) => preferment.ingredients.get(ingredient) || 0));
 
+    if (Math.abs(weight) <= 0.01) {
+      weight = 0;
+    }
+
     if (weight < 0) {
       weight = undefined;
     }
