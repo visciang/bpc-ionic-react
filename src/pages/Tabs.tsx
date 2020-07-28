@@ -88,29 +88,6 @@ const Tabs: React.FC = () => {
     <IonTabs onIonTabsDidChange={resetEditable}>
       <IonRouterOutlet id="main">
         <Route
-          path="/recipes"
-          render={() => (
-            <Tab title="Recipes" editActive={editable} onEditToggle={onEditToggle}>
-              <RecipesTab
-                name={name}
-                recipes={recipes}
-                editable={editable}
-                setRecipes={setRecipes}
-                setName={setName}
-                setFlours={setFlours}
-                setIngredients={setIngredients}
-                setPreferments={setPreferments}
-                setAvailableFlours={setAvailableFlours}
-                setAvailableIngredients={setAvailableIngredients}
-                showSaveAsAlert={saveAsAlert}
-                setShowSaveAsAlert={setSaveAsAlert}
-                onSaveRecipe={onSaveRecipe}
-              />
-            </Tab>
-          )}
-          exact={true}
-        />
-        <Route
           path="/overallTab"
           render={() => (
             <Tab title={name} editActive={editable} onEditToggle={onEditToggle} onSave={onSave} showInfo={true}>
@@ -149,13 +126,32 @@ const Tabs: React.FC = () => {
           )}
           exact={true}
         />
+        <Route
+          path="/recipes"
+          render={() => (
+            <Tab title="Recipes" editActive={editable} onEditToggle={onEditToggle}>
+              <RecipesTab
+                name={name}
+                recipes={recipes}
+                editable={editable}
+                setRecipes={setRecipes}
+                setName={setName}
+                setFlours={setFlours}
+                setIngredients={setIngredients}
+                setPreferments={setPreferments}
+                setAvailableFlours={setAvailableFlours}
+                setAvailableIngredients={setAvailableIngredients}
+                showSaveAsAlert={saveAsAlert}
+                setShowSaveAsAlert={setSaveAsAlert}
+                onSaveRecipe={onSaveRecipe}
+              />
+            </Tab>
+          )}
+          exact={true}
+        />
         <Route path="/" render={() => <Redirect to="/overallTab" />} exact={true} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">
-        <IonTabButton tab="recipes" href="/recipes">
-          <IonIcon icon={bookOutline} />
-          <IonLabel>RECIPES</IonLabel>
-        </IonTabButton>
         <IonTabButton tab="overallTab" href="/overallTab">
           <IonIcon icon={restaurantOutline} />
           <IonLabel>OVERALL</IonLabel>
@@ -167,6 +163,10 @@ const Tabs: React.FC = () => {
         <IonTabButton tab="finalDough" href="/finalDough">
           <IonIcon icon={calculatorOutline} />
           <IonLabel>DOUGH</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="recipes" href="/recipes">
+          <IonIcon icon={bookOutline} />
+          <IonLabel>RECIPES</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>
