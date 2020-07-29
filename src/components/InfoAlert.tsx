@@ -18,7 +18,7 @@ let InfoAlert: React.FC<Props> = ({ showAlert, setShowAlert }) => {
     </p>
     <p style="width: auto; text-align: center;">
       <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=YWVFRGAC55UX4">
-        <strong>PAYPAL DONATE</strong>
+      <img src="/assets/icon/donate.gif"/>
       </a>
     </p>
   `;

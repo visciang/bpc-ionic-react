@@ -17,19 +17,19 @@ const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, onSave, showInf
   const onInfo = useCallback(() => setShowInfoAlert(true), [setShowInfoAlert]);
 
   const editButton = onEditToggle ? (
-    <IonButton fill={editActive ? "solid" : undefined} onClick={onEditToggle}>
+    <IonButton color="dark" fill={editActive ? "solid" : undefined} onClick={onEditToggle}>
       <IonIcon icon={pencilOutline} />
     </IonButton>
   ) : undefined;
 
   const saveButton = onSave ? (
-    <IonButton routerLink="/recipes" onClick={onSave}>
+    <IonButton color="dark" routerLink="/recipes" onClick={onSave}>
       <IonIcon icon={saveOutline} />
     </IonButton>
   ) : undefined;
 
   const infoButton = showInfo ? (
-    <IonButton onClick={onInfo}>
+    <IonButton color="dark" onClick={onInfo}>
       <IonIcon icon={informationCircleOutline} />
     </IonButton>
   ) : undefined;
@@ -39,7 +39,7 @@ const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, onSave, showInf
   return (
     <IonPage>
       <IonHeader translucent={true}>
-        <IonToolbar>
+        <IonToolbar color="toolbar">
           <IonButtons slot="start">{infoButton}</IonButtons>
           <IonTitle>{title}</IonTitle>
           <IonButtons slot="end">
