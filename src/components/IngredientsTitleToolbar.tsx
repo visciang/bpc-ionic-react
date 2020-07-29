@@ -1,9 +1,6 @@
 import React from "react";
-import { useRecoilValue } from "recoil";
 import { IonTitle, IonToolbar, IonButton, IonIcon } from "@ionic/react";
 import { trashOutline } from "ionicons/icons";
-import * as State from "state/State";
-import { propsShallowCompare } from "components/utils";
 
 type Props = {
   title: string;
@@ -11,14 +8,11 @@ type Props = {
 };
 
 let IngredientsTitleToolbar: React.FC<Props> = ({ title, onDelete }) => {
-  const editable = useRecoilValue(State.editable);
-
-  const deleteButton =
-    editable && onDelete ? (
-      <IonButton size="small" slot="end" onClick={onDelete} fill="clear">
-        <IonIcon slot="icon-only" icon={trashOutline} />
-      </IonButton>
-    ) : undefined;
+  const deleteButton = onDelete ? (
+    <IonButton size="small" slot="end" onClick={onDelete} fill="clear">
+      <IonIcon slot="icon-only" icon={trashOutline} />
+    </IonButton>
+  ) : undefined;
 
   return (
     <IonToolbar>
@@ -28,6 +22,4 @@ let IngredientsTitleToolbar: React.FC<Props> = ({ title, onDelete }) => {
   );
 };
 
-export default IngredientsTitleToolbar = React.memo(IngredientsTitleToolbar, (p: Props, n: Props) =>
-  propsShallowCompare(p, n, [])
-);
+export default IngredientsTitleToolbar = React.memo(IngredientsTitleToolbar);

@@ -17,7 +17,7 @@ const TotalAmountInput: React.FC<Props> = ({ value, onChange }) => {
         inputMode="decimal"
         min="0"
         value={value}
-        onIonChange={onIonChangeFloat(onChange)}
+        onIonChange={onIonChangeFloat(value, onChange)}
       />
       <IonText>g</IonText>
     </IonItem>

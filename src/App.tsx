@@ -1,8 +1,6 @@
 import React from "react";
 import { IonApp } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { RecoilRoot } from "recoil";
-import Menu from "pages/Menu";
 import Tabs from "pages/Tabs";
 
 /* Core CSS required for Ionic components to work properly */
@@ -27,14 +25,11 @@ import "theme/custom.css";
 
 const App: React.FC = () => {
   return (
-    <RecoilRoot>
-      <IonApp>
-        <IonReactRouter>
-          <Menu />
-          <Tabs />
-        </IonReactRouter>
-      </IonApp>
-    </RecoilRoot>
+    <IonApp>
+      <IonReactRouter>
+        <Tabs />
+      </IonReactRouter>
+    </IonApp>
   );
 };
 

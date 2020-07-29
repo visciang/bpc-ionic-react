@@ -1,44 +1,51 @@
-import React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonButtons,
-  IonMenuButton,
-  IonButton,
-  IonIcon,
-} from "@ionic/react";
-import { pencil } from "ionicons/icons";
-import * as State from "state/State";
+import React, { useState, useCallback } from "react";
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonButton, IonIcon } from "@ionic/react";
+import { saveOutline, pencilOutline, informationCircleOutline } from "ionicons/icons";
+import InfoAlert from "components/InfoAlert";
 
 type Props = {
-  editVisible: boolean;
+  title: string;
+  editActive?: boolean;
+  showInfo?: boolean;
+  onEditToggle?(): void;
+  onSave?(): void;
 };
 
-const Tab: React.FC<Props> = ({ editVisible, children }) => {
-  const title = useRecoilValue(State.title);
-  const [editable, setEditable] = useRecoilState(State.editable);
+const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, onSave, showInfo, children }) => {
+  const [showInfoAlert, setShowInfoAlert] = useState(false);
 
-  const editButton = editVisible ? (
-    <IonButtons slot="end">
-      <IonButton fill={editable ? "solid" : undefined} onClick={() => setEditable(!editable)}>
-        <IonIcon icon={pencil} />
-      </IonButton>
-    </IonButtons>
+  const onInfo = useCallback(() => setShowInfoAlert(true), [setShowInfoAlert]);
+
+  const editButton = onEditToggle ? (
+    <IonButton color="dark" fill={editActive ? "solid" : undefined} onClick={onEditToggle}>
+      <IonIcon icon={pencilOutline} />
+    </IonButton>
   ) : undefined;
+
+  const saveButton = onSave ? (
+    <IonButton color="dark" routerLink="/recipes" onClick={onSave}>
+      <IonIcon icon={saveOutline} />
+    </IonButton>
+  ) : undefined;
+
+  const infoButton = showInfo ? (
+    <IonButton color="dark" onClick={onInfo}>
+      <IonIcon icon={informationCircleOutline} />
+    </IonButton>
+  ) : undefined;
+
+  const infoAlert = showInfo ? <InfoAlert showAlert={showInfoAlert} setShowAlert={setShowInfoAlert} /> : undefined;
 
   return (
     <IonPage>
       <IonHeader translucent={true}>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
+        <IonToolbar color="toolbar">
+          <IonButtons slot="start">{infoButton}</IonButtons>
           <IonTitle>{title}</IonTitle>
-          {editButton}
+          <IonButtons slot="end">
+            {saveButton}
+            {editButton}
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen={true} className="ion-padding">
@@ -47,6 +54,7 @@ const Tab: React.FC<Props> = ({ editVisible, children }) => {
             <IonTitle size="large">{title}</IonTitle>
           </IonToolbar>
         </IonHeader>
+        {infoAlert}
         {children}
       </IonContent>
     </IonPage>

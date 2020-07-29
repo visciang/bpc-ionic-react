@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { IonItem, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
 import { IngredientName } from "dataModel/Ingredient";
-import { propsShallowCompare } from "components/utils";
 
 type Props = {
   label: string;
@@ -36,6 +35,4 @@ let IngredientPicker: React.FC<Props> = ({ label, values, onPick }) => {
   );
 };
 
-export default IngredientPicker = React.memo(IngredientPicker, (p: Props, n: Props) =>
-  propsShallowCompare(p, n, ["label", "values"])
-);
+export default IngredientPicker = React.memo(IngredientPicker);

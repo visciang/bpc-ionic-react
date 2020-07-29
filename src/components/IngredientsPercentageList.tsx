@@ -1,16 +1,17 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { IonList, IonReorderGroup } from "@ionic/react";
 import { ItemReorderEventDetail } from "@ionic/core";
-import NewItemInput from "components/NewItemInput";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
-import IngredientsPercentageItem from "components/IngredientsPercentageItem";
+import NewItemInput from "components/NewItemInput";
+import IngredientPercentageItem from "components/IngredientPercentageItem";
+import { mapMove, mapDelete } from "components/utils";
 import { IngredientName, Ingredients, IngredientValue } from "dataModel/Ingredient";
 
 type Props = {
   title: string;
   ingredients: Ingredients;
   maxPercentage?: number;
-  editable?: boolean;
+  editable: boolean;
   onIngredientsChange(ingredients: Ingredients): void;
 };
 
@@ -21,48 +22,40 @@ let IngredientsPercentageList: React.FC<Props> = ({
   editable,
   onIngredientsChange,
 }) => {
-  console.log(`IngredientsPercentageList ${title}`);
+  const onIngredientChange = useCallback(
+    (name: IngredientName, value: IngredientValue) => onIngredientsChange(new Map([...ingredients, [name, value]])),
+    [ingredients, onIngredientsChange]
+  );
 
-  const onIngredientChange = (name: IngredientName, value: IngredientValue) => {
-    if (!(ingredients.has(name) && ingredients.get(name) === value))
-      onIngredientsChange(new Map([...ingredients, [name, value]]));
-  };
+  const onIngredientReorder = useCallback(
+    (event: CustomEvent<ItemReorderEventDetail>) => {
+      onIngredientsChange(mapMove(ingredients, event.detail.from, event.detail.to));
+      event.detail.complete();
+    },
+    [ingredients, onIngredientsChange]
+  );
 
-  const onIngredientReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
-    let orderedIngredients = [...ingredients];
-    const movedIngredient = orderedIngredients[event.detail.from];
+  const onNewIngredient = useCallback(
+    (name: IngredientName) => onIngredientsChange(new Map([...ingredients, [name, undefined]])),
+    [ingredients, onIngredientsChange]
+  );
 
-    orderedIngredients.splice(event.detail.from, 1);
-    orderedIngredients.splice(event.detail.to, 0, movedIngredient);
-
-    onIngredientsChange(new Map(orderedIngredients));
-
-    event.detail.complete();
-  };
-
-  const onNewIngredient = (name: IngredientName) => {
-    if (ingredients.has(name)) return;
-    onIngredientsChange(new Map([...ingredients, [name, undefined]]));
-  };
-
-  const onDeleteIngredient = (name: IngredientName) => {
-    if (!ingredients.has(name)) return;
-
-    let res = new Map([...ingredients]);
-    res.delete(name);
-    onIngredientsChange(res);
-  };
+  const onDeleteIngredient = useCallback((name: IngredientName) => onIngredientsChange(mapDelete(ingredients, name)), [
+    ingredients,
+    onIngredientsChange,
+  ]);
 
   return (
     <IonList lines="none">
       <IngredientsTitleToolbar title={title} />
       <IonReorderGroup disabled={!editable} onIonItemReorder={onIngredientReorder}>
-        {[...ingredients.entries()].map(([name, value]) => (
-          <IngredientsPercentageItem
+        {[...ingredients].map(([name, value]) => (
+          <IngredientPercentageItem
             key={name}
             name={name}
             value={value}
             maxPercentage={maxPercentage}
+            editable={editable}
             onChange={onIngredientChange}
             onDelete={onDeleteIngredient}
           />

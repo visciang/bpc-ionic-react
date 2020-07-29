@@ -1,21 +1,23 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { IonItem, IonLabel, IonInput, IonText, IonButton, IonIcon, IonReorder } from "@ionic/react";
-import { useRecoilValue } from "recoil";
 import { trashOutline } from "ionicons/icons";
-import { onIonChangeFloat, propsShallowCompare } from "components/utils";
+import { onIonChangeFloat } from "components/utils";
 import { IngredientName, IngredientValue } from "dataModel/Ingredient";
-import * as State from "state/State";
 
 type Props = {
   name: IngredientName;
   value: IngredientValue;
   maxPercentage?: number;
+  editable: boolean;
   onChange(name: IngredientName, value: IngredientValue): void;
   onDelete?(name: IngredientName): void;
 };
 
-let IngredientsPercentageItem: React.FC<Props> = ({ name, value, maxPercentage, onChange, onDelete }) => {
-  const editable = useRecoilValue(State.editable);
+let IngredientPercentageItem: React.FC<Props> = ({ name, value, maxPercentage, editable, onChange, onDelete }) => {
+  const onIonChange = useCallback(
+    onIonChangeFloat(value, (v) => onChange(name, v)),
+    [name, value, onChange]
+  );
 
   let children: JSX.Element = <></>;
 
@@ -40,7 +42,7 @@ let IngredientsPercentageItem: React.FC<Props> = ({ name, value, maxPercentage, 
           min="0"
           max={maxPercentage?.toString()}
           value={value}
-          onIonChange={onIonChangeFloat((v) => onChange(name, v))}
+          onIonChange={onIonChange}
         />
         <IonText>%</IonText>
       </>
@@ -55,6 +57,4 @@ let IngredientsPercentageItem: React.FC<Props> = ({ name, value, maxPercentage, 
   );
 };
 
-export default IngredientsPercentageItem = React.memo(IngredientsPercentageItem, (p: Props, n: Props) =>
-  propsShallowCompare(p, n, ["name", "value", "maxPercentage", "onChange", "onDelete"])
-);
+export default IngredientPercentageItem = React.memo(IngredientPercentageItem);
