@@ -83,10 +83,10 @@ ion-toolbar {
 }
 
 :root {
-  --ion-color-toolbar: #71c03F;
-  --ion-color-toolbar-rgb: 113,192,63;
+  --ion-color-toolbar: #71c03f;
+  --ion-color-toolbar-rgb: 113, 192, 63;
   --ion-color-toolbar-contrast: #ffffff;
-  --ion-color-toolbar-contrast-rgb: 0,0,0;
+  --ion-color-toolbar-contrast-rgb: 0, 0, 0;
   --ion-color-toolbar-shade: #63a937;
   --ion-color-toolbar-tint: #7fc652;
 }
