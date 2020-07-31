@@ -9,14 +9,14 @@ import FinalDoughTab from "pages/tabs/FinalDoughTab";
 import RecipesTab from "pages/tabs/RecipesTab";
 import { Preferments } from "dataModel/Preferment";
 import { Ingredients, IngredientName } from "dataModel/Ingredient";
-import { recipes as sampleRecipes } from "dataModel/SampleRecipes";
 import { listEquals } from "components/utils";
 import { Recipe } from "dataModel/Recipe";
+import { useRecipes } from "dataModel/Persistence";
 
 const Tabs: React.FC = () => {
   const [editable, setEditable] = useState(false);
 
-  const [recipes, setRecipes] = useState(sampleRecipes);
+  const [recipes, setRecipes] = useRecipes();
   const [saveAsAlert, setSaveAsAlert] = useState(false);
 
   const [name, setName] = useState("Untitled");
