@@ -80,8 +80,9 @@ const Tabs: React.FC = () => {
         preferments: preferments,
       };
       saveRecipe(newRecipe, recipes, setRecipes);
+      setName(name);
     },
-    [recipes, flours, ingredients, preferments, setRecipes]
+    [recipes, flours, ingredients, preferments, setRecipes, setName]
   );
 
   const onSave = useCallback(() => {
