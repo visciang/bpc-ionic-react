@@ -26,7 +26,7 @@ import "theme/custom.css";
 const App: React.FC = () => {
   return (
     <IonApp>
-      <IonReactRouter>
+      <IonReactRouter basename="/bpc-ionic-react">
         <Tabs />
       </IonReactRouter>
     </IonApp>

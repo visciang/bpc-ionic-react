@@ -149,7 +149,7 @@ const Tabs: React.FC = () => {
           )}
           exact={true}
         />
-        <Route path="/" render={() => <Redirect to="/overallTab" />} exact={true} />
+        <Route path="/" render={() => <Redirect to="/prefermentTab" />} exact={true} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">
         <IonTabButton tab="overallTab" href="/overallTab">
