@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonButton, IonIcon } from "@ionic/react";
-import { saveOutline, pencilOutline, informationCircleOutline } from "ionicons/icons";
+import { saveOutline, pencilOutline, informationCircleOutline, refreshOutline } from "ionicons/icons";
 import InfoAlert from "components/InfoAlert";
 
 type Props = {
@@ -9,9 +9,10 @@ type Props = {
   showInfo?: boolean;
   onEditToggle?(): void;
   onSave?(): void;
+  onReset?(): void;
 };
 
-const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, onSave, showInfo, children }) => {
+const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, onSave, onReset, showInfo, children }) => {
   const [showInfoAlert, setShowInfoAlert] = useState(false);
 
   const onInfo = useCallback(() => setShowInfoAlert(true), [setShowInfoAlert]);
@@ -34,13 +35,22 @@ const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, onSave, showInf
     </IonButton>
   ) : undefined;
 
+  const resetButton = onReset ? (
+    <IonButton color="dark" onClick={onReset}>
+      <IonIcon icon={refreshOutline} />
+    </IonButton>
+  ) : undefined;
+
   const infoAlert = showInfo ? <InfoAlert showAlert={showInfoAlert} setShowAlert={setShowInfoAlert} /> : undefined;
 
   return (
     <IonPage>
       <IonHeader translucent={true}>
         <IonToolbar color="toolbar">
-          <IonButtons slot="start">{infoButton}</IonButtons>
+          <IonButtons slot="start">
+            {infoButton}
+            {resetButton}
+          </IonButtons>
           <IonTitle>{title}</IonTitle>
           <IonButtons slot="end">
             {saveButton}

@@ -13,19 +13,27 @@ import { listEquals } from "components/utils";
 import { Recipe } from "dataModel/Recipe";
 import { useRecipes } from "dataModel/Persistence";
 
+const DEFAULT_EDITABLE = false;
+const DEFAULT_NAME = "Untitled";
+const DEFAULT_FLOURS: Ingredients = new Map();
+const DEFAULT_INGREDIENTS: Ingredients = new Map();
+const DEFAULT_PREFERMENTS: Preferments = new Map();
+const DEFAULT_AVAILABLE_FLOURS: IngredientName[] = [];
+const DEFAULT_AVAILABLE_INGREDIENTS: IngredientName[] = [];
+
 const Tabs: React.FC = () => {
-  const [editable, setEditable] = useState(false);
+  const [editable, setEditable] = useState(DEFAULT_EDITABLE);
 
   const [recipes, setRecipes] = useRecipes();
   const [saveAsAlert, setSaveAsAlert] = useState(false);
 
-  const [name, setName] = useState("Untitled");
-  const [flours, setFlours] = useState<Ingredients>(new Map());
-  const [ingredients, setIngredients] = useState<Ingredients>(new Map());
-  const [preferments, setPreferments] = useState<Preferments>(new Map());
+  const [name, setName] = useState(DEFAULT_NAME);
+  const [flours, setFlours] = useState(DEFAULT_FLOURS);
+  const [ingredients, setIngredients] = useState(DEFAULT_INGREDIENTS);
+  const [preferments, setPreferments] = useState(DEFAULT_PREFERMENTS);
 
-  const [availableFlours, setAvailableFlours] = useState<IngredientName[]>([]);
-  const [availableIngredients, setAvailableIngredients] = useState<IngredientName[]>([]);
+  const [availableFlours, setAvailableFlours] = useState(DEFAULT_AVAILABLE_FLOURS);
+  const [availableIngredients, setAvailableIngredients] = useState(DEFAULT_AVAILABLE_INGREDIENTS);
 
   const onFloursChange = useCallback(
     (currentFlours: Ingredients) => {
@@ -80,6 +88,16 @@ const Tabs: React.FC = () => {
     setSaveAsAlert(true);
   }, [setSaveAsAlert]);
 
+  const onReset = useCallback(() => {
+    setEditable(DEFAULT_EDITABLE);
+    setName(DEFAULT_NAME);
+    setFlours(DEFAULT_FLOURS);
+    setIngredients(DEFAULT_INGREDIENTS);
+    setPreferments(DEFAULT_PREFERMENTS);
+    setAvailableFlours(DEFAULT_AVAILABLE_FLOURS);
+    setAvailableIngredients(DEFAULT_AVAILABLE_INGREDIENTS);
+  }, [setEditable, setName, setFlours, setIngredients, setPreferments, setAvailableFlours, setAvailableIngredients]);
+
   const resetEditable = useCallback(() => {
     if (editable) setEditable(false);
   }, [editable, setEditable]);
@@ -90,7 +108,14 @@ const Tabs: React.FC = () => {
         <Route
           path="/overallTab"
           render={() => (
-            <Tab title={name} editActive={editable} onEditToggle={onEditToggle} onSave={onSave} showInfo={true}>
+            <Tab
+              title={name}
+              editActive={editable}
+              onEditToggle={onEditToggle}
+              onSave={onSave}
+              onReset={onReset}
+              showInfo={true}
+            >
               <OverallTab
                 flours={flours}
                 ingredients={ingredients}
@@ -105,7 +130,7 @@ const Tabs: React.FC = () => {
         <Route
           path="/prefermentTab"
           render={() => (
-            <Tab title={name} editActive={editable} onEditToggle={onEditToggle} onSave={onSave}>
+            <Tab title={name} editActive={editable} onEditToggle={onEditToggle} onSave={onSave} onReset={onReset}>
               <PrefermentTab
                 availableFlours={availableFlours}
                 availableIngredients={availableIngredients}
@@ -120,7 +145,7 @@ const Tabs: React.FC = () => {
         <Route
           path="/finalDough"
           render={() => (
-            <Tab title={name} onSave={onSave}>
+            <Tab title={name} onSave={onSave} onReset={onReset}>
               <FinalDoughTab flours={flours} ingredients={ingredients} preferments={preferments} />
             </Tab>
           )}
