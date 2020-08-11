@@ -69,7 +69,7 @@ const Tabs: React.FC = () => {
     [setIngredients, setPreferments, ingredients, preferments]
   );
 
-  const onEditToggle = useCallback(() => setEditable(!editable), [setEditable, editable]);
+  const onEditToggle = useCallback(() => setEditable(editable => !editable), [setEditable]);
 
   const onSaveRecipe = useCallback(
     ({ name }) => {
@@ -225,8 +225,8 @@ const removeDeletedIngredientsFromPreferments = (
 
 const saveRecipe = (recipe: Recipe, recipes: Recipe[], setRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>) => {
   if (recipes.find((r) => r.name === recipe.name) !== undefined) {
-    setRecipes(recipes.map((r) => (r.name === recipe.name ? recipe : r)));
+    setRecipes(recipes => recipes.map((r) => (r.name === recipe.name ? recipe : r)));
   } else {
-    setRecipes([...recipes, recipe]);
+    setRecipes(recipes => [...recipes, recipe]);
   }
 };

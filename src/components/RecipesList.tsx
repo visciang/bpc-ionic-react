@@ -40,8 +40,7 @@ let RecipesList: React.FC<Props> = ({
     [setName, setFlours, setIngredients, setPreferments, setAvailableFlours, setAvailableIngredients]
   );
 
-  const deleteRecipe = useCallback((recipe: Recipe): void => setRecipes(recipes.filter((x) => x !== recipe)), [
-    recipes,
+  const deleteRecipe = useCallback((recipe: Recipe): void => setRecipes(recipes => recipes.filter((x) => x !== recipe)), [
     setRecipes,
   ]);
 
