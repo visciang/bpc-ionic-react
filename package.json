@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "^2.4.0",
+    "gh-pages": "^3.1.0",
     "prettier": "^2.0.5"
   },
   "scripts": {
@@ -34,7 +35,8 @@
     "eject": "react-scripts eject",
     "clean": "git clean -fXd -e \\!node_modules -e \\!node_modules/**/*",
     "format": "prettier --write .",
-    "ionic_build": "ionic build --prod --public-url=https://visciang.github.io"
+    "predeploy": "ionic build --prod --public-url=https://visciang.github.io",
+    "deploy": "gh-pages -d build -r https://github.com/visciang/visciang.github.io.git -b master"
   },
   "eslintConfig": {
     "extends": "react-app"
