@@ -12,9 +12,7 @@ export const onIonChangeFloat = (previousValue: number | undefined, onChangeFloa
 
     let newValue: number | undefined = undefined;
 
-    if (!event.detail.value) {
-      newValue = undefined;
-    } else {
+    if (event.detail.value) {
       newValue = parseFloat(event.detail.value.replace(",", "."));
     }
 

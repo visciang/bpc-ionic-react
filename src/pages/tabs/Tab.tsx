@@ -6,13 +6,23 @@ import InfoAlert from "components/InfoAlert";
 type Props = {
   title: string;
   editActive?: boolean;
+  recipeEdited?: boolean;
   showInfo?: boolean;
   onEditToggle?(): void;
   onSave?(): void;
   onReset?(): void;
 };
 
-const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, onSave, onReset, showInfo, children }) => {
+const Tab: React.FC<Props> = ({
+  title,
+  editActive,
+  recipeEdited,
+  onEditToggle,
+  onSave,
+  onReset,
+  showInfo,
+  children,
+}) => {
   const [showInfoAlert, setShowInfoAlert] = useState(false);
 
   const onInfo = useCallback(() => setShowInfoAlert(true), [setShowInfoAlert]);
@@ -24,7 +34,7 @@ const Tab: React.FC<Props> = ({ title, editActive, onEditToggle, onSave, onReset
   ) : undefined;
 
   const saveButton = onSave ? (
-    <IonButton color="dark" routerLink="/recipes" onClick={onSave}>
+    <IonButton color="dark" fill={recipeEdited ? "solid" : undefined} routerLink="/recipes" onClick={onSave}>
       <IonIcon icon={saveOutline} />
     </IonButton>
   ) : undefined;

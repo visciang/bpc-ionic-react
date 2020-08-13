@@ -25,6 +25,7 @@ const Tabs: React.FC = () => {
   const [editable, setEditable] = useState(DEFAULT_EDITABLE);
 
   const [recipes, setRecipes] = useRecipes();
+  const [recipeEdited, setRecipeEdited] = useState(false);
   const [saveAsAlert, setSaveAsAlert] = useState(false);
 
   const [name, setName] = useState(DEFAULT_NAME);
@@ -35,9 +36,52 @@ const Tabs: React.FC = () => {
   const [availableFlours, setAvailableFlours] = useState(DEFAULT_AVAILABLE_FLOURS);
   const [availableIngredients, setAvailableIngredients] = useState(DEFAULT_AVAILABLE_INGREDIENTS);
 
+  const setWithRecipeEditedNotification = useCallback(
+    <Something,>(setSomething: React.Dispatch<React.SetStateAction<Something>>) => {
+      return (something: Something) => {
+        setSomething(something);
+        setRecipeEdited(true);
+      };
+    },
+    [setRecipeEdited]
+  );
+
+  const setFloursWithRecipeEditedNotification = useCallback(setWithRecipeEditedNotification(setFlours), [
+    setWithRecipeEditedNotification,
+    setFlours,
+  ]);
+  const setIngredientsWithRecipeEditedNotification = useCallback(setWithRecipeEditedNotification(setIngredients), [
+    setWithRecipeEditedNotification,
+    setIngredients,
+  ]);
+  const setPrefermentsWithRecipeEditedNotification = useCallback(setWithRecipeEditedNotification(setPreferments), [
+    setWithRecipeEditedNotification,
+    setPreferments,
+  ]);
+
+  const removeDeletedIngredientsFromPreferments = useCallback(
+    (kind: "flours" | "ingredients", deletedIngredients: IngredientName[]) => {
+      let updatedPreferments = preferments;
+
+      for (let [prefermentName, preferment] of preferments) {
+        const updatedIngredients = new Map([...preferment[kind]].filter(([i, v]) => !deletedIngredients.includes(i)));
+
+        if (updatedIngredients.size !== preferment[kind].size) {
+          const updatedPreferment = { ...preferment, [kind]: updatedIngredients };
+          updatedPreferments = new Map([...updatedPreferments, [prefermentName, updatedPreferment]]);
+        }
+      }
+
+      if (updatedPreferments !== preferments) {
+        setPrefermentsWithRecipeEditedNotification(updatedPreferments);
+      }
+    },
+    [preferments, setPrefermentsWithRecipeEditedNotification]
+  );
+
   const onFloursChange = useCallback(
     (currentFlours: Ingredients) => {
-      setFlours(currentFlours);
+      setFloursWithRecipeEditedNotification(currentFlours);
 
       if (!listEquals([...currentFlours.keys()], [...flours.keys()])) {
         setAvailableFlours([...currentFlours.keys()]);
@@ -46,15 +90,15 @@ const Tabs: React.FC = () => {
       const deletedFlours = [...flours.keys()].filter((i) => !currentFlours.has(i));
 
       if (deletedFlours.length !== 0) {
-        removeDeletedIngredientsFromPreferments("flours", preferments, setPreferments, deletedFlours);
+        removeDeletedIngredientsFromPreferments("flours", deletedFlours);
       }
     },
-    [setFlours, setPreferments, flours, preferments]
+    [setFloursWithRecipeEditedNotification, removeDeletedIngredientsFromPreferments, flours]
   );
 
   const onIngredientsChange = useCallback(
     (currentIngredients: Ingredients) => {
-      setIngredients(currentIngredients);
+      setIngredientsWithRecipeEditedNotification(currentIngredients);
 
       if (!listEquals([...currentIngredients.keys()], [...ingredients.keys()])) {
         setAvailableIngredients([...currentIngredients.keys()]);
@@ -63,13 +107,13 @@ const Tabs: React.FC = () => {
       const deletedIngredients = [...ingredients.keys()].filter((i) => !currentIngredients.has(i));
 
       if (deletedIngredients.length !== 0) {
-        removeDeletedIngredientsFromPreferments("ingredients", preferments, setPreferments, deletedIngredients);
+        removeDeletedIngredientsFromPreferments("ingredients", deletedIngredients);
       }
     },
-    [setIngredients, setPreferments, ingredients, preferments]
+    [setIngredientsWithRecipeEditedNotification, removeDeletedIngredientsFromPreferments, ingredients]
   );
 
-  const onEditToggle = useCallback(() => setEditable(editable => !editable), [setEditable]);
+  const onEditToggle = useCallback(() => setEditable((editable) => !editable), [setEditable]);
 
   const onSaveRecipe = useCallback(
     ({ name }) => {
@@ -79,15 +123,40 @@ const Tabs: React.FC = () => {
         ingredients: ingredients,
         preferments: preferments,
       };
-      saveRecipe(newRecipe, recipes, setRecipes);
+
+      if (recipes.find((r) => r.name === newRecipe.name) !== undefined) {
+        setRecipes((recipes) => recipes.map((r) => (r.name === newRecipe.name ? newRecipe : r)));
+      } else {
+        setRecipes((recipes) => [...recipes, newRecipe]);
+      }
+
       setName(name);
+      setRecipeEdited(false);
     },
-    [recipes, flours, ingredients, preferments, setRecipes, setName]
+    [recipes, flours, ingredients, preferments, setRecipes, setRecipeEdited, setName]
   );
 
   const onSave = useCallback(() => {
     setSaveAsAlert(true);
   }, [setSaveAsAlert]);
+
+  const onLoadRecipe = useCallback(
+    (recipe: Recipe) => {
+      setName(recipe.name);
+      setFlours(recipe.flours);
+      setIngredients(recipe.ingredients);
+      setPreferments(recipe.preferments);
+      setAvailableFlours([...recipe.flours.keys()]);
+      setAvailableIngredients([...recipe.ingredients.keys()]);
+      setRecipeEdited(false);
+    },
+    [setName, setFlours, setIngredients, setPreferments, setAvailableFlours, setAvailableIngredients]
+  );
+
+  const onDeleteRecipe = useCallback(
+    (recipe: Recipe): void => setRecipes((recipes) => recipes.filter((x) => x !== recipe)),
+    [setRecipes]
+  );
 
   const onReset = useCallback(() => {
     setEditable(DEFAULT_EDITABLE);
@@ -97,7 +166,17 @@ const Tabs: React.FC = () => {
     setPreferments(DEFAULT_PREFERMENTS);
     setAvailableFlours(DEFAULT_AVAILABLE_FLOURS);
     setAvailableIngredients(DEFAULT_AVAILABLE_INGREDIENTS);
-  }, [setEditable, setName, setFlours, setIngredients, setPreferments, setAvailableFlours, setAvailableIngredients]);
+    setRecipeEdited(false);
+  }, [
+    setEditable,
+    setName,
+    setFlours,
+    setIngredients,
+    setPreferments,
+    setAvailableFlours,
+    setAvailableIngredients,
+    setRecipeEdited,
+  ]);
 
   const resetEditable = useCallback(() => {
     if (editable) setEditable(false);
@@ -112,6 +191,7 @@ const Tabs: React.FC = () => {
             <Tab
               title={name}
               editActive={editable}
+              recipeEdited={recipeEdited}
               onEditToggle={onEditToggle}
               onSave={onSave}
               onReset={onReset}
@@ -131,13 +211,20 @@ const Tabs: React.FC = () => {
         <Route
           path="/prefermentTab"
           render={() => (
-            <Tab title={name} editActive={editable} onEditToggle={onEditToggle} onSave={onSave} onReset={onReset}>
+            <Tab
+              title={name}
+              editActive={editable}
+              recipeEdited={recipeEdited}
+              onEditToggle={onEditToggle}
+              onSave={onSave}
+              onReset={onReset}
+            >
               <PrefermentTab
                 availableFlours={availableFlours}
                 availableIngredients={availableIngredients}
                 preferments={preferments}
                 editable={editable}
-                onPrefermentsChange={setPreferments}
+                onPrefermentsChange={setPrefermentsWithRecipeEditedNotification}
               />
             </Tab>
           )}
@@ -146,7 +233,7 @@ const Tabs: React.FC = () => {
         <Route
           path="/finalDough"
           render={() => (
-            <Tab title={name} onSave={onSave} onReset={onReset}>
+            <Tab title={name} recipeEdited={recipeEdited} onSave={onSave} onReset={onReset}>
               <FinalDoughTab flours={flours} ingredients={ingredients} preferments={preferments} />
             </Tab>
           )}
@@ -157,19 +244,14 @@ const Tabs: React.FC = () => {
           render={() => (
             <Tab title="Recipes" editActive={editable} onEditToggle={onEditToggle}>
               <RecipesTab
+                editable={editable}
                 name={name}
                 recipes={recipes}
-                editable={editable}
-                setRecipes={setRecipes}
-                setName={setName}
-                setFlours={setFlours}
-                setIngredients={setIngredients}
-                setPreferments={setPreferments}
-                setAvailableFlours={setAvailableFlours}
-                setAvailableIngredients={setAvailableIngredients}
                 showSaveAsAlert={saveAsAlert}
                 setShowSaveAsAlert={setSaveAsAlert}
                 onSaveRecipe={onSaveRecipe}
+                onLoadRecipe={onLoadRecipe}
+                onDeleteRecipe={onDeleteRecipe}
               />
             </Tab>
           )}
@@ -200,33 +282,3 @@ const Tabs: React.FC = () => {
 };
 
 export default Tabs;
-
-const removeDeletedIngredientsFromPreferments = (
-  kind: "flours" | "ingredients",
-  preferments: Preferments,
-  setPreferments: React.Dispatch<React.SetStateAction<Preferments>>,
-  deletedIngredients: IngredientName[]
-) => {
-  let updatedPreferments = preferments;
-
-  for (let [prefermentName, preferment] of preferments) {
-    const updatedIngredients = new Map([...preferment[kind]].filter(([i, v]) => !deletedIngredients.includes(i)));
-
-    if (updatedIngredients.size !== preferment[kind].size) {
-      const updatedPreferment = { ...preferment, [kind]: updatedIngredients };
-      updatedPreferments = new Map([...updatedPreferments, [prefermentName, updatedPreferment]]);
-    }
-  }
-
-  if (updatedPreferments !== preferments) {
-    setPreferments(updatedPreferments);
-  }
-};
-
-const saveRecipe = (recipe: Recipe, recipes: Recipe[], setRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>) => {
-  if (recipes.find((r) => r.name === recipe.name) !== undefined) {
-    setRecipes(recipes => recipes.map((r) => (r.name === recipe.name ? recipe : r)));
-  } else {
-    setRecipes(recipes => [...recipes, recipe]);
-  }
-};
