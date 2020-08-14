@@ -1,6 +1,7 @@
 import React from "react";
 import { IonAlert } from "@ionic/react";
 import donate from "assets/img/donate.gif";
+import { version } from "../../package.json";
 
 type Props = {
   showAlert: boolean;
@@ -26,7 +27,7 @@ let InfoAlert: React.FC<Props> = ({ showAlert, setShowAlert }) => {
     </div>
   `;
 
-  return <IonAlert isOpen={showAlert} onDidDismiss={() => setShowAlert(false)} header={"Info"} message={message} />;
+  return <IonAlert isOpen={showAlert} onDidDismiss={() => setShowAlert(false)} header={`Info - v${version}`} message={message} />;
 };
 
 export default InfoAlert = React.memo(InfoAlert);
