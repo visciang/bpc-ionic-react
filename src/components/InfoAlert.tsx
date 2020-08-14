@@ -27,7 +27,14 @@ let InfoAlert: React.FC<Props> = ({ showAlert, setShowAlert }) => {
     </div>
   `;
 
-  return <IonAlert isOpen={showAlert} onDidDismiss={() => setShowAlert(false)} header={`Info - v${version}`} message={message} />;
+  return (
+    <IonAlert
+      isOpen={showAlert}
+      onDidDismiss={() => setShowAlert(false)}
+      header={`Info - v${version}`}
+      message={message}
+    />
+  );
 };
 
 export default InfoAlert = React.memo(InfoAlert);

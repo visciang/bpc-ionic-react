@@ -38,9 +38,7 @@ export const listEquals = <T>(listA: T[], listB: T[]): boolean => {
   if (listA.length !== listB.length) return false;
 
   for (let idx = 0; idx < listA.length; idx++) {
-    for (let jdx = 0; jdx < listB.length; jdx++) {
-      if (listA[idx] !== listB[jdx]) return false;
-    }
+    if (listA[idx] !== listB[idx]) return false;
   }
 
   return true;
