@@ -1,6 +1,6 @@
 {
   "name": "bpc",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": true,
   "dependencies": {
     "@capacitor/core": "^2.4.2",
@@ -17,8 +17,8 @@
     "react-dom": "^16.14.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3",
-    "typescript": "4.0.5"
+    "react-scripts": "^4.0.1",
+    "typescript": "^3.9.6"
   },
   "devDependencies": {
     "@capacitor/cli": "^2.4.2",
