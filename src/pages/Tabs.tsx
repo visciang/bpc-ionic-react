@@ -30,7 +30,7 @@ const Tabs: React.FC = () => {
 
   // The current recipe "state"
   // We don't have a single Recipe object but its components (flours, ingredients, preferments)
-  // to have a more granula controll on the re-rendering, since not every components need all of them
+  // to have a more granular control on the re-rendering, since not every components need all of them
   // Maybe over-engineering but re-rendering everything every time we edit a value seems overkill
   const [name, setName] = useState(DEFAULT_NAME);
   const [flours, setFlours] = useState(DEFAULT_FLOURS);
