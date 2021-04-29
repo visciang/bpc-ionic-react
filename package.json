@@ -27,7 +27,7 @@
     "prettier": "^2.1.2"
   },
   "scripts": {
-    "serve": "ionic serve",
+    "serve": "ionic serve --external",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -35,7 +35,7 @@
     "clean": "git clean -fXd -e \\!node_modules -e \\!node_modules/**/*",
     "format": "prettier --write .",
     "predeploy": "ionic build --prod --public-url=https://visciang.github.io",
-    "deploy": "gh-pages -d build -r https://github.com/visciang/visciang.github.io.git -b master"
+    "deploy": "gh-pages -d build -r git@github.com:visciang/visciang.github.io.git -b master"
   },
   "eslintConfig": {
     "extends": "react-app"
