@@ -25,10 +25,14 @@ jobs:
       run: npm ci
 
     - name: Build
-      run: npm run build -- --base="/bpc-ionic-react/"
+      run: |
+        # https://vite.dev/guide/static-deploy.html#deploying-a-static-site
+        REPO_NAME=$(basename "${{ github.repository }}")
+        npm run build -- --base="/${REPO_NAME}/"
 
     - name: Lint
       run: npm run lint
+
 
     - name: Publish to GitHub Pages
       if: github.ref == 'refs/heads/master'
@@ -36,7 +40,3 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: dist
-        external_repository: visciang/visciang.github.io
-        publish_branch: master
-        user_name: 'github-actions[bot]'
-        user_email: 'github-actions[bot]@users.noreply.github.com'
