@@ -1,5 +1,5 @@
-import { Ingredients } from "dataModel/Ingredient";
-import { Preferments } from "dataModel/Preferment";
+import { Ingredients } from "./Ingredient";
+import { Preferments } from "./Preferment";
 
 export enum ScaleBy {
   DOUGH = "DOUGH",
@@ -7,8 +7,17 @@ export enum ScaleBy {
 }
 
 export type Recipe = {
-  name: string;
+  name: string | undefined;
   flours: Ingredients;
   ingredients: Ingredients;
   preferments: Preferments;
 };
+
+export function newRecipe(name: string | undefined): Recipe {
+  return {
+    name: name,
+    flours: new Map(),
+    ingredients: new Map(),
+    preferments: new Map()
+  };
+}

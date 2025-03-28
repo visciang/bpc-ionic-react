@@ -1,4 +1,3 @@
-import React from "react";
 import { IonTitle, IonToolbar, IonButton, IonIcon } from "@ionic/react";
 import { trashOutline } from "ionicons/icons";
 
@@ -7,7 +6,7 @@ type Props = {
   onDelete?(): void;
 };
 
-let IngredientsTitleToolbar: React.FC<Props> = ({ title, onDelete }) => {
+export default function IngredientsTitleToolbar({ title, onDelete }: Props) {
   const deleteButton = onDelete ? (
     <IonButton size="small" slot="end" onClick={onDelete} fill="clear">
       <IonIcon slot="icon-only" icon={trashOutline} />
@@ -20,6 +19,4 @@ let IngredientsTitleToolbar: React.FC<Props> = ({ title, onDelete }) => {
       {deleteButton}
     </IonToolbar>
   );
-};
-
-export default IngredientsTitleToolbar = React.memo(IngredientsTitleToolbar);
+}

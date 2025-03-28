@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { IonItem, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
-import { IngredientName } from "dataModel/Ingredient";
+import { IngredientName } from "../dataModel/Ingredient";
 
 type Props = {
   label: string;
@@ -8,13 +8,14 @@ type Props = {
   onPick(value: IngredientName): void;
 };
 
-let IngredientPicker: React.FC<Props> = ({ label, values, onPick }) => {
+export default function IngredientPicker({ label, values, onPick }: Props) {
   const [value, setValue] = useState<string | undefined>(undefined);
 
   return (
-    <IonItem lines="none" color="light">
+    <IonItem lines="none">
       <IonLabel>{label}</IonLabel>
       <IonSelect
+        labelPlacement="end"
         disabled={values.length === 0}
         interface="popover"
         value={value}
@@ -23,7 +24,7 @@ let IngredientPicker: React.FC<Props> = ({ label, values, onPick }) => {
 
           onPick(e.detail.value);
           setValue(undefined);
-        }}
+        } }
       >
         {[...values].map((value) => (
           <IonSelectOption key={value} value={value}>
@@ -33,6 +34,4 @@ let IngredientPicker: React.FC<Props> = ({ label, values, onPick }) => {
       </IonSelect>
     </IonItem>
   );
-};
-
-export default IngredientPicker = React.memo(IngredientPicker);
+}

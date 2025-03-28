@@ -1,25 +1,18 @@
-import React from "react";
-import { ScaleBy } from "dataModel/Recipe";
-import IngredientsWeightList from "components/IngredientsWeightList";
-import { calculateDough } from "components/Calculator";
-import { validateRecipe } from "components/RecipeValidator";
-import { Preferments } from "dataModel/Preferment";
-import { Ingredients, IngredientName } from "dataModel/Ingredient";
+import { Recipe, ScaleBy } from "../dataModel/Recipe";
+import IngredientsWeightList from "./IngredientsWeightList";
+import { calculateDough } from "./Calculator";
+import { validateRecipe } from "./RecipeValidator";
 
 type Props = {
-  flours: Ingredients;
-  ingredients: Ingredients;
-  preferments: Preferments;
+  recipe: Recipe;
   scaleBy: ScaleBy;
   totalAmount: number;
 };
 
-let FinalDoughTable: React.FC<Props> = ({ flours, ingredients, preferments, scaleBy, totalAmount }) => {
-  const recipeValidationErrors = validateRecipe(flours, ingredients, preferments);
+export default function FinalDoughTable({ recipe, scaleBy, totalAmount }: Props) {
+  const recipeValidationErrors = validateRecipe(recipe);
 
   if (recipeValidationErrors.length > 0) {
-    // TODO diagnostic
-    console.log(recipeValidationErrors);
     return (
       <div className="ion-padding">
         <strong>RECIPE NOT VALID</strong>
@@ -32,23 +25,22 @@ let FinalDoughTable: React.FC<Props> = ({ flours, ingredients, preferments, scal
     );
   }
 
-  const dough = calculateDough(flours, ingredients, preferments, scaleBy, totalAmount);
+  const dough = calculateDough(recipe, scaleBy, totalAmount);
 
-  const finalFlours = [...flours.keys()].map<[IngredientName, undefined]>((k) => [k, undefined]);
-  const finalIngredients = [...ingredients.keys()].map<[IngredientName, undefined]>((k) => [k, undefined]);
-  const finalIngredientsPercentage = new Map([...finalFlours, ...finalIngredients]);
+  const finalIngredientsPercentage = new Map(
+    [...recipe.flours.keys(), ...recipe.ingredients.keys()].map((k) => [k, undefined])
+  );
 
   return (
     <>
       <IngredientsWeightList
         title="OVERALL"
-        ingredientsPercentage={new Map([...flours, ...ingredients])}
-        ingredientsWeight={dough.overall}
-      />
+        ingredientsPercentage={new Map([...recipe.flours, ...recipe.ingredients])}
+        ingredientsWeight={dough.overall} />
       {[...dough.preferments].map(([prefermentName, preferment]) => {
-        let ingredientsPercentage = new Map([
-          ...preferments.get(prefermentName)!.flours,
-          ...preferments.get(prefermentName)!.ingredients,
+        const ingredientsPercentage = new Map([
+          ...recipe.preferments.get(prefermentName)!.flours,
+          ...recipe.preferments.get(prefermentName)!.ingredients,
         ]);
 
         if (preferment.seed) {
@@ -61,17 +53,13 @@ let FinalDoughTable: React.FC<Props> = ({ flours, ingredients, preferments, scal
             title={prefermentName}
             ingredientsPercentage={ingredientsPercentage}
             ingredientsWeight={preferment.ingredients}
-            totalWeightSubtract={preferment.seed}
-          />
+            totalWeightSubtract={preferment.seed} />
         );
       })}
       <IngredientsWeightList
         title="FINAL DOUGH"
         ingredientsPercentage={finalIngredientsPercentage}
-        ingredientsWeight={dough.final}
-      />
+        ingredientsWeight={dough.final} />
     </>
   );
-};
-
-export default FinalDoughTable = React.memo(FinalDoughTable);
+}

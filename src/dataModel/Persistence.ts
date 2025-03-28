@@ -1,102 +1,124 @@
-import { useState, useEffect } from "react";
-import { Recipe } from "dataModel/Recipe";
-import { Ingredients } from "dataModel/Ingredient";
-import { Preferments, Preferment, PrefermentKind } from "dataModel/Preferment";
+import { Preferment, PrefermentKind } from "./Preferment";
+import { Recipe } from "./Recipe";
 
-export const useRecipes = (): [Recipe[], React.Dispatch<React.SetStateAction<Recipe[]>>] => {
-  const localStorageKey = "recipes";
-  const defaultRecipes: Recipe[] = [];
+type StoredRecipe = {
+  name: string;
+  flours: [string, number][];
+  ingredients: [string, number][];
+  preferments: [string, StoredPreferment][];
+}
 
-  const [value, setValue] = useState<Recipe[]>(() => {
-    const storedValue = window.localStorage.getItem(localStorageKey);
+type StoredPreferment = {
+  kind: PrefermentKind;
+  prefermentedFlour: number;
+  flours: [string, number][];
+  ingredients: [string, number][];
+  seed?: number; // Optional because it's only in SOURDOUGH
+}
 
-    return storedValue !== null ? fromJSONObject(JSON.parse(storedValue)) : defaultRecipes;
-  });
+export function getStoredRecipes(): Map<string, Recipe> {
+  const recipes = new Map<string, Recipe>();
 
-  useEffect(() => {
-    window.localStorage.setItem(localStorageKey, JSON.stringify(toJSONObject(value)));
-  }, [localStorageKey, value]);
+  for (let idx = 0; idx < window.localStorage.length; idx++) {
+    const key = window.localStorage.key(idx)!;
+    const recipe = decodeLocalStorage(JSON.parse(window.localStorage.getItem(key)!));
+    recipes.set(recipe.name!, recipe);
+  }
 
-  return [value, setValue];
-};
+  return recipes;
+}
 
-const toJSONObject = (recipes: Recipe[]) => {
-  return recipes.map(toJSONObjectRecipe);
-};
+export function fetchStoredRecipe(name: string): Recipe {
+  const recipe = window.localStorage.getItem(key(name))!;
+  return decodeLocalStorage(JSON.parse(recipe));
+}
 
-const fromJSONObject = (recipes: ReturnType<typeof toJSONObject>): Recipe[] => {
-  return recipes.map(fromJSONObjectRecipe);
-};
+export function getStoredRecipe(name: string, defaultRecipe: Recipe): Recipe {
+  const recipe = window.localStorage.getItem(key(name));
+  return recipe ? decodeLocalStorage(JSON.parse(recipe)) : defaultRecipe;
+}
 
-const toJSONObjectRecipe = (recipe: Recipe) => {
+export function setStoredRecipe(recipe: Recipe) {
+  window.localStorage.setItem(key(recipe.name!), JSON.stringify(encodeLocalStorage(recipe)));
+}
+
+export function removeStoreRecipe(name: string) {
+  window.localStorage.removeItem(key(name));
+}
+
+export function exportRecipes(): string {
+  const recipes = getStoredRecipes();
+  return JSON.stringify([...recipes.values()].map(encodeLocalStorage), null, 2);
+}
+
+export function importRecipes(recipesJson: string): number {
+  const recipes = JSON.parse(recipesJson).map(decodeLocalStorage);
+  recipes.forEach(setStoredRecipe);
+  return recipes.length;
+}
+
+function key(name: string) {
+  return `recipe::${name}`;
+}
+
+function encodeLocalStorage(recipe: Recipe) {
   return {
     name: recipe.name,
-    flours: toJSONObjectIngredients(recipe.flours),
-    ingredients: toJSONObjectIngredients(recipe.ingredients),
-    preferments: toJSONObjectPreferments(recipe.preferments),
+    flours: [...recipe.flours],
+    ingredients: [...recipe.ingredients],
+    preferments: [...recipe.preferments].map(
+      ([name, preferment]) => [name, encodePreferment(preferment)]
+    )
   };
-};
+}
 
-const fromJSONObjectRecipe = (recipe: ReturnType<typeof toJSONObjectRecipe>): Recipe => {
-  return {
-    name: recipe.name,
-    flours: fromJSONObjectIngredients(recipe.flours),
-    ingredients: fromJSONObjectIngredients(recipe.ingredients),
-    preferments: fromJSONObjectPreferments(recipe.preferments),
-  };
-};
-
-const toJSONObjectIngredients = (ingredients: Ingredients) => {
-  return [...ingredients];
-};
-const fromJSONObjectIngredients = (ingredients: ReturnType<typeof toJSONObjectIngredients>): Ingredients => {
-  return new Map(ingredients);
-};
-
-const toJSONObjectPreferments = (preferments: Preferments) => {
-  return [...preferments].map<[string, ReturnType<typeof toJSONObjectPreferment>]>(([name, preferment]) => [
-    name,
-    toJSONObjectPreferment(preferment),
-  ]);
-};
-const fromJSONObjectPreferments = (preferments: ReturnType<typeof toJSONObjectPreferments>): Preferments => {
-  return new Map(preferments.map(([name, preferment]) => [name, fromJSONObjectPreferment(preferment)]));
-};
-
-const toJSONObjectPreferment = (preferment: Preferment) => {
+function encodePreferment(preferment: Preferment) {
   if (preferment.kind === PrefermentKind.PREDOUGH) {
     return {
       kind: preferment.kind,
       prefermentedFlour: preferment.prefermentedFlour,
-      flours: toJSONObjectIngredients(preferment.flours),
-      ingredients: toJSONObjectIngredients(preferment.ingredients),
+      flours: [...preferment.flours],
+      ingredients: [...preferment.ingredients],
     };
   } else {
     return {
       kind: preferment.kind,
       prefermentedFlour: preferment.prefermentedFlour,
       seed: preferment.seed,
-      flours: toJSONObjectIngredients(preferment.flours),
-      ingredients: toJSONObjectIngredients(preferment.ingredients),
+      flours: [...preferment.flours],
+      ingredients: [...preferment.ingredients],
     };
-  }
-};
+  };
+}
 
-const fromJSONObjectPreferment = (preferment: ReturnType<typeof toJSONObjectPreferment>): Preferment => {
+function decodeLocalStorage(recipe: StoredRecipe): Recipe {
+  return {
+    name: recipe.name,
+    flours: new Map(recipe.flours),
+    ingredients: new Map(recipe.ingredients),
+    preferments: new Map(
+      recipe.preferments.map(
+        ([name, preferment]: [string, StoredPreferment]) => [name, decodePreferment(preferment)]
+      )
+    )
+  };
+}
+
+function decodePreferment(preferment: StoredPreferment): Preferment {
   if (preferment.kind === PrefermentKind.PREDOUGH) {
     return {
-      kind: preferment.kind,
+      kind: PrefermentKind.PREDOUGH,
       prefermentedFlour: preferment.prefermentedFlour,
-      flours: fromJSONObjectIngredients(preferment.flours),
-      ingredients: fromJSONObjectIngredients(preferment.ingredients),
+      flours: new Map(preferment.flours),
+      ingredients: new Map(preferment.ingredients),
     };
   } else {
     return {
-      kind: preferment.kind,
+      kind: PrefermentKind.SOURDOUGH,
       prefermentedFlour: preferment.prefermentedFlour,
       seed: preferment.seed,
-      flours: fromJSONObjectIngredients(preferment.flours),
-      ingredients: fromJSONObjectIngredients(preferment.ingredients),
+      flours: new Map(preferment.flours),
+      ingredients: new Map(preferment.ingredients),
     };
   }
-};
+}

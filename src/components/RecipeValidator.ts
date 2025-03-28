@@ -1,27 +1,24 @@
-import { Ingredients } from "dataModel/Ingredient";
-import { sum } from "components/utils";
-import { Preferments } from "dataModel/Preferment";
+import { sum } from "./utils";
+import { Ingredients } from "../dataModel/Ingredient";
+import { Preferments } from "../dataModel/Preferment";
+import { Recipe } from "../dataModel/Recipe";
 
 export type RecipeValidationErrors = string[];
 
-export const validateRecipe = (
-  flours: Ingredients,
-  ingredients: Ingredients,
-  preferments: Preferments
-): RecipeValidationErrors => {
+export function validateRecipe(recipe: Recipe): RecipeValidationErrors {
   const errors: RecipeValidationErrors = [];
 
-  errors.push(...checkFlours(flours, "OVERALL"));
-  errors.push(...checkIngredients(ingredients, "OVERALL"));
-  errors.push(...checkPreferments(preferments));
+  errors.push(...checkFlours(recipe.flours, "OVERALL"));
+  errors.push(...checkIngredients(recipe.ingredients, "OVERALL"));
+  errors.push(...checkPreferments(recipe.preferments));
 
   return errors;
-};
+}
 
-const checkFlours = (flours: Ingredients, err_title: string): RecipeValidationErrors => {
+function checkFlours(flours: Ingredients, err_title: string): RecipeValidationErrors {
   const errors: RecipeValidationErrors = [];
 
-  for (let [name, value] of flours) {
+  for (const [name, value] of flours) {
     if (value === undefined) {
       errors.push(`[${err_title}] Undefined flour value: '${name}'`);
     }
@@ -32,24 +29,24 @@ const checkFlours = (flours: Ingredients, err_title: string): RecipeValidationEr
   }
 
   return errors;
-};
+}
 
-const checkIngredients = (ingredients: Ingredients, err_title: string): RecipeValidationErrors => {
+function checkIngredients(ingredients: Ingredients, err_title: string): RecipeValidationErrors {
   const errors: RecipeValidationErrors = [];
 
-  for (let [name, value] of ingredients) {
+  for (const [name, value] of ingredients) {
     if (value === undefined) {
       errors.push(`[${err_title}] Undefined ingredient value: '${name}'`);
     }
   }
 
   return errors;
-};
+}
 
-const checkPreferments = (preferments: Preferments): RecipeValidationErrors => {
+function checkPreferments(preferments: Preferments): RecipeValidationErrors {
   const errors: RecipeValidationErrors = [];
 
-  for (let [name, value] of preferments) {
+  for (const [name, value] of preferments) {
     if (value.prefermentedFlour === undefined) {
       errors.push("Undefined prefermented flour value");
     }
@@ -63,4 +60,4 @@ const checkPreferments = (preferments: Preferments): RecipeValidationErrors => {
   }
 
   return errors;
-};
+}
