@@ -1,31 +1,77 @@
-import React from "react";
-import { IonLabel, IonItem, IonButton, IonIcon } from "@ionic/react";
-import { trashOutline } from "ionicons/icons";
+import { IonLabel, IonItem, IonButton, IonIcon, IonAlert } from "@ionic/react";
+import { createOutline, trashOutline } from "ionicons/icons";
+import { useCallback, useState } from "react";
 
 type Props = {
   name: string;
-  editable: boolean;
-  onLoad(): void;
-  onDelete(): void;
+  onSelect(name: string): void;
+  onRename(name: string, newName: string): void;
+  onDelete(name: string): void;
 };
 
-let RecipeItem: React.FC<Props> = ({ name, editable, onLoad, onDelete }) => {
-  if (editable) {
-    return (
-      <IonItem>
+export default function RecipeItem({ name, onSelect, onRename, onDelete }: Props) {
+  const [showRenameAlert, setShowRenameAlert] = useState(false);
+
+  const onSelectClick = useCallback(() => onSelect(name), [name, onSelect]);
+
+  const onRenameClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setShowRenameAlert(true);
+  }, [setShowRenameAlert]);
+
+  const handleRename = useCallback((newName: string) => {
+    if (newName && newName.trim() !== "") {
+      onRename(name, newName.trim());
+    }
+    setShowRenameAlert(false);
+  }, [name, onRename]);
+
+  const onDeleteClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    onDelete(name);
+  }, [name, onDelete]);
+
+  return (
+    <>
+      <IonItem button onClick={onSelectClick} routerLink="/ingredients" routerDirection="none" detail={false}>
         <IonLabel>{name}</IonLabel>
-        <IonButton slot="end" onClick={onDelete} fill="clear">
+        <IonButton slot="end" onClick={onRenameClick} fill="clear">
+          <IonIcon slot="icon-only" icon={createOutline} />
+        </IonButton>
+        <IonButton slot="end" onClick={onDeleteClick} fill="clear">
           <IonIcon slot="icon-only" icon={trashOutline} />
         </IonButton>
       </IonItem>
-    );
-  } else {
-    return (
-      <IonItem button onClick={onLoad} routerLink="/overallTab" routerDirection="none" detail={false}>
-        <IonLabel>{name}</IonLabel>
-      </IonItem>
-    );
-  }
+      <IonAlert
+        isOpen={showRenameAlert}
+        onDidDismiss={() => setShowRenameAlert(false)}
+        header="Rename Recipe"
+        inputs={[
+          {
+            name: 'newName',
+            type: 'text',
+            placeholder: 'Enter new name',
+            value: name
+          }
+        ]}
+        buttons={[
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => {
+              setShowRenameAlert(false);
+            }
+          },
+          {
+            text: 'Rename',
+            handler: (data) => {
+              handleRename(data.newName);
+            }
+          }
+        ]}
+      />
+    </>
+  );
 };
-
-export default RecipeItem = React.memo(RecipeItem);

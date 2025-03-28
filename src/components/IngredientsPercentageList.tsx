@@ -1,11 +1,11 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { IonList, IonReorderGroup } from "@ionic/react";
 import { ItemReorderEventDetail } from "@ionic/core";
-import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
-import NewItemInput from "components/NewItemInput";
-import IngredientPercentageItem from "components/IngredientPercentageItem";
-import { mapMove, mapDelete } from "components/utils";
-import { IngredientName, Ingredients, IngredientValue } from "dataModel/Ingredient";
+import { IngredientName, Ingredients, IngredientValue } from "../dataModel/Ingredient";
+import NewItemInput from "./NewItemInput";
+import IngredientsTitleToolbar from "./IngredientsTitleToolbar";
+import IngredientPercentageItem from "./IngredientPercentageItem";
+import { mapMoveIdx, mapDelete, mapSet } from "./utils";
 
 type Props = {
   title: string;
@@ -15,35 +15,41 @@ type Props = {
   onIngredientsChange(ingredients: Ingredients): void;
 };
 
-let IngredientsPercentageList: React.FC<Props> = ({
+export default function IngredientsPercentageList({
   title,
   ingredients,
   maxPercentage,
   editable,
   onIngredientsChange,
-}) => {
+}: Props) {
   const onIngredientChange = useCallback(
-    (name: IngredientName, value: IngredientValue) => onIngredientsChange(new Map([...ingredients, [name, value]])),
+    (name: IngredientName, value: IngredientValue) => {
+      onIngredientsChange(mapSet(ingredients, name, value))
+    },
     [ingredients, onIngredientsChange]
   );
 
   const onIngredientReorder = useCallback(
     (event: CustomEvent<ItemReorderEventDetail>) => {
-      onIngredientsChange(mapMove(ingredients, event.detail.from, event.detail.to));
+      onIngredientsChange(mapMoveIdx(ingredients, event.detail.from, event.detail.to));
       event.detail.complete();
     },
     [ingredients, onIngredientsChange]
   );
 
   const onNewIngredient = useCallback(
-    (name: IngredientName) => onIngredientsChange(new Map([...ingredients, [name, undefined]])),
+    (name: IngredientName) => {
+      onIngredientsChange(mapSet(ingredients, name, undefined))
+    },
     [ingredients, onIngredientsChange]
   );
 
-  const onDeleteIngredient = useCallback((name: IngredientName) => onIngredientsChange(mapDelete(ingredients, name)), [
-    ingredients,
-    onIngredientsChange,
-  ]);
+  const onDeleteIngredient = useCallback(
+    (name: IngredientName) => {
+      onIngredientsChange(mapDelete(ingredients, name))
+    },
+    [ingredients, onIngredientsChange]
+  );
 
   return (
     <IonList lines="none">
@@ -64,6 +70,4 @@ let IngredientsPercentageList: React.FC<Props> = ({
       <NewItemInput onNewItem={onNewIngredient} />
     </IonList>
   );
-};
-
-export default IngredientsPercentageList = React.memo(IngredientsPercentageList);
+}

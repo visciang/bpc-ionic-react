@@ -1,15 +1,15 @@
 import React from "react";
-import { IonAlert } from "@ionic/react";
-import donate from "assets/img/donate.gif";
+import { IonAlert, IonicSafeString } from "@ionic/react";
+import donate from "../assets/img/donate.gif";
 import { version } from "../../package.json";
 
 type Props = {
-  showAlert: boolean;
-  setShowAlert: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpen: boolean;
+  onDidDismiss(): void;
 };
 
-let InfoAlert: React.FC<Props> = ({ showAlert, setShowAlert }) => {
-  const message = `
+export default function InfoAlert({ isOpen, onDidDismiss }: Props) {
+  const message = new IonicSafeString(`
     <div class="ion-text-center">
       <p>
         <a href="mailto:panificazionefavaglie@gmail.com?subject=BakerCalc">
@@ -25,16 +25,14 @@ let InfoAlert: React.FC<Props> = ({ showAlert, setShowAlert }) => {
         </a>
       </p>
     </div>
-  `;
+  `);
 
   return (
     <IonAlert
-      isOpen={showAlert}
-      onDidDismiss={() => setShowAlert(false)}
+      isOpen={isOpen}
+      onDidDismiss={onDidDismiss}
       header={`Info - v${version}`}
       message={message}
     />
   );
 };
-
-export default InfoAlert = React.memo(InfoAlert);

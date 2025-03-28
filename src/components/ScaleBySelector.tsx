@@ -1,21 +1,21 @@
 import React, { useCallback } from "react";
 import { IonItem, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
 import { SelectChangeEventDetail } from "@ionic/core";
-import { ScaleBy } from "dataModel/Recipe";
+import { ScaleBy } from "../dataModel/Recipe";
 
 type Props = {
   onSelect(scaleBy: ScaleBy): void;
 };
 
-let ScaleBySelector: React.FC<Props> = ({ onSelect }) => {
+export default function ScaleBySelector({ onSelect }: Props) {
   const onIonChange = useCallback((event: CustomEvent<SelectChangeEventDetail>) => onSelect(event.detail.value), [
     onSelect,
   ]);
 
   return (
-    <IonItem lines="none" color="light">
+    <IonItem lines="none">
       <IonLabel>Scale by</IonLabel>
-      <IonSelect interface="popover" onIonChange={onIonChange}>
+      <IonSelect labelPlacement="end" interface="popover" onIonChange={onIonChange}>
         {Object.keys(ScaleBy).map((value) => (
           <IonSelectOption key={value} value={value}>
             {value}
@@ -24,6 +24,4 @@ let ScaleBySelector: React.FC<Props> = ({ onSelect }) => {
       </IonSelect>
     </IonItem>
   );
-};
-
-export default ScaleBySelector = React.memo(ScaleBySelector);
+}

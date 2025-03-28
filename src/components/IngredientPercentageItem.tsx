@@ -1,8 +1,9 @@
-import React, { useCallback } from "react";
-import { IonItem, IonLabel, IonInput, IonText, IonButton, IonIcon, IonReorder } from "@ionic/react";
+import { useCallback } from "react";
+import { IonItem, IonLabel, IonInput, IonText, IonButton, IonIcon, IonReorder, InputInputEventDetail } from "@ionic/react";
 import { trashOutline } from "ionicons/icons";
-import { onIonChangeFloat } from "components/utils";
-import { IngredientName, IngredientValue } from "dataModel/Ingredient";
+import { onIonChangeFloat } from "./utils";
+import { IngredientName, IngredientValue } from "../dataModel/Ingredient";
+import { IonInputCustomEvent } from "@ionic/core";
 
 type Props = {
   name: IngredientName;
@@ -13,13 +14,13 @@ type Props = {
   onDelete?(name: IngredientName): void;
 };
 
-let IngredientPercentageItem: React.FC<Props> = ({ name, value, maxPercentage, editable, onChange, onDelete }) => {
-  const onIonChange = useCallback(
-    onIonChangeFloat(value, (v) => onChange(name, v)),
+export default function IngredientPercentageItem({ name, value, maxPercentage, editable, onChange, onDelete }: Props) {
+  const onIonInput = useCallback(
+    (e: IonInputCustomEvent<InputInputEventDetail>) => onIonChangeFloat(value, (v) => onChange(name, v))(e),
     [name, value, onChange]
   );
 
-  let children: JSX.Element = <></>;
+  let children = <></>;
 
   if (editable) {
     if (onDelete) {
@@ -37,13 +38,13 @@ let IngredientPercentageItem: React.FC<Props> = ({ name, value, maxPercentage, e
       <>
         <IonInput
           className="ion-padding-horizontal ion-text-right"
-          type="number"
+          // Safari does not support `type="number"` (it makes mess with the input value)
+          type="text"
           inputMode="decimal"
           min="0"
           max={maxPercentage?.toString()}
           value={value}
-          onIonChange={onIonChange}
-        />
+          onIonInput={onIonInput} />
         <IonText>%</IonText>
       </>
     );
@@ -55,6 +56,4 @@ let IngredientPercentageItem: React.FC<Props> = ({ name, value, maxPercentage, e
       {children}
     </IonItem>
   );
-};
-
-export default IngredientPercentageItem = React.memo(IngredientPercentageItem);
+}

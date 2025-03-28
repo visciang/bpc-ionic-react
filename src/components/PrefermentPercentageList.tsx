@@ -1,124 +1,141 @@
-import React, { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { IonList, IonReorderGroup } from "@ionic/react";
 import { ItemReorderEventDetail } from "@ionic/core";
-import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
-import IngredientPercentageItem from "components/IngredientPercentageItem";
-import IngredientPicker from "components/IngredientPicker";
-import { mapDelete, mapMove } from "components/utils";
-import { Preferment, PrefermentKind } from "dataModel/Preferment";
-import { IngredientName, IngredientValue } from "dataModel/Ingredient";
+import IngredientsTitleToolbar from "./IngredientsTitleToolbar";
+import IngredientPercentageItem from "./IngredientPercentageItem";
+import IngredientPicker from "./IngredientPicker";
+import { Preferment, PrefermentKind } from "../dataModel/Preferment";
+import { IngredientName, IngredientValue } from "../dataModel/Ingredient";
+import { mapDelete, mapMoveIdx, mapSet } from "./utils";
 
 type Props = {
-  title: string;
+  name: string;
   availableFlours: IngredientName[];
   availableIngredients: IngredientName[];
   preferment: Preferment;
   editable: boolean;
-  onPrefermentChange(preferment: Preferment): void;
-  onPrefermentDelete(): void;
+  onPrefermentChange(name: string, preferment: Preferment): void;
+  onPrefermentDelete(name: string): void;
 };
 
-let PrefermentPercentageList: React.FC<Props> = ({
-  title,
-  availableFlours,
-  availableIngredients,
-  preferment,
-  editable,
-  onPrefermentChange,
-  onPrefermentDelete,
-}) => {
+export default function PrefermentPercentageList(
+  {
+    name,
+    availableFlours,
+    availableIngredients,
+    preferment,
+    editable,
+    onPrefermentChange,
+    onPrefermentDelete,
+  }: Props) {
   const onPrefermentedFlourChange = useCallback(
-    (name: IngredientName, value: IngredientValue) => onPrefermentChange({ ...preferment, prefermentedFlour: value }),
-    [preferment, onPrefermentChange]
+    (_name: IngredientName, value: IngredientValue) => {
+      onPrefermentChange(name, { ...preferment, prefermentedFlour: value })
+    },
+    [name, preferment, onPrefermentChange]
+  );
+
+  const _onPrefermentDelete = useCallback(
+    () => onPrefermentDelete(name),
+    [name, onPrefermentDelete]
   );
 
   const onSeedChange = useCallback(
-    (name: IngredientName, value: IngredientValue) => {
-      if (preferment.kind === PrefermentKind.SOURDOUGH) onPrefermentChange({ ...preferment, seed: value });
+    (_name: IngredientName, value: IngredientValue) => {
+      if (preferment.kind === PrefermentKind.SOURDOUGH) onPrefermentChange(name, { ...preferment, seed: value });
     },
-    [preferment, onPrefermentChange]
+    [name, preferment, onPrefermentChange]
   );
 
   const onFlourChange = useCallback(
-    (name: IngredientName, value: IngredientValue) =>
-      onPrefermentChange({ ...preferment, flours: new Map([...preferment.flours, [name, value]]) }),
-    [preferment, onPrefermentChange]
+    (flour: IngredientName, value: IngredientValue) => {
+      onPrefermentChange(name, { ...preferment, flours: mapSet(preferment.flours, flour, value) })
+    },
+    [name, preferment, onPrefermentChange]
   );
 
   const onIngredientChange = useCallback(
-    (name: IngredientName, value: IngredientValue) =>
-      onPrefermentChange({ ...preferment, ingredients: new Map([...preferment.ingredients, [name, value]]) }),
-    [preferment, onPrefermentChange]
+    (ingredient: IngredientName, value: IngredientValue) => {
+      onPrefermentChange(name, { ...preferment, ingredients: mapSet(preferment.ingredients, ingredient, value) })
+    },
+    [name, preferment, onPrefermentChange]
   );
 
   const onFlourDelete = useCallback(
-    (name: IngredientName) => onPrefermentChange({ ...preferment, flours: mapDelete(preferment.flours, name) }),
-    [preferment, onPrefermentChange]
+    (flour: IngredientName) => {
+      onPrefermentChange(name, { ...preferment, flours: mapDelete(preferment.flours, flour) })
+    },
+    [name, preferment, onPrefermentChange]
   );
 
   const onIngredientDelete = useCallback(
-    (name: IngredientName) =>
-      onPrefermentChange({ ...preferment, ingredients: mapDelete(preferment.ingredients, name) }),
-    [preferment, onPrefermentChange]
+    (ingredient: IngredientName) => {
+      onPrefermentChange(name, { ...preferment, ingredients: mapDelete(preferment.ingredients, ingredient) })
+    },
+    [name, preferment, onPrefermentChange]
   );
 
   const onFlourReorder = useCallback(
     (event: CustomEvent<ItemReorderEventDetail>) => {
-      onPrefermentChange({
+      onPrefermentChange(name, {
         ...preferment,
-        flours: mapMove(preferment.flours, event.detail.from, event.detail.to),
+        flours: mapMoveIdx(preferment.flours, event.detail.from, event.detail.to),
       });
       event.detail.complete();
     },
-    [preferment, onPrefermentChange]
+    [name, preferment, onPrefermentChange]
   );
 
   const onIngredientReorder = useCallback(
     (event: CustomEvent<ItemReorderEventDetail>) => {
-      onPrefermentChange({
+      onPrefermentChange(name, {
         ...preferment,
-        ingredients: mapMove(preferment.ingredients, event.detail.from, event.detail.to),
+        ingredients: mapMoveIdx(preferment.ingredients, event.detail.from, event.detail.to),
       });
       event.detail.complete();
     },
-    [preferment, onPrefermentChange]
+    [name, preferment, onPrefermentChange]
   );
 
   const onNewFlour = useCallback(
-    (name: IngredientName) => {
-      onPrefermentChange({ ...preferment, flours: new Map([...preferment.flours, [name, undefined]]) });
+    (flour: IngredientName) => {
+      onPrefermentChange(name, { ...preferment, flours: mapSet(preferment.flours, flour, undefined) })
     },
-    [preferment, onPrefermentChange]
+    [name, preferment, onPrefermentChange]
   );
 
   const onNewIngredient = useCallback(
-    (name: IngredientName) => {
-      onPrefermentChange({ ...preferment, ingredients: new Map([...preferment.ingredients, [name, undefined]]) });
+    (ingredient: IngredientName) => {
+      onPrefermentChange(name, { ...preferment, ingredients: mapSet(preferment.ingredients, ingredient, undefined) })
     },
-    [preferment, onPrefermentChange]
+    [name, preferment, onPrefermentChange]
   );
 
-  const selectableFlours = availableFlours.filter((flour) => !preferment.flours.has(flour));
-  const selectableIngredients = availableIngredients.filter((ingredient) => !preferment.ingredients.has(ingredient));
+  const selectableFlours = useMemo(
+    () => availableFlours.filter((flour) => !preferment.flours.has(flour)),
+    [availableFlours, preferment.flours]
+  );
+  const selectableIngredients = useMemo(
+    () => availableIngredients.filter((ingredient) => !preferment.ingredients.has(ingredient)),
+    [availableIngredients, preferment.ingredients]
+  );
 
   return (
     <IonList lines="none">
-      <IngredientsTitleToolbar title={title} onDelete={editable ? onPrefermentDelete : undefined} />
+      <IngredientsTitleToolbar title={name} onDelete={editable ? _onPrefermentDelete : undefined} />
       <IngredientPercentageItem
         name="Prefermented flour"
         value={preferment.prefermentedFlour}
         maxPercentage={100}
         editable={editable}
-        onChange={onPrefermentedFlourChange}
-      />
+        onChange={onPrefermentedFlourChange} />
       {preferment.kind === PrefermentKind.SOURDOUGH ? (
         <IngredientPercentageItem
           name="Sourdough starter"
           value={preferment.seed}
           maxPercentage={100}
           editable={editable}
-          onChange={onSeedChange}
-        />
+          onChange={onSeedChange} />
       ) : undefined}
       <IonReorderGroup disabled={!editable} onIonItemReorder={onFlourReorder}>
         {[...preferment.flours].map(([name, value]) => (
@@ -129,8 +146,7 @@ let PrefermentPercentageList: React.FC<Props> = ({
             maxPercentage={100}
             editable={editable}
             onChange={onFlourChange}
-            onDelete={onFlourDelete}
-          />
+            onDelete={onFlourDelete} />
         ))}
       </IonReorderGroup>
       <IonReorderGroup disabled={!editable} onIonItemReorder={onIngredientReorder}>
@@ -143,8 +159,7 @@ let PrefermentPercentageList: React.FC<Props> = ({
               maxPercentage={100}
               editable={editable}
               onChange={onIngredientChange}
-              onDelete={onIngredientDelete}
-            />
+              onDelete={onIngredientDelete} />
           );
         })}
       </IonReorderGroup>
@@ -152,6 +167,4 @@ let PrefermentPercentageList: React.FC<Props> = ({
       <IngredientPicker label="Pick ingredient" values={selectableIngredients} onPick={onNewIngredient} />
     </IonList>
   );
-};
-
-export default PrefermentPercentageList = React.memo(PrefermentPercentageList);
+}

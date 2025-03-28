@@ -3,6 +3,11 @@
   "name": "Baker Percentage Calculator",
   "icons": [
     {
+      "src": "assets/icon/favicon.png",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    },
+    {
       "src": "assets/icon/icon.png",
       "type": "image/png",
       "sizes": "512x512",
@@ -11,6 +16,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#71c03F",
-  "background_color": "#71c03F"
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff"
 }

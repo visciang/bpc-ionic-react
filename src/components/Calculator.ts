@@ -1,7 +1,7 @@
-import { ScaleBy } from "dataModel/Recipe";
-import { Ingredients, IngredientValue } from "dataModel/Ingredient";
-import { Preferment, Preferments, PrefermentKind, PrefermentName } from "dataModel/Preferment";
-import { sum } from "components/utils";
+import { Recipe, ScaleBy } from "../dataModel/Recipe";
+import { Ingredients, IngredientValue } from "../dataModel/Ingredient";
+import { Preferment, Preferments, PrefermentKind, PrefermentName } from "../dataModel/Preferment";
+import { sum } from "./utils";
 
 type CalcPreferment = {
   kind: PrefermentKind;
@@ -17,30 +17,19 @@ type CalcDough = {
   final: Ingredients;
 };
 
-export const calculateDough = (
-  flours: Ingredients,
-  ingredients: Ingredients,
-  preferments: Preferments,
-  scaleBy: ScaleBy,
-  totalAmount: number
-): CalcDough => {
-  const scaleFactor = calculateScaleFactor(flours, ingredients, scaleBy);
+export function calculateDough(recipe: Recipe, scaleBy: ScaleBy, totalAmount: number): CalcDough {
+  const scaleFactor = calculateScaleFactor(recipe.flours, recipe.ingredients, scaleBy);
   const scaleDoughFactor = totalAmount / scaleFactor;
 
-  return calculateWeigths(flours, ingredients, preferments, scaleDoughFactor);
-};
+  return calculateWeigths(recipe, scaleDoughFactor);
+}
 
-const calculateWeigths = (
-  flours: Ingredients,
-  ingredients: Ingredients,
-  preferments: Preferments,
-  scaleDoughFactor: number
-): CalcDough => {
+function calculateWeigths(recipe: Recipe, scaleDoughFactor: number): CalcDough {
   const overall = new Map([
-    ...calculateIngredients(flours, scaleDoughFactor),
-    ...calculateIngredients(ingredients, scaleDoughFactor),
+    ...calculateIngredients(recipe.flours, scaleDoughFactor),
+    ...calculateIngredients(recipe.ingredients, scaleDoughFactor),
   ]);
-  const preferments_ = calculatePreferments(preferments, scaleDoughFactor);
+  const preferments_ = calculatePreferments(recipe.preferments, scaleDoughFactor);
   const final = calculateFinal(overall, preferments_);
 
   return {
@@ -48,28 +37,28 @@ const calculateWeigths = (
     preferments: preferments_,
     final: final,
   };
-};
+}
 
-const calculateScaleFactor = (flours: Ingredients, ingredients: Ingredients, scaleBy: ScaleBy): number => {
+function calculateScaleFactor(flours: Ingredients, ingredients: Ingredients, scaleBy: ScaleBy): number {
   return scaleBy === ScaleBy.FLOUR ? 100 : sum(flours.values(), ingredients.values());
-};
+}
 
-const calculateIngredients = (ingredients: Ingredients, scaleDoughFactor: number): Ingredients => {
+function calculateIngredients(ingredients: Ingredients, scaleDoughFactor: number): Ingredients {
   return new Map([...ingredients].map(([name, value]) => [name, value! * scaleDoughFactor]));
-};
+}
 
-const calculatePreferments = (preferments: Preferments, scaleDoughFactor: number): CalcPreferments => {
+function calculatePreferments(preferments: Preferments, scaleDoughFactor: number): CalcPreferments {
   return new Map(
     [...preferments].map(([prefermentName, preferment]) => [
       prefermentName,
       calculatePreferment(preferment, scaleDoughFactor),
     ])
   );
-};
+}
 
-const calculatePreferment = (preferment: Preferment, scaleDoughFactor: number): CalcPreferment => {
+function calculatePreferment(preferment: Preferment, scaleDoughFactor: number): CalcPreferment {
   const prefermentScaleDoughFactor = scaleDoughFactor * (preferment.prefermentedFlour! / 100);
-  let ingredients = new Map([
+  const ingredients = new Map([
     ...calculateIngredients(preferment.ingredients, prefermentScaleDoughFactor),
     ...calculateIngredients(preferment.flours, prefermentScaleDoughFactor),
   ]);
@@ -85,14 +74,13 @@ const calculatePreferment = (preferment: Preferment, scaleDoughFactor: number): 
     ingredients: ingredients,
     seed: seed,
   };
-};
+}
 
-const calculateFinal = (overall: Ingredients, preferments: CalcPreferments): Ingredients => {
+function calculateFinal(overall: Ingredients, preferments: CalcPreferments): Ingredients {
   const final = new Map([...overall]);
 
-  for (let ingredient of overall.keys()) {
-    let weight: IngredientValue =
-      final.get(ingredient)! -
+  for (const ingredient of overall.keys()) {
+    let weight: IngredientValue = final.get(ingredient)! -
       sum([...preferments.values()].map((preferment) => preferment.ingredients.get(ingredient) || 0));
 
     if (Math.abs(weight) <= 0.01) {
@@ -107,4 +95,4 @@ const calculateFinal = (overall: Ingredients, preferments: CalcPreferments): Ing
   }
 
   return final;
-};
+}
