@@ -50,6 +50,7 @@ setupIonicReact({
   innerHTMLTemplatesEnabled: true
 });
 
+const basename = import.meta.env.BASE_URL || '/';
 const UNTITLED_RECIPE: Recipe = newRecipe(undefined);
 
 export default function App() {
@@ -117,7 +118,7 @@ export default function App() {
 
   return (
     <IonApp>
-      <IonReactRouter>
+      <IonReactRouter basename={basename}>
         <IonTabs>
           <IonRouterOutlet>
             <Route exact path="/ingredients">
