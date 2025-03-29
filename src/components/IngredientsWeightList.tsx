@@ -15,7 +15,7 @@ export default function IngredientsWeightList({ title, ingredientsPercentage, in
   let totalWeightStr: string | undefined;
 
   if (totalWeightSubtract) {
-    totalWeightStr = `${numberToString(totalWeight)} - (${totalWeightSubtract}) = ${totalWeight - totalWeightSubtract}`;
+    totalWeightStr = `${numberToString(totalWeight)} - (${numberToString(totalWeightSubtract)}) = ${numberToString(totalWeight - totalWeightSubtract)}`;
   } else {
     totalWeightStr = numberToString(totalWeight);
   }
