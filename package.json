@@ -4,9 +4,9 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
+    "dev": "VITE_GIT_SHA=$(git rev-parse HEAD) vite",
+    "build": "tsc && VITE_GIT_SHA=$(git rev-parse HEAD) vite build",
+    "preview": "VITE_GIT_SHA=$(git rev-parse HEAD) vite preview",
     "lint": "eslint"
   },
   "dependencies": {

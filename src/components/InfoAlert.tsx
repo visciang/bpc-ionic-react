@@ -1,7 +1,8 @@
-import React from "react";
 import { IonAlert, IonicSafeString } from "@ionic/react";
 import donate from "../assets/img/donate.gif";
 import { version } from "../../package.json";
+
+const gitSHA = import.meta.env.VITE_GIT_SHA || "development";
 
 type Props = {
   isOpen: boolean;
@@ -24,6 +25,12 @@ export default function InfoAlert({ isOpen, onDidDismiss }: Props) {
         <img src=${donate}>
         </a>
       </p>
+      <p class="ion-text-small">
+        Build: ${gitSHA.substring(0, 7)}
+      </p>
+      <p class="ion-text-small">
+        Version: ${version}
+      </p>
     </div>
   `);
 
@@ -31,7 +38,7 @@ export default function InfoAlert({ isOpen, onDidDismiss }: Props) {
     <IonAlert
       isOpen={isOpen}
       onDidDismiss={onDidDismiss}
-      header={`Info - v${version}`}
+      header={"About B%C"}
       message={message}
     />
   );

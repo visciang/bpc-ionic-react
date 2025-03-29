@@ -9,5 +9,8 @@ export default defineConfig({
     react(),
     legacy(),
     VitePWA({ registerType: 'autoUpdate' })
-  ]
+  ],
+  define: {
+    "import.meta.env.VITE_GIT_SHA": JSON.stringify(process.env.VITE_GIT_SHA || "development")
+  }
 })
