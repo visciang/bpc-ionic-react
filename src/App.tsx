@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
@@ -41,95 +41,21 @@ import Tab from "./pages/Tab";
 import IngredientsView from "./pages/IngredientsView";
 import PrefermentView from "./pages/PrefermentView";
 import FinalDoughView from "./pages/FinalDoughView";
-import { newRecipe, Recipe } from "./dataModel/Recipe";
-import { fetchStoredRecipe, getStoredRecipes, store } from "./Storage";
-import { mapDelete, mapMove, mapSet } from "./components/utils";
-import { RecipesBookContextProps } from "./components/RecipesBookModal";
+import { useRecipesBook } from "./hooks/useRecipesBook";
 
 setupIonicReact({
   innerHTMLTemplatesEnabled: true,
 });
 
 const basename = import.meta.env.BASE_URL || "/";
-const UNTITLED_RECIPE: Recipe = newRecipe(undefined);
 
 export default function App() {
+  const recipesBookCtx = useRecipesBook();
   const [editable, setEditable] = useState(false);
-  const [recipes, setRecipes] = useState(getStoredRecipes());
-  const [recipe, setRecipe] = useState(UNTITLED_RECIPE);
-
-  useEffect(() => {
-    store(recipe, recipes);
-  }, [recipe, recipes]);
-
-  const onNewRecipe = useCallback(
-    (name: string) => {
-      const recipe = newRecipe(name);
-      setRecipes(mapSet(recipes, name, recipe));
-      setRecipe(recipe);
-    },
-    [recipes, setRecipes, setRecipe],
-  );
-
-  const onDeleteRecipe = useCallback(
-    (name: string) => {
-      setRecipes(mapDelete(recipes, name));
-
-      if (name === recipe.name) {
-        setRecipe(UNTITLED_RECIPE);
-      }
-    },
-    [recipe.name, recipes, setRecipes, setRecipe],
-  );
-
-  const onSelectRecipe = useCallback(
-    (name: string) => {
-      const recipe = fetchStoredRecipe(name);
-      setRecipe(recipe);
-    },
-    [setRecipe],
-  );
-
-  const onRenameRecipe = useCallback(
-    (name: string, newName: string) => {
-      const renamedRecipe = fetchStoredRecipe(name);
-      renamedRecipe.name = newName;
-
-      setRecipes(mapMove(recipes, name, newName));
-
-      if (name === recipe.name) {
-        setRecipe(renamedRecipe);
-      }
-    },
-    [recipe.name, recipes, setRecipe, setRecipes],
-  );
-
-  const onReloadRecipes = useCallback(() => {
-    setRecipes(getStoredRecipes());
-  }, [setRecipes]);
-
-  const onEditRecipe = useCallback(
-    (recipe: Recipe) => {
-      setRecipe(recipe);
-    },
-    [setRecipe],
-  );
 
   const onEditToggle = useCallback(() => {
     setEditable((prevEditable) => !prevEditable);
   }, [setEditable]);
-
-  const recipesBookCtx = useMemo<RecipesBookContextProps>(
-    () => ({
-      recipes: [...recipes.keys()],
-      onNew: onNewRecipe,
-      onSelect: onSelectRecipe,
-      onRename: onRenameRecipe,
-      onDelete: onDeleteRecipe,
-      reload: onReloadRecipes,
-    }),
-    [recipes, onNewRecipe, onSelectRecipe, onRenameRecipe, onDeleteRecipe, onReloadRecipes],
-  );
 
   return (
     <IonApp>
@@ -137,18 +63,26 @@ export default function App() {
         <IonTabs>
           <IonRouterOutlet>
             <Route exact path="/ingredients">
-              <Tab title={recipe.name} editable={editable} onEditToggle={onEditToggle} recipesBookCtx={recipesBookCtx}>
-                <IngredientsView recipe={recipe} onEditRecipe={onEditRecipe} editable={editable} />
+              <Tab editable={editable} onEditToggle={onEditToggle} recipesBookCtx={recipesBookCtx}>
+                <IngredientsView
+                  recipe={recipesBookCtx.currentRecipe}
+                  onEditRecipe={recipesBookCtx.onEdit}
+                  editable={editable}
+                />
               </Tab>
             </Route>
             <Route exact path="/prefermentTab">
-              <Tab title={recipe.name} editable={editable} onEditToggle={onEditToggle} recipesBookCtx={recipesBookCtx}>
-                <PrefermentView recipe={recipe} onEditRecipe={onEditRecipe} editable={editable} />
+              <Tab editable={editable} onEditToggle={onEditToggle} recipesBookCtx={recipesBookCtx}>
+                <PrefermentView
+                  recipe={recipesBookCtx.currentRecipe}
+                  onEditRecipe={recipesBookCtx.onEdit}
+                  editable={editable}
+                />
               </Tab>
             </Route>
             <Route exact path="/finalDough">
-              <Tab title={recipe.name} recipesBookCtx={recipesBookCtx}>
-                <FinalDoughView recipe={recipe} />
+              <Tab editable={editable} onEditToggle={onEditToggle} recipesBookCtx={recipesBookCtx}>
+                <FinalDoughView recipe={recipesBookCtx.currentRecipe} />
               </Tab>
             </Route>
             <Route exact path="/">

@@ -2,17 +2,16 @@ import React, { useCallback } from "react";
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonButton, IonIcon } from "@ionic/react";
 import { pencilOutline, informationCircleOutline, bookOutline } from "ionicons/icons";
 import InfoAlert from "../components/InfoAlert";
-import RecipesBookModal, { RecipesBookContextProps } from "../components/RecipesBookModal";
+import RecipesBookModal from "../components/RecipesBookModal";
+import { RecipesBookContextProps } from "../hooks/useRecipesBook";
 
 type Props = {
-  title: string | undefined;
   recipesBookCtx: RecipesBookContextProps;
   editable?: boolean;
   onEditToggle?(): void;
 };
 
 export default function Tab({
-  title,
   recipesBookCtx,
   editable,
   onEditToggle,
@@ -32,6 +31,8 @@ export default function Tab({
 
   const hideInfo = useCallback(() => setShowInfo(false), [setShowInfo]);
   const hideRecipes = useCallback(() => setShowRecipes(false), [setShowRecipes]);
+
+  const title = recipesBookCtx.currentRecipe.name;
 
   return (
     <IonPage>

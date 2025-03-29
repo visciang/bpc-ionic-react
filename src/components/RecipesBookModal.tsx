@@ -18,15 +18,7 @@ import { closeOutline, downloadOutline, pushOutline } from "ionicons/icons";
 import RecipeItem from "./RecipeItem";
 import NewItemInput from "./NewItemInput";
 import { exportRecipes, importRecipes } from "../Storage";
-
-export type RecipesBookContextProps = {
-  recipes: string[];
-  onNew(name: string): void;
-  onSelect(name: string): void;
-  onRename(name: string, newName: string): void;
-  onDelete(name: string): void;
-  reload(): void;
-};
+import { RecipesBookContextProps } from "../hooks/useRecipesBook";
 
 type Props = {
   recipesBookCtx: RecipesBookContextProps;
