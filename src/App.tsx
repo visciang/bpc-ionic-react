@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
@@ -42,7 +42,7 @@ import IngredientsView from "./pages/IngredientsView";
 import PrefermentView from "./pages/PrefermentView";
 import FinalDoughView from "./pages/FinalDoughView";
 import { newRecipe, Recipe } from "./dataModel/Recipe";
-import { fetchStoredRecipe, getStoredRecipes, removeStoreRecipe, setStoredRecipe } from "./dataModel/Persistence";
+import { fetchStoredRecipe, getStoredRecipes, store } from "./Storage";
 import { mapDelete, mapMove, mapSet } from "./components/utils";
 import { RecipesBookContextProps } from "./components/RecipesBookModal";
 
@@ -58,12 +58,13 @@ export default function App() {
   const [recipes, setRecipes] = useState(getStoredRecipes());
   const [recipe, setRecipe] = useState(UNTITLED_RECIPE);
 
-  // TODO useEffect to save recipes to local storage
+  useEffect(() => {
+    store(recipe, recipes);
+  }, [recipe, recipes]);
 
   const onNewRecipe = useCallback(
     (name: string) => {
       const recipe = newRecipe(name);
-      setStoredRecipe(recipe);
       setRecipes(mapSet(recipes, name, recipe));
       setRecipe(recipe);
     },
@@ -72,7 +73,6 @@ export default function App() {
 
   const onDeleteRecipe = useCallback(
     (name: string) => {
-      removeStoreRecipe(name);
       setRecipes(mapDelete(recipes, name));
 
       if (name === recipe.name) {
@@ -94,8 +94,6 @@ export default function App() {
     (name: string, newName: string) => {
       const renamedRecipe = fetchStoredRecipe(name);
       renamedRecipe.name = newName;
-      setStoredRecipe(renamedRecipe);
-      removeStoreRecipe(name);
 
       setRecipes(mapMove(recipes, name, newName));
 
@@ -112,7 +110,6 @@ export default function App() {
 
   const onEditRecipe = useCallback(
     (recipe: Recipe) => {
-      setStoredRecipe(recipe);
       setRecipe(recipe);
     },
     [setRecipe],

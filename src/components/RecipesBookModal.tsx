@@ -17,7 +17,7 @@ import {
 import { closeOutline, downloadOutline, pushOutline } from "ionicons/icons";
 import RecipeItem from "./RecipeItem";
 import NewItemInput from "./NewItemInput";
-import { exportRecipes, importRecipes } from "../dataModel/Persistence";
+import { exportRecipes, importRecipes } from "../Storage";
 
 export type RecipesBookContextProps = {
   recipes: string[];

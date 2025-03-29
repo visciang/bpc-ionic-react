@@ -1,5 +1,5 @@
-import { Preferment, PrefermentKind } from "./Preferment";
-import { Recipe } from "./Recipe";
+import { Preferment, PrefermentKind } from "./dataModel/Preferment";
+import { Recipe } from "./dataModel/Recipe";
 
 type StoredRecipe = {
   name: string;
@@ -15,6 +15,36 @@ type StoredPreferment = {
   ingredients: [string, number][];
   seed?: number; // Optional because it's only in SOURDOUGH
 };
+
+export function store(recipe: Recipe, recipes: Map<string, Recipe>) {
+  if (recipe.name) {
+    setStoredRecipe(recipe);
+  }
+
+  // Make sure recipes Map is in sync with localStorage
+  // This handles additions, updates, and deletions
+  const storedKeys = new Set<string>();
+  for (let idx = 0; idx < window.localStorage.length; idx++) {
+    const key = window.localStorage.key(idx);
+    if (key?.startsWith("recipe::")) {
+      storedKeys.add(key.replace(/^recipe::/, ""));
+    }
+  }
+
+  // Add/update recipes that are in the Map but not in localStorage
+  recipes.forEach((recipeValue, recipeName) => {
+    if (!storedKeys.has(recipeName)) {
+      setStoredRecipe(recipeValue);
+    }
+  });
+
+  // Remove recipes that are in localStorage but not in the Map
+  storedKeys.forEach((name) => {
+    if (!recipes.has(name)) {
+      removeStoreRecipe(name);
+    }
+  });
+}
 
 export function getStoredRecipes(): Map<string, Recipe> {
   const recipes = new Map<string, Recipe>();
@@ -33,19 +63,6 @@ export function fetchStoredRecipe(name: string): Recipe {
   return decodeLocalStorage(JSON.parse(recipe));
 }
 
-export function getStoredRecipe(name: string, defaultRecipe: Recipe): Recipe {
-  const recipe = window.localStorage.getItem(key(name));
-  return recipe ? decodeLocalStorage(JSON.parse(recipe)) : defaultRecipe;
-}
-
-export function setStoredRecipe(recipe: Recipe) {
-  window.localStorage.setItem(key(recipe.name!), JSON.stringify(encodeLocalStorage(recipe)));
-}
-
-export function removeStoreRecipe(name: string) {
-  window.localStorage.removeItem(key(name));
-}
-
 export function exportRecipes(): string {
   const recipes = getStoredRecipes();
   return JSON.stringify([...recipes.values()].map(encodeLocalStorage), null, 2);
@@ -59,6 +76,14 @@ export function importRecipes(recipesJson: string): number {
 
 function key(name: string) {
   return `recipe::${name}`;
+}
+
+function setStoredRecipe(recipe: Recipe) {
+  window.localStorage.setItem(key(recipe.name!), JSON.stringify(encodeLocalStorage(recipe)));
+}
+
+function removeStoreRecipe(name: string) {
+  window.localStorage.removeItem(key(name));
 }
 
 function encodeLocalStorage(recipe: Recipe) {
