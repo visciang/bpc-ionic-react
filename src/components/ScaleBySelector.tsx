@@ -8,9 +8,10 @@ type Props = {
 };
 
 export default function ScaleBySelector({ onSelect }: Props) {
-  const onIonChange = useCallback((event: CustomEvent<SelectChangeEventDetail>) => onSelect(event.detail.value), [
-    onSelect,
-  ]);
+  const onIonChange = useCallback(
+    (event: CustomEvent<SelectChangeEventDetail>) => onSelect(event.detail.value),
+    [onSelect],
+  );
 
   return (
     <IonItem lines="none">

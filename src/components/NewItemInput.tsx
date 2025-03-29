@@ -15,18 +15,17 @@ export default function NewItemInput({ onNewItem }: Props) {
     setNewItem(undefined);
   }, [newItem, onNewItem, setNewItem]);
 
-  const onIonInput = useCallback((event: IonInputCustomEvent<InputInputEventDetail>) => {
-    setNewItem(parseNewItem(event.detail.value));
-  }, [setNewItem]);
+  const onIonInput = useCallback(
+    (event: IonInputCustomEvent<InputInputEventDetail>) => {
+      setNewItem(parseNewItem(event.detail.value));
+    },
+    [setNewItem],
+  );
 
   return (
     <IonItem lines="none">
       <IonInput required type="text" placeholder="New ..." value={newItem} onIonInput={onIonInput} />
-      <IonButton
-        className="ion-no-padding"
-        onClick={onClick}
-        fill="clear"
-        disabled={!(newItem && onNewItem)}>
+      <IonButton className="ion-no-padding" onClick={onClick} fill="clear" disabled={!(newItem && onNewItem)}>
         <IonIcon slot="icon-only" icon={addOutline} />
       </IonButton>
     </IonItem>
@@ -36,4 +35,3 @@ export default function NewItemInput({ onNewItem }: Props) {
 function parseNewItem(value: string | undefined | null) {
   return value?.trim() ? value.trim() : undefined;
 }
-

@@ -34,12 +34,5 @@ export default function InfoAlert({ isOpen, onDidDismiss }: Props) {
     </div>
   `);
 
-  return (
-    <IonAlert
-      isOpen={isOpen}
-      onDidDismiss={onDidDismiss}
-      header={"About B%C"}
-      message={message}
-    />
-  );
-};
+  return <IonAlert isOpen={isOpen} onDidDismiss={onDidDismiss} header={"About B%C"} message={message} />;
+}

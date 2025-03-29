@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from "react";
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
   IonIcon,
@@ -8,34 +8,34 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
-  setupIonicReact
-} from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
+  setupIonicReact,
+} from "@ionic/react";
+import { IonReactRouter } from "@ionic/react-router";
 
 import { calculatorOutline, restaurantOutline, arrowUndoOutline } from "ionicons/icons";
 
 /* Core CSS required for Ionic components to work properly */
-import '@ionic/react/css/core.css';
+import "@ionic/react/css/core.css";
 
 /* Core CSS required for Ionic components to work properly */
-import '@ionic/react/css/core.css';
+import "@ionic/react/css/core.css";
 
 /* Basic CSS for apps built with Ionic */
-import '@ionic/react/css/normalize.css';
-import '@ionic/react/css/structure.css';
-import '@ionic/react/css/typography.css';
+import "@ionic/react/css/normalize.css";
+import "@ionic/react/css/structure.css";
+import "@ionic/react/css/typography.css";
 
 /* Optional CSS utils that can be commented out */
-import '@ionic/react/css/padding.css';
-import '@ionic/react/css/float-elements.css';
-import '@ionic/react/css/text-alignment.css';
-import '@ionic/react/css/text-transformation.css';
-import '@ionic/react/css/flex-utils.css';
-import '@ionic/react/css/display.css';
+import "@ionic/react/css/padding.css";
+import "@ionic/react/css/float-elements.css";
+import "@ionic/react/css/text-alignment.css";
+import "@ionic/react/css/text-transformation.css";
+import "@ionic/react/css/flex-utils.css";
+import "@ionic/react/css/display.css";
 
 /* Theme variables */
-import './theme/variables.css';
-import './theme/custom.css';
+import "./theme/variables.css";
+import "./theme/custom.css";
 
 import Tab from "./pages/Tab";
 import IngredientsView from "./pages/IngredientsView";
@@ -47,10 +47,10 @@ import { mapDelete, mapMove, mapSet } from "./components/utils";
 import { RecipesBookContextProps } from "./components/RecipesBookModal";
 
 setupIonicReact({
-  innerHTMLTemplatesEnabled: true
+  innerHTMLTemplatesEnabled: true,
 });
 
-const basename = import.meta.env.BASE_URL || '/';
+const basename = import.meta.env.BASE_URL || "/";
 const UNTITLED_RECIPE: Recipe = newRecipe(undefined);
 
 export default function App() {
@@ -60,61 +60,79 @@ export default function App() {
 
   // TODO useEffect to save recipes to local storage
 
-  const onNewRecipe = useCallback((name: string) => {
-    const recipe = newRecipe(name);
-    setStoredRecipe(recipe);
-    setRecipes(mapSet(recipes, name, recipe));
-    setRecipe(recipe);
-  }, [recipes, setRecipes, setRecipe]);
+  const onNewRecipe = useCallback(
+    (name: string) => {
+      const recipe = newRecipe(name);
+      setStoredRecipe(recipe);
+      setRecipes(mapSet(recipes, name, recipe));
+      setRecipe(recipe);
+    },
+    [recipes, setRecipes, setRecipe],
+  );
 
-  const onDeleteRecipe = useCallback((name: string) => {
-    removeStoreRecipe(name);
-    setRecipes(mapDelete(recipes, name));
+  const onDeleteRecipe = useCallback(
+    (name: string) => {
+      removeStoreRecipe(name);
+      setRecipes(mapDelete(recipes, name));
 
-    if (name === recipe.name) {
-      setRecipe(UNTITLED_RECIPE);
-    }
-  }, [recipe.name, recipes, setRecipes, setRecipe]);
+      if (name === recipe.name) {
+        setRecipe(UNTITLED_RECIPE);
+      }
+    },
+    [recipe.name, recipes, setRecipes, setRecipe],
+  );
 
-  const onSelectRecipe = useCallback((name: string) => {
-    const recipe = fetchStoredRecipe(name);
-    setRecipe(recipe);
-  }, [setRecipe]);
+  const onSelectRecipe = useCallback(
+    (name: string) => {
+      const recipe = fetchStoredRecipe(name);
+      setRecipe(recipe);
+    },
+    [setRecipe],
+  );
 
-  const onRenameRecipe = useCallback((name: string, newName: string) => {
-    const renamedRecipe = fetchStoredRecipe(name);
-    renamedRecipe.name = newName;
-    setStoredRecipe(renamedRecipe);
-    removeStoreRecipe(name);
+  const onRenameRecipe = useCallback(
+    (name: string, newName: string) => {
+      const renamedRecipe = fetchStoredRecipe(name);
+      renamedRecipe.name = newName;
+      setStoredRecipe(renamedRecipe);
+      removeStoreRecipe(name);
 
-    setRecipes(mapMove(recipes, name, newName));
+      setRecipes(mapMove(recipes, name, newName));
 
-    if (name === recipe.name) {
-      setRecipe(renamedRecipe);
-    }
-  }, [recipe.name, recipes, setRecipe, setRecipes]);
+      if (name === recipe.name) {
+        setRecipe(renamedRecipe);
+      }
+    },
+    [recipe.name, recipes, setRecipe, setRecipes],
+  );
 
   const onReloadRecipes = useCallback(() => {
     setRecipes(getStoredRecipes());
   }, [setRecipes]);
 
-  const onEditRecipe = useCallback((recipe: Recipe) => {
-    setStoredRecipe(recipe);
-    setRecipe(recipe);
-  }, [setRecipe]);
+  const onEditRecipe = useCallback(
+    (recipe: Recipe) => {
+      setStoredRecipe(recipe);
+      setRecipe(recipe);
+    },
+    [setRecipe],
+  );
 
   const onEditToggle = useCallback(() => {
     setEditable((prevEditable) => !prevEditable);
   }, [setEditable]);
 
-  const recipesBookCtx = useMemo<RecipesBookContextProps>(() => ({
-    recipes: [...recipes.keys()],
-    onNew: onNewRecipe,
-    onSelect: onSelectRecipe,
-    onRename: onRenameRecipe,
-    onDelete: onDeleteRecipe,
-    reload: onReloadRecipes,
-  }), [recipes, onNewRecipe, onSelectRecipe, onRenameRecipe, onDeleteRecipe, onReloadRecipes]);
+  const recipesBookCtx = useMemo<RecipesBookContextProps>(
+    () => ({
+      recipes: [...recipes.keys()],
+      onNew: onNewRecipe,
+      onSelect: onSelectRecipe,
+      onRename: onRenameRecipe,
+      onDelete: onDeleteRecipe,
+      reload: onReloadRecipes,
+    }),
+    [recipes, onNewRecipe, onSelectRecipe, onRenameRecipe, onDeleteRecipe, onReloadRecipes],
+  );
 
   return (
     <IonApp>
@@ -157,5 +175,5 @@ export default function App() {
         </IonTabs>
       </IonReactRouter>
     </IonApp>
-  )
+  );
 }

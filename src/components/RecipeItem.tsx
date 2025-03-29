@@ -14,24 +14,33 @@ export default function RecipeItem({ name, onSelect, onRename, onDelete }: Props
 
   const onSelectClick = useCallback(() => onSelect(name), [name, onSelect]);
 
-  const onRenameClick = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setShowRenameAlert(true);
-  }, [setShowRenameAlert]);
+  const onRenameClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      e.preventDefault();
+      setShowRenameAlert(true);
+    },
+    [setShowRenameAlert],
+  );
 
-  const handleRename = useCallback((newName: string) => {
-    if (newName && newName.trim() !== "") {
-      onRename(name, newName.trim());
-    }
-    setShowRenameAlert(false);
-  }, [name, onRename]);
+  const handleRename = useCallback(
+    (newName: string) => {
+      if (newName && newName.trim() !== "") {
+        onRename(name, newName.trim());
+      }
+      setShowRenameAlert(false);
+    },
+    [name, onRename],
+  );
 
-  const onDeleteClick = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    onDelete(name);
-  }, [name, onDelete]);
+  const onDeleteClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      e.preventDefault();
+      onDelete(name);
+    },
+    [name, onDelete],
+  );
 
   return (
     <>
@@ -50,28 +59,28 @@ export default function RecipeItem({ name, onSelect, onRename, onDelete }: Props
         header="Rename Recipe"
         inputs={[
           {
-            name: 'newName',
-            type: 'text',
-            placeholder: 'Enter new name',
-            value: name
-          }
+            name: "newName",
+            type: "text",
+            placeholder: "Enter new name",
+            value: name,
+          },
         ]}
         buttons={[
           {
-            text: 'Cancel',
-            role: 'cancel',
+            text: "Cancel",
+            role: "cancel",
             handler: () => {
               setShowRenameAlert(false);
-            }
+            },
           },
           {
-            text: 'Rename',
+            text: "Rename",
             handler: (data) => {
               handleRename(data.newName);
-            }
-          }
+            },
+          },
         ]}
       />
     </>
   );
-};
+}

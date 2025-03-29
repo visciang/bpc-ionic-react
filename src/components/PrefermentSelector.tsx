@@ -11,7 +11,7 @@ type Props = {
 export default function PrefermentSelector({ value, onSelect }: Props) {
   const onIonChange = useCallback(
     (event: CustomEvent<SelectChangeEventDetail>) => event.detail.value && onSelect(event.detail.value),
-    [onSelect]
+    [onSelect],
   );
 
   return (

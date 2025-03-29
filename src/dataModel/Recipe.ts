@@ -18,6 +18,6 @@ export function newRecipe(name: string | undefined): Recipe {
     name: name,
     flours: new Map(),
     ingredients: new Map(),
-    preferments: new Map()
+    preferments: new Map(),
   };
 }

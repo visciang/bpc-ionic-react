@@ -11,7 +11,13 @@ type Props = {
   onEditToggle?(): void;
 };
 
-export default function Tab({ title, recipesBookCtx, editable, onEditToggle, children }: Props & { children?: React.ReactNode }) {
+export default function Tab({
+  title,
+  recipesBookCtx,
+  editable,
+  onEditToggle,
+  children,
+}: Props & { children?: React.ReactNode }) {
   const [showInfo, setShowInfo] = React.useState(false);
   const [showRecipes, setShowRecipes] = React.useState(false);
 
@@ -40,9 +46,7 @@ export default function Tab({ title, recipesBookCtx, editable, onEditToggle, chi
             </IonButton>
           </IonButtons>
           <IonTitle>{title}</IonTitle>
-          <IonButtons slot="end">
-            {editButton}
-          </IonButtons>
+          <IonButtons slot="end">{editButton}</IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen className="ion-padding">

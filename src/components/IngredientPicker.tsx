@@ -24,7 +24,7 @@ export default function IngredientPicker({ label, values, onPick }: Props) {
 
           onPick(e.detail.value);
           setValue(undefined);
-        } }
+        }}
       >
         {[...values].map((value) => (
           <IonSelectOption key={value} value={value}>

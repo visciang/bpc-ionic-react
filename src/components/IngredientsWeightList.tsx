@@ -10,7 +10,12 @@ type Props = {
   totalWeightSubtract?: number;
 };
 
-export default function IngredientsWeightList({ title, ingredientsPercentage, ingredientsWeight, totalWeightSubtract }: Props) {
+export default function IngredientsWeightList({
+  title,
+  ingredientsPercentage,
+  ingredientsWeight,
+  totalWeightSubtract,
+}: Props) {
   const totalWeight = sum(ingredientsWeight.values());
   let totalWeightStr: string | undefined;
 
@@ -51,9 +56,7 @@ export default function IngredientsWeightList({ title, ingredientsPercentage, in
         <IonRow>
           <IonCol className="ion-text-start"></IonCol>
           <IonCol size="2" className="ion-text-end"></IonCol>
-          <IonCol className="ion-text-end">
-            {totalWeightStr || <IonText color="danger">ERROR !</IonText>}
-          </IonCol>
+          <IonCol className="ion-text-end">{totalWeightStr || <IonText color="danger">ERROR !</IonText>}</IonCol>
         </IonRow>
       </IonGrid>
     </IonList>

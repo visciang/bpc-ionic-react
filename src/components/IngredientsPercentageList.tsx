@@ -24,9 +24,9 @@ export default function IngredientsPercentageList({
 }: Props) {
   const onIngredientChange = useCallback(
     (name: IngredientName, value: IngredientValue) => {
-      onIngredientsChange(mapSet(ingredients, name, value))
+      onIngredientsChange(mapSet(ingredients, name, value));
     },
-    [ingredients, onIngredientsChange]
+    [ingredients, onIngredientsChange],
   );
 
   const onIngredientReorder = useCallback(
@@ -34,21 +34,21 @@ export default function IngredientsPercentageList({
       onIngredientsChange(mapMoveIdx(ingredients, event.detail.from, event.detail.to));
       event.detail.complete();
     },
-    [ingredients, onIngredientsChange]
+    [ingredients, onIngredientsChange],
   );
 
   const onNewIngredient = useCallback(
     (name: IngredientName) => {
-      onIngredientsChange(mapSet(ingredients, name, undefined))
+      onIngredientsChange(mapSet(ingredients, name, undefined));
     },
-    [ingredients, onIngredientsChange]
+    [ingredients, onIngredientsChange],
   );
 
   const onDeleteIngredient = useCallback(
     (name: IngredientName) => {
-      onIngredientsChange(mapDelete(ingredients, name))
+      onIngredientsChange(mapDelete(ingredients, name));
     },
-    [ingredients, onIngredientsChange]
+    [ingredients, onIngredientsChange],
   );
 
   return (

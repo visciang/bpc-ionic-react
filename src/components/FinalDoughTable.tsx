@@ -28,7 +28,7 @@ export default function FinalDoughTable({ recipe, scaleBy, totalAmount }: Props)
   const dough = calculateDough(recipe, scaleBy, totalAmount);
 
   const finalIngredientsPercentage = new Map(
-    [...recipe.flours.keys(), ...recipe.ingredients.keys()].map((k) => [k, undefined])
+    [...recipe.flours.keys(), ...recipe.ingredients.keys()].map((k) => [k, undefined]),
   );
 
   return (
@@ -36,7 +36,8 @@ export default function FinalDoughTable({ recipe, scaleBy, totalAmount }: Props)
       <IngredientsWeightList
         title="OVERALL"
         ingredientsPercentage={new Map([...recipe.flours, ...recipe.ingredients])}
-        ingredientsWeight={dough.overall} />
+        ingredientsWeight={dough.overall}
+      />
       {[...dough.preferments].map(([prefermentName, preferment]) => {
         const ingredientsPercentage = new Map([
           ...recipe.preferments.get(prefermentName)!.flours,
@@ -53,13 +54,15 @@ export default function FinalDoughTable({ recipe, scaleBy, totalAmount }: Props)
             title={prefermentName}
             ingredientsPercentage={ingredientsPercentage}
             ingredientsWeight={preferment.ingredients}
-            totalWeightSubtract={preferment.seed} />
+            totalWeightSubtract={preferment.seed}
+          />
         );
       })}
       <IngredientsWeightList
         title="FINAL DOUGH"
         ingredientsPercentage={finalIngredientsPercentage}
-        ingredientsWeight={dough.final} />
+        ingredientsWeight={dough.final}
+      />
     </>
   );
 }

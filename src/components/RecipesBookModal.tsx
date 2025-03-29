@@ -38,18 +38,27 @@ export default function RecipesBookModal({ recipesBookCtx, isOpen, onClose }: Pr
   const fileInputRef = useRef<HTMLInputElement>(null);
   const toast = useIonToast();
 
-  const onSelect = useCallback((name: string) => {
-    recipesBookCtx.onSelect(name);
-    onClose?.();
-  }, [recipesBookCtx, onClose]);
+  const onSelect = useCallback(
+    (name: string) => {
+      recipesBookCtx.onSelect(name);
+      onClose?.();
+    },
+    [recipesBookCtx, onClose],
+  );
 
-  const onRename = useCallback((name: string, newName: string) => {
-    recipesBookCtx.onRename(name, newName);
-  }, [recipesBookCtx]);
+  const onRename = useCallback(
+    (name: string, newName: string) => {
+      recipesBookCtx.onRename(name, newName);
+    },
+    [recipesBookCtx],
+  );
 
-  const onDelete = useCallback((name: string) => {
-    recipesBookCtx.onDelete(name);
-  }, [recipesBookCtx]);
+  const onDelete = useCallback(
+    (name: string) => {
+      recipesBookCtx.onDelete(name);
+    },
+    [recipesBookCtx],
+  );
 
   const handleImportClick = useCallback(() => {
     if (fileInputRef.current) {
@@ -57,11 +66,14 @@ export default function RecipesBookModal({ recipesBookCtx, isOpen, onClose }: Pr
     }
   }, [fileInputRef]);
 
-  const handleImportFile = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    handleImport(event, toast, () => {
-      recipesBookCtx.reload();
-    });
-  }, [toast, recipesBookCtx]);
+  const handleImportFile = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      handleImport(event, toast, () => {
+        recipesBookCtx.reload();
+      });
+    },
+    [toast, recipesBookCtx],
+  );
 
   return (
     <IonModal isOpen={isOpen} backdropDismiss={false}>
@@ -87,7 +99,7 @@ export default function RecipesBookModal({ recipesBookCtx, isOpen, onClose }: Pr
             <input
               type="file"
               ref={fileInputRef}
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
               accept=".json"
               onChange={handleImportFile}
             />
@@ -99,18 +111,10 @@ export default function RecipesBookModal({ recipesBookCtx, isOpen, onClose }: Pr
             </IonButton>
           </IonCol>
         </IonRow>
-        <IonRow class="ion-justify-content-center ion-margin-bottom">
-          Pick or create a new recipe
-        </IonRow>
+        <IonRow class="ion-justify-content-center ion-margin-bottom">Pick or create a new recipe</IonRow>
         <IonList>
           {recipesBookCtx.recipes.toSorted().map((name) => (
-            <RecipeItem
-              key={name}
-              name={name}
-              onSelect={onSelect}
-              onRename={onRename}
-              onDelete={onDelete}
-            />
+            <RecipeItem key={name} name={name} onSelect={onSelect} onRename={onRename} onDelete={onDelete} />
           ))}
           <NewItemInput onNewItem={recipesBookCtx.onNew} />
         </IonList>
@@ -123,13 +127,13 @@ function handleExport() {
   const recipesJson = exportRecipes();
 
   // Create a blob and download link
-  const blob = new Blob([recipesJson], { type: 'application/json' });
+  const blob = new Blob([recipesJson], { type: "application/json" });
   const url = URL.createObjectURL(blob);
 
   // Create a temporary anchor element to trigger download
-  const a = document.createElement('a');
+  const a = document.createElement("a");
   a.href = url;
-  a.download = 'bread-recipes.json';
+  a.download = "bread-recipes.json";
   document.body.appendChild(a);
   a.click();
 
@@ -138,7 +142,11 @@ function handleExport() {
   URL.revokeObjectURL(url);
 }
 
-function handleImport(event: React.ChangeEvent<HTMLInputElement>, [present]: UseIonToastResult, onComplete?: () => void) {
+function handleImport(
+  event: React.ChangeEvent<HTMLInputElement>,
+  [present]: UseIonToastResult,
+  onComplete?: () => void,
+) {
   const file = event.target.files?.[0];
   if (!file) return;
 
@@ -152,21 +160,21 @@ function handleImport(event: React.ChangeEvent<HTMLInputElement>, [present]: Use
       present({
         message: `Successfully imported ${recipesCount} recipes`,
         duration: 3000,
-        color: 'success'
+        color: "success",
       });
 
       onComplete?.();
     } catch {
       present({
-        message: 'Failed to import recipes. Please check the file format.',
+        message: "Failed to import recipes. Please check the file format.",
         duration: 3000,
-        color: 'danger'
+        color: "danger",
       });
     }
 
     // Reset the file input
     if (event.target) {
-      event.target.value = '';
+      event.target.value = "";
     }
   };
   reader.readAsText(file);

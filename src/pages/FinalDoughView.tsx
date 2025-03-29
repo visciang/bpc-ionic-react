@@ -12,12 +12,10 @@ export default function FinalDoughView({ recipe }: Props) {
   const [scaleBy, setScaleBy] = useState<ScaleBy | undefined>(undefined);
   const [totalAmount, setTotalAmount] = useState<number | undefined>(undefined);
 
-  const finalDoughTable = scaleBy && totalAmount ? (
-    <FinalDoughTable
-      recipe={recipe}
-      scaleBy={scaleBy}
-      totalAmount={totalAmount} />
-  ) : undefined;
+  const finalDoughTable =
+    scaleBy && totalAmount ? (
+      <FinalDoughTable recipe={recipe} scaleBy={scaleBy} totalAmount={totalAmount} />
+    ) : undefined;
 
   return (
     <>

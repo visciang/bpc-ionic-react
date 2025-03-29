@@ -26,7 +26,6 @@ export default function PrefermentView({ recipe, editable, onEditRecipe }: Props
           flours: new Map(),
           ingredients: new Map(),
         };
-
       else
         newPreferment = {
           kind: PrefermentKind.SOURDOUGH,
@@ -36,24 +35,33 @@ export default function PrefermentView({ recipe, editable, onEditRecipe }: Props
           seed: undefined,
         };
 
-      onEditRecipe({ ...recipe, preferments: mapSet(recipe.preferments, name, newPreferment) });
+      onEditRecipe({
+        ...recipe,
+        preferments: mapSet(recipe.preferments, name, newPreferment),
+      });
       setPrefermentKind(undefined);
     },
-    [prefermentKind, recipe, onEditRecipe, setPrefermentKind]
+    [prefermentKind, recipe, onEditRecipe, setPrefermentKind],
   );
 
   const onPrefermentChange = useCallback(
     (name: PrefermentName, preferment: PrefermentT) => {
-      onEditRecipe({ ...recipe, preferments: mapSet(recipe.preferments, name, preferment) });
+      onEditRecipe({
+        ...recipe,
+        preferments: mapSet(recipe.preferments, name, preferment),
+      });
     },
-    [recipe, onEditRecipe]
+    [recipe, onEditRecipe],
   );
 
   const onPrefermentDelete = useCallback(
     (name: PrefermentName) => {
-      onEditRecipe({ ...recipe, preferments: mapDelete(recipe.preferments, name) });
+      onEditRecipe({
+        ...recipe,
+        preferments: mapDelete(recipe.preferments, name),
+      });
     },
-    [recipe, onEditRecipe]
+    [recipe, onEditRecipe],
   );
 
   const availableFlours = useMemo(() => [...recipe.flours.keys()], [recipe.flours]);
@@ -74,7 +82,8 @@ export default function PrefermentView({ recipe, editable, onEditRecipe }: Props
             preferment={preferment}
             editable={editable}
             onPrefermentChange={onPrefermentChange}
-            onPrefermentDelete={onPrefermentDelete} />
+            onPrefermentDelete={onPrefermentDelete}
+          />
         </div>
       ))}
     </>

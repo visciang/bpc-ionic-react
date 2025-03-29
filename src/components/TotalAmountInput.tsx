@@ -16,7 +16,8 @@ export default function TotalAmountInput({ value, onChange }: Props) {
         inputMode="decimal"
         min="0"
         value={value}
-        onIonInput={onIonChangeFloat(value, onChange)} />
+        onIonInput={onIonChangeFloat(value, onChange)}
+      />
       <IonText>g</IonText>
     </IonItem>
   );

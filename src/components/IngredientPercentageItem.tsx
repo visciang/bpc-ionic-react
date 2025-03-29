@@ -1,5 +1,14 @@
 import { useCallback } from "react";
-import { IonItem, IonLabel, IonInput, IonText, IonButton, IonIcon, IonReorder, InputInputEventDetail } from "@ionic/react";
+import {
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonText,
+  IonButton,
+  IonIcon,
+  IonReorder,
+  InputInputEventDetail,
+} from "@ionic/react";
 import { trashOutline } from "ionicons/icons";
 import { onIonChangeFloat } from "./utils";
 import { IngredientName, IngredientValue } from "../dataModel/Ingredient";
@@ -17,7 +26,7 @@ type Props = {
 export default function IngredientPercentageItem({ name, value, maxPercentage, editable, onChange, onDelete }: Props) {
   const onIonInput = useCallback(
     (e: IonInputCustomEvent<InputInputEventDetail>) => onIonChangeFloat(value, (v) => onChange(name, v))(e),
-    [name, value, onChange]
+    [name, value, onChange],
   );
 
   let children = <></>;
@@ -44,7 +53,8 @@ export default function IngredientPercentageItem({ name, value, maxPercentage, e
           min="0"
           max={maxPercentage?.toString()}
           value={value}
-          onIonInput={onIonInput} />
+          onIonInput={onIonInput}
+        />
         <IonText>%</IonText>
       </>
     );

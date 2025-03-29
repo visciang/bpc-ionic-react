@@ -6,7 +6,7 @@ type StoredRecipe = {
   flours: [string, number][];
   ingredients: [string, number][];
   preferments: [string, StoredPreferment][];
-}
+};
 
 type StoredPreferment = {
   kind: PrefermentKind;
@@ -14,7 +14,7 @@ type StoredPreferment = {
   flours: [string, number][];
   ingredients: [string, number][];
   seed?: number; // Optional because it's only in SOURDOUGH
-}
+};
 
 export function getStoredRecipes(): Map<string, Recipe> {
   const recipes = new Map<string, Recipe>();
@@ -66,9 +66,7 @@ function encodeLocalStorage(recipe: Recipe) {
     name: recipe.name,
     flours: [...recipe.flours],
     ingredients: [...recipe.ingredients],
-    preferments: [...recipe.preferments].map(
-      ([name, preferment]) => [name, encodePreferment(preferment)]
-    )
+    preferments: [...recipe.preferments].map(([name, preferment]) => [name, encodePreferment(preferment)]),
   };
 }
 
@@ -88,7 +86,7 @@ function encodePreferment(preferment: Preferment) {
       flours: [...preferment.flours],
       ingredients: [...preferment.ingredients],
     };
-  };
+  }
 }
 
 function decodeLocalStorage(recipe: StoredRecipe): Recipe {
@@ -97,10 +95,8 @@ function decodeLocalStorage(recipe: StoredRecipe): Recipe {
     flours: new Map(recipe.flours),
     ingredients: new Map(recipe.ingredients),
     preferments: new Map(
-      recipe.preferments.map(
-        ([name, preferment]: [string, StoredPreferment]) => [name, decodePreferment(preferment)]
-      )
-    )
+      recipe.preferments.map(([name, preferment]: [string, StoredPreferment]) => [name, decodePreferment(preferment)]),
+    ),
   };
 }
 

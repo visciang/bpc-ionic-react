@@ -7,7 +7,8 @@
     "dev": "VITE_GIT_SHA=$(git rev-parse HEAD) vite",
     "build": "tsc && VITE_GIT_SHA=$(git rev-parse HEAD) vite build",
     "preview": "VITE_GIT_SHA=$(git rev-parse HEAD) vite preview",
-    "lint": "eslint"
+    "lint": "prettier . --check && eslint",
+    "lint:fix": "prettier . --write && eslint --fix"
   },
   "dependencies": {
     "@ionic/react": "^8.0.0",
@@ -33,6 +34,7 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
+    "prettier": "3.5.3",
     "terser": "^5.4.0",
     "typescript": "^5.1.6",
     "typescript-eslint": "^8.28.0",

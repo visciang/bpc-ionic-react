@@ -52,7 +52,7 @@ function calculatePreferments(preferments: Preferments, scaleDoughFactor: number
     [...preferments].map(([prefermentName, preferment]) => [
       prefermentName,
       calculatePreferment(preferment, scaleDoughFactor),
-    ])
+    ]),
   );
 }
 
@@ -80,7 +80,8 @@ function calculateFinal(overall: Ingredients, preferments: CalcPreferments): Ing
   const final = new Map([...overall]);
 
   for (const ingredient of overall.keys()) {
-    let weight: IngredientValue = final.get(ingredient)! -
+    let weight: IngredientValue =
+      final.get(ingredient)! -
       sum([...preferments.values()].map((preferment) => preferment.ingredients.get(ingredient) || 0));
 
     if (Math.abs(weight) <= 0.01) {
