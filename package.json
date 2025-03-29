@@ -41,5 +41,5 @@
     "vite": "^6.2.3",
     "vite-plugin-pwa": "^0.21.2"
   },
-  "description": "An Ionic project"
+  "description": "Baker % Calculator"
 }
