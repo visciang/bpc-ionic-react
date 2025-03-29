@@ -24,15 +24,14 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
+    - name: Lint
+      run: npm run lint
+
     - name: Build
       run: |
         # https://vite.dev/guide/static-deploy.html#deploying-a-static-site
         REPO_NAME=$(basename "${{ github.repository }}")
         npm run build -- --base="/${REPO_NAME}/"
-
-    - name: Lint
-      run: npm run lint
-
 
     - name: Publish to GitHub Pages
       if: github.ref == 'refs/heads/master'
