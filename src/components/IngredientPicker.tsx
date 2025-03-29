@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { IonItem, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
 import { IngredientName } from "../dataModel/Ingredient";
 
