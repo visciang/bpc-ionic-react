@@ -1,11 +1,11 @@
-import { useCallback, useMemo } from "react";
-import { IonList, IonReorderGroup } from "@ionic/react";
 import { ItemReorderEventDetail } from "@ionic/core";
-import IngredientsTitleToolbar from "./IngredientsTitleToolbar";
+import { IonList, IonReorderGroup } from "@ionic/react";
+import { useCallback, useMemo } from "react";
+import { IngredientName, IngredientValue } from "../dataModel/Ingredient";
+import { Preferment, PrefermentKind } from "../dataModel/Preferment";
 import IngredientPercentageItem from "./IngredientPercentageItem";
 import IngredientPicker from "./IngredientPicker";
-import { Preferment, PrefermentKind } from "../dataModel/Preferment";
-import { IngredientName, IngredientValue } from "../dataModel/Ingredient";
+import IngredientsTitleToolbar from "./IngredientsTitleToolbar";
 import { mapDelete, mapMoveIdx, mapSet } from "./utils";
 
 type Props = {

@@ -1,6 +1,6 @@
-import { useCallback } from "react";
-import { IonItem, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
 import { SelectChangeEventDetail } from "@ionic/core";
+import { IonItem, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
+import { useCallback } from "react";
 import { ScaleBy } from "../dataModel/Recipe";
 
 type Props = {

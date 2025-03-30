@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { IonInputCustomEvent } from "@ionic/core";
 import {
   IonItem,
   IonLabel,
@@ -10,9 +10,9 @@ import {
   InputInputEventDetail,
 } from "@ionic/react";
 import { trashOutline } from "ionicons/icons";
-import { onIonChangeFloat } from "./utils";
+import { useCallback } from "react";
 import { IngredientName, IngredientValue } from "../dataModel/Ingredient";
-import { IonInputCustomEvent } from "@ionic/core";
+import { onIonChangeFloat } from "./utils";
 
 type Props = {
   name: IngredientName;

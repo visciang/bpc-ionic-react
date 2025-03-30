@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { IonItem, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
+import { useState } from "react";
 import { IngredientName } from "../dataModel/Ingredient";
 
 type Props = {

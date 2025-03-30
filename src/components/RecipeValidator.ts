@@ -1,7 +1,7 @@
-import { sum } from "./utils";
 import { Ingredients } from "../dataModel/Ingredient";
 import { Preferments } from "../dataModel/Preferment";
 import { Recipe } from "../dataModel/Recipe";
+import { sum } from "./utils";
 
 export type RecipeValidationErrors = string[];
 

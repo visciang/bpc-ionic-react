@@ -1,6 +1,6 @@
-import { Recipe, ScaleBy } from "../dataModel/Recipe";
 import { Ingredients, IngredientValue } from "../dataModel/Ingredient";
 import { Preferment, Preferments, PrefermentKind, PrefermentName } from "../dataModel/Preferment";
+import { Recipe, ScaleBy } from "../dataModel/Recipe";
 import { sum } from "./utils";
 
 type CalcPreferment = {

@@ -1,4 +1,3 @@
-import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
   IonIcon,
@@ -10,20 +9,16 @@ import {
   setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-
 import { calculatorOutline, restaurantOutline, arrowUndoOutline } from "ionicons/icons";
-
+import { Redirect, Route } from "react-router-dom";
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
-
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
-
 /* Basic CSS for apps built with Ionic */
 import "@ionic/react/css/normalize.css";
 import "@ionic/react/css/structure.css";
 import "@ionic/react/css/typography.css";
-
 /* Optional CSS utils that can be commented out */
 import "@ionic/react/css/padding.css";
 import "@ionic/react/css/float-elements.css";
@@ -31,17 +26,16 @@ import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
-
 /* Theme variables */
 import "./theme/variables.css";
 import "./theme/custom.css";
-
-import Tab from "./pages/Tab";
+/* -- */
+import { useEditToggle } from "./hooks/useEditToggle";
+import { useRecipesBook } from "./hooks/useRecipesBook";
+import FinalDoughView from "./pages/FinalDoughView";
 import IngredientsView from "./pages/IngredientsView";
 import PrefermentView from "./pages/PrefermentView";
-import FinalDoughView from "./pages/FinalDoughView";
-import { useRecipesBook } from "./hooks/useRecipesBook";
-import { useEditToggle } from "./hooks/useEditToggle";
+import Tab from "./pages/Tab";
 
 setupIonicReact({
   innerHTMLTemplatesEnabled: true,

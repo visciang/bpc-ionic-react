@@ -1,7 +1,7 @@
-import { useState, useCallback } from "react";
-import { IonItem, IonInput, IonButton, IonIcon } from "@ionic/react";
 import { IonInputCustomEvent, InputInputEventDetail } from "@ionic/core";
+import { IonItem, IonInput, IonButton, IonIcon } from "@ionic/react";
 import { addOutline } from "ionicons/icons";
+import { useState, useCallback } from "react";
 
 type Props = {
   onNewItem?(name: string): void;
