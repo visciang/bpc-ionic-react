@@ -4,6 +4,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import eslintImport from "eslint-plugin-import";
 import tseslint from "typescript-eslint";
+import noRelativeImportPaths from "eslint-plugin-no-relative-import-paths";
 
 export default tseslint.config(
   { ignores: ["dist", "cypress.config.ts"] },
@@ -18,6 +19,7 @@ export default tseslint.config(
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
       import: eslintImport,
+      "no-relative-import-paths": noRelativeImportPaths,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
@@ -32,6 +34,7 @@ export default tseslint.config(
           alphabetize: { order: "asc", caseInsensitive: true },
         },
       ],
+      "no-relative-import-paths/no-relative-import-paths": ["warn", { rootDir: "src", prefix: "" }],
     },
   },
 );

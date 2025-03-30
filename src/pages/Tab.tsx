@@ -1,10 +1,10 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonButton, IonIcon } from "@ionic/react";
+import InfoAlert from "components/InfoAlert";
+import RecipesBookModal from "components/RecipesBookModal";
+import { EditToggle } from "hooks/useEditToggle";
+import { RecipesBookContextProps } from "hooks/useRecipesBook";
 import { pencilOutline, informationCircleOutline, bookOutline } from "ionicons/icons";
 import React, { useCallback } from "react";
-import InfoAlert from "../components/InfoAlert";
-import RecipesBookModal from "../components/RecipesBookModal";
-import { EditToggle } from "../hooks/useEditToggle";
-import { RecipesBookContextProps } from "../hooks/useRecipesBook";
 
 type Props = {
   recipesBookCtx: RecipesBookContextProps;

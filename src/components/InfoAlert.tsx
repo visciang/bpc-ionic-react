@@ -1,6 +1,6 @@
 import { IonAlert, IonicSafeString } from "@ionic/react";
+import donate from "assets/img/donate.gif";
 import { version } from "../../package.json";
-import donate from "../assets/img/donate.gif";
 
 const gitSHA = import.meta.env.VITE_GIT_SHA || "development";
 

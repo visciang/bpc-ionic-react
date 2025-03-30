@@ -1,5 +1,5 @@
 import { IonInputCustomEvent, InputInputEventDetail } from "@ionic/core";
-import { IngredientValue } from "../dataModel/Ingredient";
+import { IngredientValue } from "dataModel/Ingredient";
 
 type OnIonChange = (event: IonInputCustomEvent<InputInputEventDetail>) => void;
 type OnChangeFloat = (value?: number) => void;

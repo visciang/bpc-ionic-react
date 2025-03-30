@@ -9,10 +9,10 @@ import {
   IonReorder,
   InputInputEventDetail,
 } from "@ionic/react";
+import { onIonChangeFloat } from "components/utils";
+import { IngredientName, IngredientValue } from "dataModel/Ingredient";
 import { trashOutline } from "ionicons/icons";
 import { useCallback } from "react";
-import { IngredientName, IngredientValue } from "../dataModel/Ingredient";
-import { onIonChangeFloat } from "./utils";
 
 type Props = {
   name: IngredientName;

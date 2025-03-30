@@ -1,7 +1,7 @@
 import { SelectChangeEventDetail } from "@ionic/core";
 import { IonItem, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
+import { ScaleBy } from "dataModel/Recipe";
 import { useCallback } from "react";
-import { ScaleBy } from "../dataModel/Recipe";
 
 type Props = {
   onSelect(scaleBy: ScaleBy): void;

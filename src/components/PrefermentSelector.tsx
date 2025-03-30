@@ -1,7 +1,7 @@
 import { SelectChangeEventDetail } from "@ionic/core";
 import { IonItem, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
+import { PrefermentKind } from "dataModel/Preferment";
 import { useCallback } from "react";
-import { PrefermentKind } from "../dataModel/Preferment";
 
 type Props = {
   value?: PrefermentKind;

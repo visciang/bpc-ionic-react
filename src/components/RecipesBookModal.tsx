@@ -13,12 +13,12 @@ import {
   useIonToast,
   UseIonToastResult,
 } from "@ionic/react";
+import NewItemInput from "components/NewItemInput";
+import RecipeItem from "components/RecipeItem";
+import { RecipesBookContextProps } from "hooks/useRecipesBook";
 import { closeOutline, downloadOutline, pushOutline } from "ionicons/icons";
 import { useCallback, useRef } from "react";
-import { RecipesBookContextProps } from "../hooks/useRecipesBook";
-import { exportRecipes, importRecipes } from "../Storage";
-import NewItemInput from "./NewItemInput";
-import RecipeItem from "./RecipeItem";
+import { exportRecipes, importRecipes } from "Storage";
 
 type Props = {
   recipesBookCtx: RecipesBookContextProps;

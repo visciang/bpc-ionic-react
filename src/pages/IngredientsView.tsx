@@ -1,7 +1,7 @@
+import IngredientsPercentageList from "components/IngredientsPercentageList";
+import { Ingredients } from "dataModel/Ingredient";
+import { Recipe } from "dataModel/Recipe";
 import { useCallback } from "react";
-import IngredientsPercentageList from "../components/IngredientsPercentageList";
-import { Ingredients } from "../dataModel/Ingredient";
-import { Recipe } from "../dataModel/Recipe";
 
 type Props = {
   recipe: Recipe;

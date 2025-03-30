@@ -1,7 +1,7 @@
 import { IonList, IonGrid, IonRow, IonCol, IonText } from "@ionic/react";
-import { Ingredients } from "../dataModel/Ingredient";
-import IngredientsTitleToolbar from "./IngredientsTitleToolbar";
-import { sum } from "./utils";
+import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
+import { sum } from "components/utils";
+import { Ingredients } from "dataModel/Ingredient";
 
 type Props = {
   title: string;

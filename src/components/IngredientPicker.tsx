@@ -1,6 +1,6 @@
 import { IonItem, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
+import { IngredientName } from "dataModel/Ingredient";
 import { useState } from "react";
-import { IngredientName } from "../dataModel/Ingredient";
 
 type Props = {
   label: string;

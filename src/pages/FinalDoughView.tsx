@@ -1,8 +1,8 @@
+import FinalDoughTable from "components/FinalDoughTable";
+import ScaleBySelector from "components/ScaleBySelector";
+import TotalAmountInput from "components/TotalAmountInput";
+import { Recipe, ScaleBy } from "dataModel/Recipe";
 import { useState } from "react";
-import FinalDoughTable from "../components/FinalDoughTable";
-import ScaleBySelector from "../components/ScaleBySelector";
-import TotalAmountInput from "../components/TotalAmountInput";
-import { Recipe, ScaleBy } from "../dataModel/Recipe";
 
 type Props = {
   recipe: Recipe;

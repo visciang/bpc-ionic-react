@@ -1,5 +1,5 @@
-import { Preferment, PrefermentKind } from "./dataModel/Preferment";
-import { Recipe } from "./dataModel/Recipe";
+import { Preferment, PrefermentKind } from "dataModel/Preferment";
+import { Recipe } from "dataModel/Recipe";
 
 type StoredRecipe = {
   name: string;

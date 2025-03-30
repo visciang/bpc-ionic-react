@@ -1,7 +1,7 @@
-import { Ingredients, IngredientValue } from "../dataModel/Ingredient";
-import { Preferment, Preferments, PrefermentKind, PrefermentName } from "../dataModel/Preferment";
-import { Recipe, ScaleBy } from "../dataModel/Recipe";
-import { sum } from "./utils";
+import { sum } from "components/utils";
+import { Ingredients, IngredientValue } from "dataModel/Ingredient";
+import { Preferment, Preferments, PrefermentKind, PrefermentName } from "dataModel/Preferment";
+import { Recipe, ScaleBy } from "dataModel/Recipe";
 
 type CalcPreferment = {
   kind: PrefermentKind;

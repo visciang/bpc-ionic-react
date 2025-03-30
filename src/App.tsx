@@ -9,8 +9,6 @@ import {
   setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { calculatorOutline, restaurantOutline, arrowUndoOutline } from "ionicons/icons";
-import { Redirect, Route } from "react-router-dom";
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
 /* Core CSS required for Ionic components to work properly */
@@ -27,15 +25,18 @@ import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
 /* Theme variables */
-import "./theme/variables.css";
-import "./theme/custom.css";
+import "theme/variables.css";
+import "theme/custom.css";
 /* -- */
-import { useEditToggle } from "./hooks/useEditToggle";
-import { useRecipesBook } from "./hooks/useRecipesBook";
-import FinalDoughView from "./pages/FinalDoughView";
-import IngredientsView from "./pages/IngredientsView";
-import PrefermentView from "./pages/PrefermentView";
-import Tab from "./pages/Tab";
+import { useEditToggle } from "hooks/useEditToggle";
+import { useRecipesBook } from "hooks/useRecipesBook";
+import { calculatorOutline, restaurantOutline, arrowUndoOutline } from "ionicons/icons";
+import FinalDoughView from "pages/FinalDoughView";
+import IngredientsView from "pages/IngredientsView";
+import PrefermentView from "pages/PrefermentView";
+import Tab from "pages/Tab";
+/* -- */
+import { Redirect, Route } from "react-router-dom";
 
 setupIonicReact({
   innerHTMLTemplatesEnabled: true,

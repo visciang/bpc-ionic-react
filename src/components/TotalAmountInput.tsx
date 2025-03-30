@@ -1,5 +1,5 @@
 import { IonItem, IonLabel, IonInput, IonText } from "@ionic/react";
-import { onIonChangeFloat } from "./utils";
+import { onIonChangeFloat } from "components/utils";
 
 type Props = {
   value?: number;

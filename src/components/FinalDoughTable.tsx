@@ -1,7 +1,7 @@
-import { Recipe, ScaleBy } from "../dataModel/Recipe";
-import { calculateDough } from "./Calculator";
-import IngredientsWeightList from "./IngredientsWeightList";
-import { validateRecipe } from "./RecipeValidator";
+import { calculateDough } from "components/Calculator";
+import IngredientsWeightList from "components/IngredientsWeightList";
+import { validateRecipe } from "components/RecipeValidator";
+import { Recipe, ScaleBy } from "dataModel/Recipe";
 
 type Props = {
   recipe: Recipe;
