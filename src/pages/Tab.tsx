@@ -31,7 +31,7 @@ export default function Tab({ recipesBookCtx, editToggle, children }: Props & { 
 
   return (
     <IonPage>
-      <IonHeader translucent>
+      <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
             <IonButton onClick={onInfo}>
@@ -45,7 +45,7 @@ export default function Tab({ recipesBookCtx, editToggle, children }: Props & { 
           <IonButtons slot="end">{editButton}</IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen className="ion-padding">
+      <IonContent className="ion-padding">
         <InfoAlert isOpen={showInfo} onDidDismiss={hideInfo} />
         <RecipesBookModal
           // Prompt to select a recipe if none is selected (undefined title) or
