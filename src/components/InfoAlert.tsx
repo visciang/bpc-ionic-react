@@ -13,6 +13,9 @@ export default function InfoAlert({ isOpen, onDidDismiss }: Props) {
   const message = new IonicSafeString(`
     <div class="ion-text-center">
       <p>
+        <strong>Version</strong>: ${version} (${gitSHA.substring(0, 7)})
+      </p>
+      <p>
         <a href="mailto:panificazionefavaglie@gmail.com?subject=BakerCalc">
           Info mail
         </a>
@@ -21,15 +24,9 @@ export default function InfoAlert({ isOpen, onDidDismiss }: Props) {
         If you like the App<br/>support me with a beer!<br/>Thank you
       </p>
       <p>
-        <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=YWVFRGAC55UX4">
+        <a href="https://www.paypal.com/ncp/payment/MW65J8LXXJ8S4">
         <img src=${donate}>
         </a>
-      </p>
-      <p class="ion-text-small">
-        Build: ${gitSHA.substring(0, 7)}
-      </p>
-      <p class="ion-text-small">
-        Version: ${version}
       </p>
     </div>
   `);
