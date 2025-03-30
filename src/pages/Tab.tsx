@@ -4,27 +4,22 @@ import { pencilOutline, informationCircleOutline, bookOutline } from "ionicons/i
 import InfoAlert from "../components/InfoAlert";
 import RecipesBookModal from "../components/RecipesBookModal";
 import { RecipesBookContextProps } from "../hooks/useRecipesBook";
+import { EditToggle } from "../hooks/useEditToggle";
 
 type Props = {
   recipesBookCtx: RecipesBookContextProps;
-  editable?: boolean;
-  onEditToggle?(): void;
+  editToggle?: EditToggle;
 };
 
-export default function Tab({
-  recipesBookCtx,
-  editable,
-  onEditToggle,
-  children,
-}: Props & { children?: React.ReactNode }) {
+export default function Tab({ recipesBookCtx, editToggle, children }: Props & { children?: React.ReactNode }) {
   const [showInfo, setShowInfo] = React.useState(false);
   const [showRecipes, setShowRecipes] = React.useState(false);
 
   const onInfo = useCallback(() => setShowInfo(true), [setShowInfo]);
   const onRecipes = useCallback(() => setShowRecipes(true), [setShowRecipes]);
 
-  const editButton = onEditToggle ? (
-    <IonButton fill={editable ? "solid" : undefined} onClick={onEditToggle}>
+  const editButton = editToggle ? (
+    <IonButton fill={editToggle.editable ? "solid" : undefined} onClick={editToggle.onToggle}>
       <IonIcon icon={pencilOutline} />
     </IonButton>
   ) : undefined;

@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";
 import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
@@ -42,6 +41,7 @@ import IngredientsView from "./pages/IngredientsView";
 import PrefermentView from "./pages/PrefermentView";
 import FinalDoughView from "./pages/FinalDoughView";
 import { useRecipesBook } from "./hooks/useRecipesBook";
+import { useEditToggle } from "./hooks/useEditToggle";
 
 setupIonicReact({
   innerHTMLTemplatesEnabled: true,
@@ -51,11 +51,7 @@ const basename = import.meta.env.BASE_URL || "/";
 
 export default function App() {
   const recipesBookCtx = useRecipesBook();
-  const [editable, setEditable] = useState(false);
-
-  const onEditToggle = useCallback(() => {
-    setEditable((prevEditable) => !prevEditable);
-  }, [setEditable]);
+  const editToggle = useEditToggle();
 
   return (
     <IonApp>
@@ -63,25 +59,25 @@ export default function App() {
         <IonTabs>
           <IonRouterOutlet>
             <Route exact path="/ingredients">
-              <Tab editable={editable} onEditToggle={onEditToggle} recipesBookCtx={recipesBookCtx}>
+              <Tab editToggle={editToggle} recipesBookCtx={recipesBookCtx}>
                 <IngredientsView
                   recipe={recipesBookCtx.currentRecipe}
                   onEditRecipe={recipesBookCtx.onEdit}
-                  editable={editable}
+                  editable={editToggle.editable}
                 />
               </Tab>
             </Route>
             <Route exact path="/prefermentTab">
-              <Tab editable={editable} onEditToggle={onEditToggle} recipesBookCtx={recipesBookCtx}>
+              <Tab editToggle={editToggle} recipesBookCtx={recipesBookCtx}>
                 <PrefermentView
                   recipe={recipesBookCtx.currentRecipe}
                   onEditRecipe={recipesBookCtx.onEdit}
-                  editable={editable}
+                  editable={editToggle.editable}
                 />
               </Tab>
             </Route>
             <Route exact path="/finalDough">
-              <Tab editable={editable} onEditToggle={onEditToggle} recipesBookCtx={recipesBookCtx}>
+              <Tab recipesBookCtx={recipesBookCtx}>
                 <FinalDoughView recipe={recipesBookCtx.currentRecipe} />
               </Tab>
             </Route>
