@@ -46,6 +46,7 @@ export default function IngredientPercentageItem({ name, value, maxPercentage, e
     children = (
       <>
         <IonInput
+          slot="end"
           className="ion-padding-horizontal ion-text-right"
           // Safari does not support `type="number"` (it makes mess with the input value)
           type="text"
@@ -55,14 +56,14 @@ export default function IngredientPercentageItem({ name, value, maxPercentage, e
           value={value}
           onIonInput={onIonInput}
         />
-        <IonText>%</IonText>
+        <IonText slot="end">%</IonText>
       </>
     );
   }
 
   return (
     <IonItem>
-      <IonLabel>{name}</IonLabel>
+      <IonLabel slot="start">{name}</IonLabel>
       {children}
     </IonItem>
   );
