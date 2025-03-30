@@ -6,3 +6,8 @@
 .background-light {
   background: var(--ion-color-light);
 }
+
+/* This should macth the theme_color in the manifest.json */
+:root {
+  --ion-toolbar-background: #f7f7f7;
+}

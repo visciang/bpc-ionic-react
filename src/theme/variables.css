@@ -75,8 +75,3 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
 }
-
-/* This should macth the theme_color in the manifest.json */
-:root {
-  --ion-toolbar-background: #f7f7f7;
-}
