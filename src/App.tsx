@@ -29,13 +29,13 @@ import "theme/variables.css";
 import "theme/custom.css";
 /* -- */
 import { RecipesProvider } from "contexts/RecipesContext";
-import { useEditToggle } from "hooks/useEditToggle";
 import { calculatorOutline, restaurantOutline, arrowUndoOutline } from "ionicons/icons";
 import FinalDoughView from "pages/FinalDoughView";
 import IngredientsView from "pages/IngredientsView";
 import PrefermentView from "pages/PrefermentView";
 import Tab from "pages/Tab";
 /* -- */
+import { useCallback } from "react";
 import { Redirect, Route } from "react-router-dom";
 
 setupIonicReact({
@@ -45,7 +45,9 @@ setupIonicReact({
 const basename = import.meta.env.BASE_URL || "/";
 
 export default function App() {
-  const editToggle = useEditToggle();
+  const renderIngredientsView = useCallback((editable: boolean) => <IngredientsView editable={editable} />, []);
+  const renderPrefermentView = useCallback((editable: boolean) => <PrefermentView editable={editable} />, []);
+  const renderFinalDoughView = useCallback(() => <FinalDoughView />, []);
 
   return (
     <IonApp>
@@ -54,19 +56,13 @@ export default function App() {
           <IonRouterOutlet>
             <RecipesProvider>
               <Route exact path="/ingredients">
-                <Tab editToggle={editToggle}>
-                  <IngredientsView editable={editToggle.editable} />
-                </Tab>
+                <Tab allowEditing={true} render={renderIngredientsView} />
               </Route>
               <Route exact path="/prefermentTab">
-                <Tab editToggle={editToggle}>
-                  <PrefermentView editable={editToggle.editable} />
-                </Tab>
+                <Tab allowEditing={true} render={renderPrefermentView} />
               </Route>
               <Route exact path="/finalDough">
-                <Tab>
-                  <FinalDoughView />
-                </Tab>
+                <Tab allowEditing={false} render={renderFinalDoughView} />
               </Route>
               <Route exact path="/">
                 <Redirect to="/ingredients" />

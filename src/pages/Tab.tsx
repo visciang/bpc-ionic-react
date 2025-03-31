@@ -2,23 +2,26 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonBu
 import InfoAlert from "components/InfoAlert";
 import RecipesBookModal from "components/RecipesBookModal";
 import { useRecipes } from "contexts/RecipesContext";
-import { EditToggle } from "hooks/useEditToggle";
+import { useEditToggle } from "hooks/useEditToggle";
 import { pencilOutline, informationCircleOutline, bookOutline } from "ionicons/icons";
-import React, { useCallback } from "react";
+import { ReactNode, useCallback, useState } from "react";
 
 type Props = {
-  editToggle?: EditToggle;
+  allowEditing?: boolean;
+  render: (editable: boolean) => ReactNode;
 };
 
-export default function Tab({ children, editToggle }: Props & { children?: React.ReactNode }) {
+export default function Tab({ render, allowEditing = false }: Props) {
   const recipesBookCtx = useRecipes();
-  const [showInfo, setShowInfo] = React.useState(false);
-  const [showRecipes, setShowRecipes] = React.useState(false);
+  const [showInfo, setShowInfo] = useState(false);
+  const [showRecipes, setShowRecipes] = useState(false);
+
+  const editToggle = useEditToggle();
 
   const onInfo = useCallback(() => setShowInfo(true), [setShowInfo]);
   const onRecipes = useCallback(() => setShowRecipes(true), [setShowRecipes]);
 
-  const editButton = editToggle ? (
+  const editButton = allowEditing ? (
     <IonButton fill={editToggle.editable ? "solid" : undefined} onClick={editToggle.onToggle}>
       <IonIcon icon={pencilOutline} />
     </IonButton>
@@ -54,7 +57,7 @@ export default function Tab({ children, editToggle }: Props & { children?: React
           onClose={title === undefined ? undefined : hideRecipes}
           recipesBookCtx={recipesBookCtx}
         />
-        {children}
+        {render(editToggle.editable)}
       </IonContent>
     </IonPage>
   );
