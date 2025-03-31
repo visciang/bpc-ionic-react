@@ -1,7 +1,7 @@
 {
   "name": "bpc",
   "private": true,
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "scripts": {
     "dev": "VITE_GIT_SHA=$(git rev-parse HEAD) vite",
@@ -42,7 +42,7 @@
     "typescript": "^5.1.6",
     "typescript-eslint": "^8.28.0",
     "vite": "^6.2.4",
-    "vite-plugin-pwa": "^0.21.2",
+    "vite-plugin-pwa": "^1.0.0",
     "vite-tsconfig-paths": "^5.1.4"
   },
   "description": "Baker % Calculator"
