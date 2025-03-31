@@ -28,6 +28,7 @@ import "@ionic/react/css/display.css";
 import "theme/variables.css";
 import "theme/custom.css";
 /* -- */
+import { FinalDoughProvider } from "contexts/FinalDoughContext";
 import { RecipesProvider } from "contexts/RecipesContext";
 import { calculatorOutline, restaurantOutline, arrowUndoOutline } from "ionicons/icons";
 import FinalDoughView from "pages/FinalDoughView";
@@ -55,18 +56,20 @@ export default function App() {
         <IonTabs>
           <IonRouterOutlet>
             <RecipesProvider>
-              <Route exact path="/ingredients">
-                <Tab allowEditing={true} render={renderIngredientsView} />
-              </Route>
-              <Route exact path="/prefermentTab">
-                <Tab allowEditing={true} render={renderPrefermentView} />
-              </Route>
-              <Route exact path="/finalDough">
-                <Tab allowEditing={false} render={renderFinalDoughView} />
-              </Route>
-              <Route exact path="/">
-                <Redirect to="/ingredients" />
-              </Route>
+              <FinalDoughProvider>
+                <Route exact path="/ingredients">
+                  <Tab allowEditing={true} render={renderIngredientsView} />
+                </Route>
+                <Route exact path="/prefermentTab">
+                  <Tab allowEditing={true} render={renderPrefermentView} />
+                </Route>
+                <Route exact path="/finalDough">
+                  <Tab allowEditing={false} render={renderFinalDoughView} />
+                </Route>
+                <Route exact path="/">
+                  <Redirect to="/ingredients" />
+                </Route>
+              </FinalDoughProvider>
             </RecipesProvider>
           </IonRouterOutlet>
           <IonTabBar slot="bottom">

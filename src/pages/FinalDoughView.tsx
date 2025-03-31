@@ -1,13 +1,21 @@
 import FinalDoughTable from "components/FinalDoughTable";
 import ScaleBySelector from "components/ScaleBySelector";
 import TotalAmountInput from "components/TotalAmountInput";
+import { useFinalDough } from "contexts/FinalDoughContext";
 import { useRecipes } from "contexts/RecipesContext";
-import { ScaleBy } from "dataModel/Recipe";
-import { useState } from "react";
+import { debounce } from "lodash";
+import { useMemo } from "react";
 
 export default function FinalDoughView() {
-  const [scaleBy, setScaleBy] = useState<ScaleBy | undefined>(undefined);
-  const [totalAmount, setTotalAmount] = useState<number | undefined>(undefined);
+  const { scaleBy, setScaleBy, totalAmount, setTotalAmount } = useFinalDough();
+
+  const debouncedSetTotalAmount = useMemo(
+    () =>
+      debounce((totalAmount: number) => {
+        setTotalAmount(totalAmount);
+      }, 300),
+    [setTotalAmount],
+  );
 
   const recipesBookCtx = useRecipes();
   const recipe = recipesBookCtx.currentRecipe;
@@ -20,8 +28,8 @@ export default function FinalDoughView() {
   return (
     <>
       <div className="ion-padding-bottom">
-        <ScaleBySelector onSelect={setScaleBy} />
-        <TotalAmountInput value={totalAmount} onChange={setTotalAmount} />
+        <ScaleBySelector onSelect={setScaleBy} value={scaleBy} />
+        <TotalAmountInput value={totalAmount} onChange={debouncedSetTotalAmount} />
       </div>
       <div className="border-top ion-padding-vertical">{finalDoughTable}</div>
     </>

@@ -1,5 +1,6 @@
 import { mapDelete, mapMove, mapSet } from "components/utils";
 import { Recipe, newRecipe } from "dataModel/Recipe";
+import { debounce } from "lodash";
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { fetchStoredRecipe, getStoredRecipes, store } from "Storage";
 
@@ -69,10 +70,11 @@ export function useRecipesBook(): RecipesBookContextProps {
     setRecipes(getStoredRecipes());
   }, [setRecipes]);
 
-  const onEditRecipe = useCallback(
-    (recipe: Recipe) => {
-      setCurrentRecipe(recipe);
-    },
+  const onEditRecipe = useMemo(
+    () =>
+      debounce((recipe: Recipe) => {
+        setCurrentRecipe(recipe);
+      }, 300),
     [setCurrentRecipe],
   );
 

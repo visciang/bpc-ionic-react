@@ -1,7 +1,7 @@
 {
   "name": "bpc",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "scripts": {
     "dev": "VITE_GIT_SHA=$(git rev-parse HEAD) vite",
@@ -16,6 +16,7 @@
     "@types/react-router": "^5.1.20",
     "@types/react-router-dom": "^5.3.3",
     "ionicons": "^7.0.0",
+    "lodash": "^4.17.21",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router": "^5.3.4",
@@ -25,6 +26,7 @@
     "@rollup/rollup-linux-x64-gnu": "*"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.16",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-legacy": "^6.0.2",

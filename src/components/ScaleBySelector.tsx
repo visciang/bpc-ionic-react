@@ -1,28 +1,28 @@
-import { SelectChangeEventDetail } from "@ionic/core";
-import { IonItem, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
+import { IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
 import { ScaleBy } from "dataModel/Recipe";
 import { useCallback } from "react";
 
 type Props = {
-  onSelect(scaleBy: ScaleBy): void;
+  onSelect: (value: ScaleBy) => void;
+  value?: ScaleBy;
 };
 
-export default function ScaleBySelector({ onSelect }: Props) {
-  const onIonChange = useCallback(
-    (event: CustomEvent<SelectChangeEventDetail>) => onSelect(event.detail.value),
+export default function ScaleBySelector({ onSelect, value }: Props) {
+  const onChange = useCallback(
+    (e: CustomEvent) => {
+      onSelect(e.detail.value as ScaleBy);
+    },
     [onSelect],
   );
 
   return (
-    <IonItem lines="none">
-      <IonLabel>Scale by</IonLabel>
-      <IonSelect labelPlacement="end" interface="popover" onIonChange={onIonChange}>
-        {Object.keys(ScaleBy).map((value) => (
-          <IonSelectOption key={value} value={value}>
-            {value}
-          </IonSelectOption>
-        ))}
-      </IonSelect>
-    </IonItem>
+    <IonSegment value={value} onIonChange={onChange}>
+      <IonSegmentButton value={ScaleBy.DOUGH}>
+        <IonLabel>Dough</IonLabel>
+      </IonSegmentButton>
+      <IonSegmentButton value={ScaleBy.FLOUR}>
+        <IonLabel>Flour</IonLabel>
+      </IonSegmentButton>
+    </IonSegment>
   );
 }
