@@ -76,9 +76,11 @@ export function useRecipesBook(): RecipesBookContextProps {
     [setCurrentRecipe],
   );
 
-  const contextValue = useMemo<RecipesBookContextProps>(
+  const recipesList = useMemo(() => [...recipes.keys()], [recipes]);
+
+  const contextValue = useMemo(
     () => ({
-      recipes: [...recipes.keys()],
+      recipes: recipesList,
       currentRecipe,
       onNew: onNewRecipe,
       onSelect: onSelectRecipe,
@@ -88,14 +90,14 @@ export function useRecipesBook(): RecipesBookContextProps {
       reload: onReloadRecipes,
     }),
     [
-      recipes,
+      recipesList,
       currentRecipe,
       onNewRecipe,
       onSelectRecipe,
       onRenameRecipe,
       onDeleteRecipe,
-      onReloadRecipes,
       onEditRecipe,
+      onReloadRecipes,
     ],
   );
 
