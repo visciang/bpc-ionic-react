@@ -2,18 +2,20 @@ import NewItemInput from "components/NewItemInput";
 import PrefermentPercentageList from "components/PrefermentPercentageList";
 import PrefermentSelector from "components/PrefermentSelector";
 import { mapDelete, mapSet } from "components/utils";
+import { useRecipes } from "contexts/RecipesContext";
 import { PrefermentKind, Preferment as PrefermentT, PrefermentName } from "dataModel/Preferment";
-import { Recipe } from "dataModel/Recipe";
 import { useState, useCallback, useMemo } from "react";
 
 type Props = {
-  recipe: Recipe;
   editable: boolean;
-  onEditRecipe(recipe: Recipe): void;
 };
 
-export default function PrefermentView({ recipe, editable, onEditRecipe }: Props) {
+export default function PrefermentView({ editable }: Props) {
   const [prefermentKind, setPrefermentKind] = useState<PrefermentKind | undefined>(undefined);
+
+  const recipesBookCtx = useRecipes();
+  const recipe = recipesBookCtx.currentRecipe;
+  const onEditRecipe = recipesBookCtx.onEdit;
 
   const onNewPreferment = useCallback(
     (name: string) => {

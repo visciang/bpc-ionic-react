@@ -1,15 +1,17 @@
 import IngredientsPercentageList from "components/IngredientsPercentageList";
+import { useRecipes } from "contexts/RecipesContext";
 import { Ingredients } from "dataModel/Ingredient";
-import { Recipe } from "dataModel/Recipe";
 import { useCallback } from "react";
 
 type Props = {
-  recipe: Recipe;
   editable: boolean;
-  onEditRecipe(recipe: Recipe): void;
 };
 
-export default function IngredientsView({ recipe, onEditRecipe, editable }: Props) {
+export default function IngredientsView({ editable }: Props) {
+  const recipesBookCtx = useRecipes();
+  const recipe = recipesBookCtx.currentRecipe;
+  const onEditRecipe = recipesBookCtx.onEdit;
+
   const onFloursChange = useCallback(
     (flours: Ingredients) => {
       onEditRecipe({ ...recipe, flours });

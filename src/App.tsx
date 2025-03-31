@@ -28,8 +28,8 @@ import "@ionic/react/css/display.css";
 import "theme/variables.css";
 import "theme/custom.css";
 /* -- */
+import { RecipesProvider } from "contexts/RecipesContext";
 import { useEditToggle } from "hooks/useEditToggle";
-import { useRecipesBook } from "hooks/useRecipesBook";
 import { calculatorOutline, restaurantOutline, arrowUndoOutline } from "ionicons/icons";
 import FinalDoughView from "pages/FinalDoughView";
 import IngredientsView from "pages/IngredientsView";
@@ -45,7 +45,6 @@ setupIonicReact({
 const basename = import.meta.env.BASE_URL || "/";
 
 export default function App() {
-  const recipesBookCtx = useRecipesBook();
   const editToggle = useEditToggle();
 
   return (
@@ -53,32 +52,26 @@ export default function App() {
       <IonReactRouter basename={basename}>
         <IonTabs>
           <IonRouterOutlet>
-            <Route exact path="/ingredients">
-              <Tab editToggle={editToggle} recipesBookCtx={recipesBookCtx}>
-                <IngredientsView
-                  recipe={recipesBookCtx.currentRecipe}
-                  onEditRecipe={recipesBookCtx.onEdit}
-                  editable={editToggle.editable}
-                />
-              </Tab>
-            </Route>
-            <Route exact path="/prefermentTab">
-              <Tab editToggle={editToggle} recipesBookCtx={recipesBookCtx}>
-                <PrefermentView
-                  recipe={recipesBookCtx.currentRecipe}
-                  onEditRecipe={recipesBookCtx.onEdit}
-                  editable={editToggle.editable}
-                />
-              </Tab>
-            </Route>
-            <Route exact path="/finalDough">
-              <Tab recipesBookCtx={recipesBookCtx}>
-                <FinalDoughView recipe={recipesBookCtx.currentRecipe} />
-              </Tab>
-            </Route>
-            <Route exact path="/">
-              <Redirect to="/ingredients" />
-            </Route>
+            <RecipesProvider>
+              <Route exact path="/ingredients">
+                <Tab editToggle={editToggle}>
+                  <IngredientsView editable={editToggle.editable} />
+                </Tab>
+              </Route>
+              <Route exact path="/prefermentTab">
+                <Tab editToggle={editToggle}>
+                  <PrefermentView editable={editToggle.editable} />
+                </Tab>
+              </Route>
+              <Route exact path="/finalDough">
+                <Tab>
+                  <FinalDoughView />
+                </Tab>
+              </Route>
+              <Route exact path="/">
+                <Redirect to="/ingredients" />
+              </Route>
+            </RecipesProvider>
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
             <IonTabButton tab="ingredientsTab" href="/ingredients">

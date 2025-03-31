@@ -1,16 +1,16 @@
 import FinalDoughTable from "components/FinalDoughTable";
 import ScaleBySelector from "components/ScaleBySelector";
 import TotalAmountInput from "components/TotalAmountInput";
-import { Recipe, ScaleBy } from "dataModel/Recipe";
+import { useRecipes } from "contexts/RecipesContext";
+import { ScaleBy } from "dataModel/Recipe";
 import { useState } from "react";
 
-type Props = {
-  recipe: Recipe;
-};
-
-export default function FinalDoughView({ recipe }: Props) {
+export default function FinalDoughView() {
   const [scaleBy, setScaleBy] = useState<ScaleBy | undefined>(undefined);
   const [totalAmount, setTotalAmount] = useState<number | undefined>(undefined);
+
+  const recipesBookCtx = useRecipes();
+  const recipe = recipesBookCtx.currentRecipe;
 
   const finalDoughTable =
     scaleBy && totalAmount ? (
