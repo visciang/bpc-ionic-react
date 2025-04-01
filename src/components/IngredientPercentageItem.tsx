@@ -14,6 +14,8 @@ import { IngredientName, IngredientValue } from "dataModel/Ingredient";
 import { trashOutline } from "ionicons/icons";
 import { useCallback } from "react";
 
+const PERCENTAGE_INPUT_DEBOUNCE_MS = 1000;
+
 type Props = {
   name: IngredientName;
   value: IngredientValue;
@@ -54,7 +56,9 @@ export default function IngredientPercentageItem({ name, value, maxPercentage, e
           min="0"
           max={maxPercentage?.toString()}
           value={value}
+          placeholder="..."
           onIonInput={onIonInput}
+          debounce={PERCENTAGE_INPUT_DEBOUNCE_MS}
         />
         <IonText slot="end">%</IonText>
       </>
