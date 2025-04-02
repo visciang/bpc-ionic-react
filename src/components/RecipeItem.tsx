@@ -11,6 +11,7 @@ type Props = {
 
 export default function RecipeItem({ name, onSelect, onRename, onDelete }: Props) {
   const [showRenameAlert, setShowRenameAlert] = useState(false);
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
   const onSelectClick = useCallback(() => onSelect(name), [name, onSelect]);
 
@@ -37,10 +38,15 @@ export default function RecipeItem({ name, onSelect, onRename, onDelete }: Props
     (e: React.MouseEvent) => {
       e.stopPropagation();
       e.preventDefault();
-      onDelete(name);
+      setShowDeleteAlert(true);
     },
-    [name, onDelete],
+    [setShowDeleteAlert],
   );
+
+  const handleDelete = useCallback(() => {
+    onDelete(name);
+    setShowDeleteAlert(false);
+  }, [name, onDelete]);
 
   return (
     <>
@@ -85,6 +91,26 @@ export default function RecipeItem({ name, onSelect, onRename, onDelete }: Props
             handler: (data) => {
               handleRename(data.newName);
             },
+          },
+        ]}
+      />
+      <IonAlert
+        isOpen={showDeleteAlert}
+        onDidDismiss={() => setShowDeleteAlert(false)}
+        header="Delete Recipe"
+        message={`Are you sure you want to delete "${name}"?`}
+        buttons={[
+          {
+            text: "Cancel",
+            role: "cancel",
+            handler: () => {
+              setShowDeleteAlert(false);
+            },
+          },
+          {
+            text: "Delete",
+            role: "destructive",
+            handler: handleDelete,
           },
         ]}
       />
