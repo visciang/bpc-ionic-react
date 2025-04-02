@@ -136,7 +136,11 @@ export default function PrefermentPercentageList({
 
   return (
     <IonList lines="none">
-      <IngredientsTitleToolbar title={name} onDelete={editable ? _onPrefermentDelete : undefined} />
+      <IngredientsTitleToolbar
+        title={name}
+        onDelete={editable ? _onPrefermentDelete : undefined}
+        showPercentageLabel={true}
+      />
       <IngredientPercentageItem
         name="Prefermented flour"
         value={preferment.prefermentedFlour}
