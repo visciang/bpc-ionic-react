@@ -18,7 +18,7 @@ import RecipeItem from "components/RecipeItem";
 import { RecipesBookContextProps } from "hooks/useRecipesBook";
 import { closeOutline, downloadOutline, pushOutline } from "ionicons/icons";
 import { useCallback, useRef } from "react";
-import { exportRecipes, importRecipes } from "Storage";
+import { exportStoredRecipes, importStoredRecipes } from "store";
 
 type Props = {
   recipesBookCtx: RecipesBookContextProps;
@@ -116,7 +116,7 @@ export default function RecipesBookModal({ recipesBookCtx, isOpen, onClose }: Pr
 }
 
 function handleExport() {
-  const recipesJson = exportRecipes();
+  const recipesJson = exportStoredRecipes();
 
   // Create a blob and download link
   const blob = new Blob([recipesJson], { type: "application/json" });
@@ -147,7 +147,7 @@ function handleImport(
   reader.onload = (e) => {
     try {
       const recipesJson = e.target?.result as string;
-      const recipesCount = importRecipes(recipesJson);
+      const recipesCount = importStoredRecipes(recipesJson);
 
       present({
         message: `Successfully imported ${recipesCount} recipes`,

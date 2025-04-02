@@ -1,7 +1,7 @@
 import { mapDelete, mapMove, mapSet } from "components/utils";
 import { Recipe, newRecipe } from "dataModel/Recipe";
 import { useState, useCallback, useMemo, useEffect } from "react";
-import { fetchStoredRecipe, getStoredRecipes, store } from "Storage";
+import { fetchStoredRecipe, getStoredRecipes, store } from "store";
 
 export type RecipesBookContextProps = {
   recipes: string[];

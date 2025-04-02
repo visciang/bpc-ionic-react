@@ -63,12 +63,12 @@ export function fetchStoredRecipe(name: string): Recipe {
   return decodeLocalStorage(JSON.parse(recipe));
 }
 
-export function exportRecipes(): string {
+export function exportStoredRecipes(): string {
   const recipes = getStoredRecipes();
   return JSON.stringify([...recipes.values()].map(encodeLocalStorage), null, 2);
 }
 
-export function importRecipes(recipesJson: string): number {
+export function importStoredRecipes(recipesJson: string): number {
   const recipes = JSON.parse(recipesJson).map(decodeLocalStorage);
   recipes.forEach(setStoredRecipe);
   return recipes.length;
