@@ -50,14 +50,7 @@ export default function RecipeItem({ name, onSelect, onRename, onDelete }: Props
 
   return (
     <>
-      <IonItem
-        button
-        lines="full"
-        onClick={onSelectClick}
-        routerLink="/ingredients"
-        routerDirection="none"
-        detail={false}
-      >
+      <IonItem button lines="full" onClick={onSelectClick} detail={false}>
         <IonLabel slot="start">{name}</IonLabel>
         <IonButton slot="end" onClick={onRenameClick} fill="clear">
           <IonIcon slot="icon-only" icon={createOutline} />

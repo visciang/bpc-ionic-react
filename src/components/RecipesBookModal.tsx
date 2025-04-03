@@ -21,31 +21,33 @@ import { useCallback, useRef } from "react";
 import { exportStoredRecipes, importStoredRecipes } from "store";
 
 type Props = {
-  recipesBookCtx: RecipesBookContextProps;
   isOpen: boolean;
+  recipesBookCtx: RecipesBookContextProps;
+  onSelect(name: string): void;
   onClose?(): void;
 };
 
-export default function RecipesBookModal({ recipesBookCtx, isOpen, onClose }: Props) {
+export default function RecipesBookModal({ isOpen, recipesBookCtx, onSelect, onClose }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const toast = useIonToast();
 
-  const onSelect = useCallback(
+  const onSelectItem = useCallback(
     (name: string) => {
       recipesBookCtx.onSelect(name);
+      onSelect(name);
       onClose?.();
     },
-    [recipesBookCtx, onClose],
+    [recipesBookCtx, onSelect, onClose],
   );
 
-  const onRename = useCallback(
+  const onRenameItem = useCallback(
     (name: string, newName: string) => {
       recipesBookCtx.onRename(name, newName);
     },
     [recipesBookCtx],
   );
 
-  const onDelete = useCallback(
+  const onDeleteItem = useCallback(
     (name: string) => {
       recipesBookCtx.onDelete(name);
     },
@@ -106,7 +108,13 @@ export default function RecipesBookModal({ recipesBookCtx, isOpen, onClose }: Pr
         <IonRow class="ion-justify-content-center ion-margin-bottom">Pick or create a new recipe</IonRow>
         <IonList>
           {recipesBookCtx.recipes.toSorted().map((name) => (
-            <RecipeItem key={name} name={name} onSelect={onSelect} onRename={onRename} onDelete={onDelete} />
+            <RecipeItem
+              key={name}
+              name={name}
+              onSelect={onSelectItem}
+              onRename={onRenameItem}
+              onDelete={onDeleteItem}
+            />
           ))}
           <NewItemInput onNewItem={recipesBookCtx.onNew} />
         </IonList>

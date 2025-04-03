@@ -1,14 +1,14 @@
 import IngredientsPercentageList from "components/IngredientsPercentageList";
-import { useRecipes } from "contexts/RecipesContext";
 import { Ingredients } from "dataModel/Ingredient";
+import { RecipesBookContextProps } from "hooks/useRecipesBook";
 import { useCallback } from "react";
 
 type Props = {
   editable: boolean;
+  recipesBookCtx: RecipesBookContextProps;
 };
 
-export default function IngredientsView({ editable }: Props) {
-  const recipesBookCtx = useRecipes();
+export default function IngredientsView({ editable, recipesBookCtx }: Props) {
   const recipe = recipesBookCtx.currentRecipe;
   const onEditRecipe = recipesBookCtx.onEdit;
 
