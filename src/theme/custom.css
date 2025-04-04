@@ -7,7 +7,7 @@
   background: var(--ion-color-light);
 }
 
-/* This should macth the theme_color in the manifest.json */
+/* This should match the "theme_color" in the manifest.json file */
 :root {
-  --ion-toolbar-background: var(--ion-color-light);
+  --ion-toolbar-background: var(--ion-background-color);
 }
