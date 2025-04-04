@@ -1,7 +1,7 @@
 {
   "name": "bpc",
   "private": true,
-  "version": "1.1.1",
+  "version": "1.2.0",
   "type": "module",
   "scripts": {
     "dev": "VITE_GIT_SHA=$(git rev-parse HEAD) vite",

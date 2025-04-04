@@ -11,20 +11,26 @@ type Props = {
 
 export default function FinalDoughView({ recipesBookCtx }: Props) {
   const [scaleBy, setScaleBy] = useState<ScaleBy>(ScaleBy.DOUGH);
+  const [totalItems, setTotalItems] = useState<number | undefined>(undefined);
   const [totalAmount, setTotalAmount] = useState<number | undefined>(undefined);
 
   const recipe = recipesBookCtx.currentRecipe;
 
   const finalDoughTable =
     scaleBy && totalAmount ? (
-      <FinalDoughTable recipe={recipe} scaleBy={scaleBy} totalAmount={totalAmount} />
+      <FinalDoughTable recipe={recipe} scaleBy={scaleBy} totalAmount={(totalItems || 1) * totalAmount} />
     ) : undefined;
 
   return (
     <>
       <div className="ion-padding-bottom">
         <ScaleBySelector onSelect={setScaleBy} value={scaleBy} />
-        <TotalAmountInput value={totalAmount} onChange={setTotalAmount} />
+        <TotalAmountInput
+          items={totalItems}
+          amount={totalAmount}
+          onChangeAmount={setTotalAmount}
+          onChangeItems={setTotalItems}
+        />
       </div>
       <div className="border-top ion-padding-vertical">{finalDoughTable}</div>
     </>
