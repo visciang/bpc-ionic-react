@@ -8,20 +8,26 @@ type Props = {
 };
 
 export default function IngredientsTitleToolbar({ title, showPercentageLabel, onDelete }: Props) {
-  const deleteButton = onDelete ? (
-    <IonButton size="small" slot="end" onClick={onDelete} fill="clear">
-      <IonIcon slot="icon-only" icon={trashOutline} />
-    </IonButton>
-  ) : showPercentageLabel ? (
-    <IonText className="ion-padding-horizontal" slot="end">
-      %
-    </IonText>
-  ) : undefined;
+  let buttons = <></>;
+
+  if (onDelete) {
+    buttons = (
+      <IonButton size="small" slot="end" onClick={onDelete} fill="clear">
+        <IonIcon slot="icon-only" icon={trashOutline} />
+      </IonButton>
+    );
+  } else if (showPercentageLabel) {
+    buttons = (
+      <IonText className="ion-padding-horizontal" slot="end">
+        %
+      </IonText>
+    );
+  }
 
   return (
     <IonToolbar>
       <IonTitle>{title}</IonTitle>
-      {deleteButton}
+      {buttons}
     </IonToolbar>
   );
 }
