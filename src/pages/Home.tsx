@@ -67,7 +67,7 @@ export default function Main() {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding">
+      <IonContent>
         <IonSegmentView>
           <IonSegmentContent id="ingredients">
             <IngredientsView editable={editToggle.editable} recipesBookCtx={recipesBookCtx} />

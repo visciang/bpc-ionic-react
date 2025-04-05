@@ -84,7 +84,7 @@ export default function RecipesBookModal({ isOpen, recipesBookCtx, onSelect, onC
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <IonRow class="ion-justify-content-center ion-margin-bottom">
+        <IonRow class="ion-justify-content-center ion-padding">
           <IonCol size="auto">
             <IonButton fill="outline" onClick={handleImportClick}>
               <IonIcon icon={downloadOutline}></IonIcon>
@@ -105,8 +105,8 @@ export default function RecipesBookModal({ isOpen, recipesBookCtx, onSelect, onC
             </IonButton>
           </IonCol>
         </IonRow>
-        <IonRow class="ion-justify-content-center ion-margin-bottom">Pick or create a new recipe</IonRow>
-        <IonList>
+        <IonRow class="ion-justify-content-center ion-padding">Pick or create a new recipe</IonRow>
+        <IonList className="ion-padding-vertical">
           {recipesBookCtx.recipes.toSorted().map((name) => (
             <RecipeItem
               key={name}

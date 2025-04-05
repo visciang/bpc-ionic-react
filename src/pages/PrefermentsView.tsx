@@ -71,12 +71,12 @@ export default function PrefermentsView({ editable, recipesBookCtx }: Props) {
 
   return (
     <>
-      <div className="ion-padding-bottom">
+      <div className="ion-padding">
         <PrefermentSelector value={prefermentKind} onSelect={setPrefermentKind} />
         <NewItemInput onNewItem={prefermentKind ? onNewPreferment : undefined} />
       </div>
       {[...recipe.preferments].map(([name, preferment]) => (
-        <div key={name} className="border-top ion-padding-vertical">
+        <div key={name}>
           <PrefermentPercentageList
             name={name}
             availableFlours={availableFlours}

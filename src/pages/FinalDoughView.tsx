@@ -23,7 +23,7 @@ export default function FinalDoughView({ recipesBookCtx }: Props) {
 
   return (
     <>
-      <div className="ion-padding-bottom">
+      <div className="ion-padding">
         <ScaleBySelector onSelect={setScaleBy} value={scaleBy} />
         <TotalAmountInput
           items={totalItems}
