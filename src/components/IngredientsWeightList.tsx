@@ -26,7 +26,7 @@ export default function IngredientsWeightList({
   }
 
   return (
-    <IonList lines="none">
+    <IonList lines="none" inset={true}>
       <IngredientsTitleToolbar title={title} showPercentageLabel={false} />
       <IonGrid>
         <IonRow>

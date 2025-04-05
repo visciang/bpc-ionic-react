@@ -52,7 +52,7 @@ export default function IngredientsPercentageList({
   );
 
   return (
-    <IonList lines="none">
+    <IonList lines="none" inset={true}>
       <IngredientsTitleToolbar title={title} showPercentageLabel={true} />
       <IonReorderGroup disabled={!editable} onIonItemReorder={onIngredientReorder}>
         {[...ingredients].map(([name, value]) => (

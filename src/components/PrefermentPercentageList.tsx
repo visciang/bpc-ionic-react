@@ -135,7 +135,7 @@ export default function PrefermentPercentageList({
   );
 
   return (
-    <IonList lines="none">
+    <IonList lines="none" inset={true}>
       <IngredientsTitleToolbar
         title={name}
         onDelete={editable ? _onPrefermentDelete : undefined}
