@@ -26,7 +26,7 @@ export default function IngredientsWeightList({
   }
 
   return (
-    <IonList lines="none" inset={true}>
+    <IonList inset={true}>
       <IngredientsTitleToolbar title={title} showPercentageLabel={false} />
       <IonGrid>
         <IonRow>
@@ -65,5 +65,5 @@ export default function IngredientsWeightList({
 
 function numberToString(value: number | undefined): string | undefined {
   if (value === undefined) return undefined;
-  return Number.isInteger(value) ? value.toString() : value.toFixed(2);
+  return Number.isInteger(value) ? value.toString() : value.toFixed(1);
 }

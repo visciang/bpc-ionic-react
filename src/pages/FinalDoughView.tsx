@@ -32,7 +32,7 @@ export default function FinalDoughView({ recipesBookCtx }: Props) {
           onChangeItems={setTotalItems}
         />
       </div>
-      <div className="border-top ion-padding-vertical">{finalDoughTable}</div>
+      {finalDoughTable}
     </>
   );
 }
