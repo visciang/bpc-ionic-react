@@ -17,7 +17,7 @@ type CalcDough = {
   final: Ingredients;
 };
 
-export function calculateDough(recipe: Recipe, scaleBy: ScaleBy, totalAmount: number): CalcDough {
+export function calculate(recipe: Recipe, scaleBy: ScaleBy, totalAmount: number): CalcDough {
   const scaleFactor = calculateScaleFactor(recipe.flours, recipe.ingredients, scaleBy);
   const scaleDoughFactor = totalAmount / scaleFactor;
 

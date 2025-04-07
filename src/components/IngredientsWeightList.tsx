@@ -3,7 +3,7 @@ import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import { sum } from "components/utils";
 import { Ingredients } from "dataModel/Ingredient";
 
-type Props = {
+export type Props = {
   title: string;
   ingredientsPercentage: Ingredients;
   ingredientsWeight: Ingredients;

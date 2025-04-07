@@ -1,4 +1,4 @@
-import { calculateDough } from "components/Calculator";
+import { calculate } from "components/FinalDoughCalculator";
 import IngredientsWeightList from "components/IngredientsWeightList";
 import { validateRecipe } from "components/RecipeValidator";
 import { Recipe, ScaleBy } from "dataModel/Recipe";
@@ -25,7 +25,7 @@ export default function FinalDoughTable({ recipe, scaleBy, totalAmount }: Props)
     );
   }
 
-  const dough = calculateDough(recipe, scaleBy, totalAmount);
+  const dough = calculate(recipe, scaleBy, totalAmount);
 
   const finalIngredientsPercentage = new Map(
     [...recipe.flours.keys(), ...recipe.ingredients.keys()].map((k) => [k, undefined]),

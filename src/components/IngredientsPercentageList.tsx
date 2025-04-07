@@ -10,18 +10,11 @@ import { useCallback } from "react";
 type Props = {
   title: string;
   ingredients: Ingredients;
-  maxPercentage?: number;
   editable: boolean;
   onIngredientsChange(ingredients: Ingredients): void;
 };
 
-export default function IngredientsPercentageList({
-  title,
-  ingredients,
-  maxPercentage,
-  editable,
-  onIngredientsChange,
-}: Props) {
+export default function IngredientsPercentageList({ title, ingredients, editable, onIngredientsChange }: Props) {
   const onIngredientChange = useCallback(
     (name: IngredientName, value: IngredientValue) => {
       onIngredientsChange(mapSet(ingredients, name, value));
@@ -60,7 +53,6 @@ export default function IngredientsPercentageList({
             key={name}
             name={name}
             value={value}
-            maxPercentage={maxPercentage}
             editable={editable}
             onChange={onIngredientChange}
             onDelete={onDeleteIngredient}

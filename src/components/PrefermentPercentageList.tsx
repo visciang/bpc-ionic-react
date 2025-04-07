@@ -144,7 +144,6 @@ export default function PrefermentPercentageList({
       <IngredientPercentageItem
         name="Prefermented flour"
         value={preferment.prefermentedFlour}
-        maxPercentage={100}
         editable={editable}
         onChange={onPrefermentedFlourChange}
       />
@@ -152,7 +151,6 @@ export default function PrefermentPercentageList({
         <IngredientPercentageItem
           name="Sourdough starter"
           value={preferment.seed}
-          maxPercentage={100}
           editable={editable}
           onChange={onSeedChange}
         />
@@ -163,7 +161,6 @@ export default function PrefermentPercentageList({
             key={name}
             name={name}
             value={value}
-            maxPercentage={100}
             editable={editable}
             onChange={onFlourChange}
             onDelete={onFlourDelete}
@@ -177,7 +174,6 @@ export default function PrefermentPercentageList({
               key={name}
               name={name}
               value={value}
-              maxPercentage={100}
               editable={editable}
               onChange={onIngredientChange}
               onDelete={onIngredientDelete}

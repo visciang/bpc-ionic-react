@@ -18,7 +18,6 @@ export default function TotalAmountInput({ items, amount, onChangeAmount, onChan
         className="ion-padding-horizontal ion-text-right"
         type="number"
         inputMode="numeric"
-        min="1"
         placeholder="1"
         value={items}
         onIonInput={onIonChangeFloat(items, onChangeItems)}
@@ -29,7 +28,6 @@ export default function TotalAmountInput({ items, amount, onChangeAmount, onChan
         className="ion-padding-horizontal ion-text-right"
         type="number"
         inputMode="decimal"
-        min="0"
         placeholder="..."
         value={amount}
         onIonInput={onIonChangeFloat(amount, onChangeAmount)}

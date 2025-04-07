@@ -16,12 +16,14 @@ import {
 } from "@ionic/react";
 import InfoAlert from "components/InfoAlert";
 import RecipesBookModal from "components/RecipesBookModal";
+import SourdoughBuilderModal from "components/SourdoughBuilderModal";
 import { useEditToggle } from "hooks/useEditToggle";
 import { useRecipesBook } from "hooks/useRecipesBook";
 import {
   arrowUndoOutline,
   bookOutline,
   calculatorOutline,
+  infiniteOutline,
   informationCircleOutline,
   pencilOutline,
   restaurantOutline,
@@ -36,14 +38,17 @@ export default function Main() {
 
   const [showInfo, setShowInfo] = useState(false);
   const [showRecipes, setShowRecipes] = useState(false);
+  const [showSourdoughBuilder, setShowSourdoughBuilder] = useState(false);
 
   const editToggle = useEditToggle();
 
   const onInfo = useCallback(() => setShowInfo(true), [setShowInfo]);
   const onRecipes = useCallback(() => setShowRecipes(true), [setShowRecipes]);
+  const onSourdoughBulder = useCallback(() => setShowSourdoughBuilder(true), [setShowSourdoughBuilder]);
 
   const hideInfo = useCallback(() => setShowInfo(false), [setShowInfo]);
   const hideRecipes = useCallback(() => setShowRecipes(false), [setShowRecipes]);
+  const hideSourdoughBuilder = useCallback(() => setShowSourdoughBuilder(false), [setShowSourdoughBuilder]);
 
   const [title, setTitle] = useState<string | undefined>(undefined);
 
@@ -57,6 +62,9 @@ export default function Main() {
             </IonButton>
             <IonButton onClick={onRecipes}>
               <IonIcon icon={bookOutline} />
+            </IonButton>
+            <IonButton onClick={onSourdoughBulder}>
+              <IonIcon icon={infiniteOutline} />
             </IonButton>
           </IonButtons>
           <IonTitle>{title}</IonTitle>
@@ -88,6 +96,7 @@ export default function Main() {
           onClose={title === undefined ? undefined : hideRecipes}
           recipesBookCtx={recipesBookCtx}
         />
+        <SourdoughBuilderModal isOpen={showSourdoughBuilder} onClose={hideSourdoughBuilder} />
       </IonContent>
       <IonFooter>
         <IonToolbar>

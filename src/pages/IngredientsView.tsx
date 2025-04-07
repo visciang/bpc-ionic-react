@@ -31,14 +31,12 @@ export default function IngredientsView({ editable, recipesBookCtx }: Props) {
       <IngredientsPercentageList
         title="FLOURS"
         ingredients={recipe.flours}
-        maxPercentage={100}
         onIngredientsChange={onFloursChange}
         editable={editable}
       />
       <IngredientsPercentageList
         title="INGREDIENTS"
         ingredients={recipe.ingredients}
-        maxPercentage={undefined}
         onIngredientsChange={onIngredientsChange}
         editable={editable}
       />
