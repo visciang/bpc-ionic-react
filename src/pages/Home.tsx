@@ -63,12 +63,12 @@ export default function Main() {
             <IonButton onClick={onRecipes}>
               <IonIcon icon={bookOutline} />
             </IonButton>
-            <IonButton onClick={onSourdoughBulder}>
-              <IonIcon icon={infiniteOutline} />
-            </IonButton>
           </IonButtons>
           <IonTitle>{title}</IonTitle>
           <IonButtons slot="end">
+            <IonButton onClick={onSourdoughBulder}>
+              <IonIcon icon={infiniteOutline} />
+            </IonButton>
             <IonButton fill={editToggle.editable ? "solid" : undefined} onClick={editToggle.onToggle}>
               <IonIcon icon={pencilOutline} />
             </IonButton>
