@@ -22,7 +22,8 @@
     "react-router-dom": "^5.3.4"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "*"
+    "@rollup/rollup-linux-x64-gnu": "*",
+    "@rollup/rollup-linux-arm64-gnu": "*"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.16",
