@@ -36,8 +36,6 @@ export default function SourdoughBuilderModal({ isOpen, onClose }: SourdoughBuil
 
   const [buildPercentage, buildsWeights] = calculateBuildWeights(starter, hydration, builds, total);
 
-  console.log(buildsWeights);
-
   return (
     <IonModal isOpen={isOpen}>
       <IonHeader>

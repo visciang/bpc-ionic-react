@@ -11,11 +11,11 @@ type BasePreferment = {
   ingredients: Ingredients;
 };
 
-type PreDoughPreferment = {
+export type PreDoughPreferment = {
   kind: PrefermentKind.PREDOUGH;
 } & BasePreferment;
 
-type SourdoughPreferment = {
+export type SourdoughPreferment = {
   kind: PrefermentKind.SOURDOUGH;
   seed: IngredientValue;
 } & BasePreferment;

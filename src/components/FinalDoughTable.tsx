@@ -1,7 +1,10 @@
 import { calculate } from "components/FinalDoughCalculator";
 import IngredientsWeightList from "components/IngredientsWeightList";
 import { validateRecipe } from "components/RecipeValidator";
+import { PrefermentKind } from "dataModel/Preferment";
 import { Recipe, ScaleBy } from "dataModel/Recipe";
+
+export const SOURDOUGH_SEED_LABEL = "(sourdough seed)";
 
 type Props = {
   recipe: Recipe;
@@ -38,14 +41,12 @@ export default function FinalDoughTable({ recipe, scaleBy, totalAmount }: Props)
         ingredientsPercentage={new Map([...recipe.flours, ...recipe.ingredients])}
         ingredientsWeight={dough.overall}
       />
-      {[...dough.preferments].map(([prefermentName, preferment]) => {
-        const ingredientsPercentage = new Map([
-          ...recipe.preferments.get(prefermentName)!.flours,
-          ...recipe.preferments.get(prefermentName)!.ingredients,
-        ]);
+      {[...dough.preferments].map(([prefermentName, prefermentWeights]) => {
+        const preferment = recipe.preferments.get(prefermentName)!;
+        const ingredientsPercentage = new Map([...preferment.flours, ...preferment.ingredients]);
 
-        if (preferment.seed) {
-          ingredientsPercentage.set("(sourdough seed)", preferment.seed);
+        if (preferment.kind === PrefermentKind.SOURDOUGH) {
+          ingredientsPercentage.set(SOURDOUGH_SEED_LABEL, preferment.seed);
         }
 
         return (
@@ -53,8 +54,7 @@ export default function FinalDoughTable({ recipe, scaleBy, totalAmount }: Props)
             key={prefermentName}
             title={prefermentName}
             ingredientsPercentage={ingredientsPercentage}
-            ingredientsWeight={preferment.ingredients}
-            totalWeightSubtract={preferment.seed}
+            ingredientsWeight={prefermentWeights.ingredients}
           />
         );
       })}

@@ -1,12 +1,19 @@
+import { SOURDOUGH_SEED_LABEL } from "components/FinalDoughTable";
 import { sum } from "components/utils";
 import { Ingredients, IngredientValue } from "dataModel/Ingredient";
-import { Preferment, Preferments, PrefermentKind, PrefermentName } from "dataModel/Preferment";
+import {
+  Preferment,
+  Preferments,
+  PrefermentKind,
+  PrefermentName,
+  PreDoughPreferment,
+  SourdoughPreferment,
+} from "dataModel/Preferment";
 import { Recipe, ScaleBy } from "dataModel/Recipe";
 
 type CalcPreferment = {
-  kind: PrefermentKind;
   ingredients: Ingredients;
-  seed?: IngredientValue;
+  seedSubtractIngredients: Ingredients;
 };
 
 type CalcPreferments = Map<PrefermentName, CalcPreferment>;
@@ -57,22 +64,52 @@ function calculatePreferments(preferments: Preferments, scaleDoughFactor: number
 }
 
 function calculatePreferment(preferment: Preferment, scaleDoughFactor: number): CalcPreferment {
+  switch (preferment.kind) {
+    case PrefermentKind.PREDOUGH:
+      return calculatePredough(preferment, scaleDoughFactor);
+
+    case PrefermentKind.SOURDOUGH:
+      return calculateSourdough(preferment, scaleDoughFactor);
+  }
+}
+
+function calculatePredough(preferment: PreDoughPreferment, scaleDoughFactor: number): CalcPreferment {
   const prefermentScaleDoughFactor = scaleDoughFactor * (preferment.prefermentedFlour! / 100);
   const ingredients = new Map([
     ...calculateIngredients(preferment.ingredients, prefermentScaleDoughFactor),
     ...calculateIngredients(preferment.flours, prefermentScaleDoughFactor),
   ]);
-  let seed = undefined;
-
-  if (preferment.kind === PrefermentKind.SOURDOUGH) {
-    seed = preferment.seed! * prefermentScaleDoughFactor;
-    ingredients.set("(sourdough seed)", seed);
-  }
 
   return {
-    kind: preferment.kind,
     ingredients: ingredients,
-    seed: seed,
+    seedSubtractIngredients: new Map(),
+  };
+}
+
+function calculateSourdough(preferment: SourdoughPreferment, scaleDoughFactor: number): CalcPreferment {
+  const prefermentScaleDoughFactor = scaleDoughFactor * (preferment.prefermentedFlour! / 100);
+  const prefermentWeight =
+    prefermentScaleDoughFactor * sum(preferment.flours.values(), preferment.ingredients.values());
+  const prefermentRelativeScaleDoughFactor =
+    prefermentWeight / sum(preferment.flours.values(), preferment.ingredients.values(), [preferment.seed!]);
+
+  const ingredients = new Map([
+    ...calculateIngredients(preferment.flours, prefermentRelativeScaleDoughFactor),
+    ...calculateIngredients(preferment.ingredients, prefermentRelativeScaleDoughFactor),
+    ...calculateIngredients(new Map([[SOURDOUGH_SEED_LABEL, preferment.seed!]]), prefermentRelativeScaleDoughFactor),
+  ]);
+
+  const seedSubtractFactor =
+    ingredients.get(SOURDOUGH_SEED_LABEL)! / sum(preferment.flours.values(), preferment.ingredients.values());
+
+  const seedSubtractIngredients = new Map([
+    ...calculateIngredients(preferment.flours, seedSubtractFactor),
+    ...calculateIngredients(preferment.ingredients, seedSubtractFactor),
+  ]);
+
+  return {
+    ingredients: ingredients,
+    seedSubtractIngredients: seedSubtractIngredients,
   };
 }
 
@@ -82,7 +119,13 @@ function calculateFinal(overall: Ingredients, preferments: CalcPreferments): Ing
   for (const ingredient of overall.keys()) {
     let weight: IngredientValue =
       final.get(ingredient)! -
-      sum([...preferments.values()].map((preferment) => preferment.ingredients.get(ingredient) || 0));
+      sum(
+        [...preferments.values()].map((preferment) => {
+          return (
+            (preferment.ingredients.get(ingredient) || 0) + (preferment.seedSubtractIngredients?.get(ingredient) || 0)
+          );
+        }),
+      );
 
     if (Math.abs(weight) <= 0.01) {
       weight = 0;

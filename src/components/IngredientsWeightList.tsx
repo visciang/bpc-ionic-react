@@ -7,23 +7,11 @@ export type Props = {
   title: string;
   ingredientsPercentage: Ingredients;
   ingredientsWeight: Ingredients;
-  totalWeightSubtract?: number;
 };
 
-export default function IngredientsWeightList({
-  title,
-  ingredientsPercentage,
-  ingredientsWeight,
-  totalWeightSubtract,
-}: Props) {
+export default function IngredientsWeightList({ title, ingredientsPercentage, ingredientsWeight }: Props) {
   const totalWeight = sum(ingredientsWeight.values());
-  let totalWeightStr: string | undefined;
-
-  if (totalWeightSubtract) {
-    totalWeightStr = `${numberToString(totalWeight)} - (${numberToString(totalWeightSubtract)}) = ${numberToString(totalWeight - totalWeightSubtract)}`;
-  } else {
-    totalWeightStr = numberToString(totalWeight);
-  }
+  const totalWeightStr = numberToString(totalWeight);
 
   return (
     <IonList inset={true}>
