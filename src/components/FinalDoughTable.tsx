@@ -1,6 +1,7 @@
 import { calculate } from "components/FinalDoughCalculator";
 import IngredientsWeightList from "components/IngredientsWeightList";
 import { validateRecipe } from "components/RecipeValidator";
+import { sum } from "components/utils";
 import { PrefermentKind } from "dataModel/Preferment";
 import { Recipe, ScaleBy } from "dataModel/Recipe";
 
@@ -33,6 +34,12 @@ export default function FinalDoughTable({ recipe, scaleBy, totalAmount }: Props)
   const finalIngredientsPercentage = new Map(
     [...recipe.flours.keys(), ...recipe.ingredients.keys()].map((k) => [k, undefined]),
   );
+
+  dough.preferments.keys().forEach((prefermentName) => {
+    finalIngredientsPercentage.set(prefermentName, undefined);
+    const prefermentTotalWeight = sum(dough.preferments.get(prefermentName)!.ingredients.values());
+    dough.final.set(prefermentName, prefermentTotalWeight);
+  });
 
   return (
     <>
