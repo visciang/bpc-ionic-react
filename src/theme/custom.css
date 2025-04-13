@@ -4,5 +4,5 @@
 
 /* This should match the "theme_color" in the manifest.json file */
 :root {
-  --ion-toolbar-background: var(--ion-background-color);
+  --ion-toolbar-background: var(--ion-color-light);
 }
