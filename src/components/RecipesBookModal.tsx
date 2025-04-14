@@ -106,7 +106,7 @@ export default function RecipesBookModal({ isOpen, recipesBookCtx, onSelect, onC
           </IonCol>
         </IonRow>
         <IonRow class="ion-justify-content-center ion-padding">Pick or create a new recipe</IonRow>
-        <IonList className="ion-padding-vertical">
+        <IonList className="ion-padding-vertical" inset={true}>
           {recipesBookCtx.recipes.toSorted().map((name) => (
             <RecipeItem
               key={name}
