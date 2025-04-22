@@ -87,7 +87,7 @@ export default function RecipesBookModal({ isOpen, recipesBookCtx, onSelect, onC
         <IonRow class="ion-justify-content-center ion-padding">
           <IonCol size="auto">
             <IonButton fill="outline" onClick={handleImportClick}>
-              <IonIcon icon={downloadOutline}></IonIcon>
+              <IonIcon icon={pushOutline}></IonIcon>
               Import
             </IonButton>
             <input
@@ -100,7 +100,7 @@ export default function RecipesBookModal({ isOpen, recipesBookCtx, onSelect, onC
           </IonCol>
           <IonCol size="auto">
             <IonButton fill="outline" onClick={handleExport}>
-              <IonIcon icon={pushOutline}></IonIcon>
+              <IonIcon icon={downloadOutline}></IonIcon>
               Export
             </IonButton>
           </IonCol>
