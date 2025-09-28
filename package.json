@@ -6,25 +6,27 @@
   "scripts": {
     "dev": "VITE_GIT_SHA=$(git rev-parse HEAD) vite",
     "build": "tsc && VITE_GIT_SHA=$(git rev-parse HEAD) vite build",
-    "preview": "VITE_GIT_SHA=$(git rev-parse HEAD) vite preview",
+    "preview": "VITE_GIT_SHA=$(git rev-parse HEAD) vite preview --host",
     "lint": "prettier . --check && eslint",
     "lint:fix": "prettier . --write && eslint --fix"
   },
   "dependencies": {
-    "@ionic/react": "^8.0.0",
-    "@ionic/react-router": "^8.0.0",
-    "@types/react-router": "^5.1.20",
-    "@types/react-router-dom": "^5.3.3",
-    "ionicons": "^8.0.0",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.15.18",
+    "@mui/material": "^5.15.18",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router": "^5.3.4",
-    "react-router-dom": "^5.3.4"
+    "react-router-dom": "^6.23.1",
+    "use-debounce": "^10.0.6"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "*",
+    "@rollup/rollup-darwin-arm64-gnu": "*",
     "@rollup/rollup-linux-arm64-gnu": "*",
-    "@rollup/rollup-darwin-arm64-gnu": "*"
+    "@rollup/rollup-linux-x64-gnu": "*"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.16",

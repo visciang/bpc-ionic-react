@@ -1,11 +1,9 @@
-import { IonInputCustomEvent, InputInputEventDetail } from "@ionic/core";
-import { IonItem, IonLabel, IonInput, IonButton, IonIcon, IonReorder } from "@ionic/react";
-import { onIonChangeFloat } from "components/utils";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import { ListItem, ListItemText, TextField, IconButton, Box } from "@mui/material";
 import { IngredientName, IngredientValue } from "dataModel/Ingredient";
-import { trashOutline } from "ionicons/icons";
-import { useCallback } from "react";
-
-const PERCENTAGE_INPUT_DEBOUNCE_MS = 300;
+import { useCallback, useState, useEffect } from "react";
+import { useDebounce } from "use-debounce";
 
 type Props = {
   name: IngredientName;
@@ -13,12 +11,45 @@ type Props = {
   editable: boolean;
   onChange(name: IngredientName, value: IngredientValue): void;
   onDelete?(name: IngredientName): void;
+  dragHandleProps?: Record<string, unknown>;
 };
 
-export default function IngredientPercentageItem({ name, value, editable, onChange, onDelete }: Props) {
-  const onIonInput = useCallback(
-    (e: IonInputCustomEvent<InputInputEventDetail>) => onIonChangeFloat(value, (v) => onChange(name, v))(e),
-    [name, value, onChange],
+export default function IngredientPercentageItem({
+  name,
+  value,
+  editable,
+  onChange,
+  onDelete,
+  dragHandleProps,
+}: Props) {
+  const [internalValue, setInternalValue] = useState(value);
+  const [debouncedValue] = useDebounce(internalValue, 300);
+
+  useEffect(() => {
+    setInternalValue(value);
+  }, [value]);
+
+  useEffect(() => {
+    if (internalValue === debouncedValue) {
+      if (value !== internalValue) {
+        onChange(name, internalValue);
+      }
+    }
+  }, [internalValue, debouncedValue, value, onChange, name]);
+
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const val = event.target.value;
+      if (val === "") {
+        setInternalValue(undefined);
+      } else {
+        const num = parseFloat(val);
+        if (!isNaN(num)) {
+          setInternalValue(num);
+        }
+      }
+    },
+    [setInternalValue],
   );
 
   let children = <></>;
@@ -27,33 +58,37 @@ export default function IngredientPercentageItem({ name, value, editable, onChan
     if (onDelete) {
       children = (
         <>
-          <IonButton slot="end" onClick={() => onDelete(name)} fill="clear">
-            <IonIcon slot="icon-only" icon={trashOutline} />
-          </IonButton>
-          <IonReorder slot="end" className="ion-no-margin" />
+          <IconButton edge="end" aria-label="delete" onClick={() => onDelete && onDelete(name)}>
+            <DeleteIcon />
+          </IconButton>
+          <Box
+            {...dragHandleProps}
+            sx={{ cursor: "grab", display: "inline-flex", alignItems: "center", p: 1 }}
+            data-testid="drag-handle"
+          >
+            <DragIndicatorIcon />
+          </Box>
         </>
       );
     }
   } else {
     children = (
-      <IonInput
-        slot="end"
-        className="ion-text-right"
-        // Safari does not support `type="number"` (it makes mess with the input value)
+      <TextField
+        sx={{ width: "100px" }}
+        size="small"
         type="text"
         inputMode="decimal"
-        value={value}
+        value={internalValue ?? ""}
         placeholder="..."
-        onIonInput={onIonInput}
-        debounce={PERCENTAGE_INPUT_DEBOUNCE_MS}
+        onChange={handleChange}
       />
     );
   }
 
   return (
-    <IonItem lines="none">
-      <IonLabel slot="start">{name}</IonLabel>
+    <ListItem>
+      <ListItemText primary={name} />
       {children}
-    </IonItem>
+    </ListItem>
   );
 }

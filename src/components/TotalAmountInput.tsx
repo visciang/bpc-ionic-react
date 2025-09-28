@@ -1,7 +1,6 @@
-import { IonItem, IonLabel, IonInput, IonText } from "@ionic/react";
-import { onIonChangeFloat } from "components/utils";
-
-const INPUT_DEBOUNCE_MS = 300;
+import { Box, TextField, Typography } from "@mui/material";
+import { useState, useEffect } from "react";
+import { useDebounce } from "use-debounce";
 
 type Props = {
   items?: number;
@@ -11,29 +10,67 @@ type Props = {
 };
 
 export default function TotalAmountInput({ items, amount, onChangeAmount, onChangeItems }: Props) {
+  const [internalItems, setInternalItems] = useState(items);
+  const [internalAmount, setInternalAmount] = useState(amount);
+
+  const [debouncedItems] = useDebounce(internalItems, 300);
+  const [debouncedAmount] = useDebounce(internalAmount, 300);
+
+  useEffect(() => {
+    setInternalItems(items);
+  }, [items]);
+
+  useEffect(() => {
+    setInternalAmount(amount);
+  }, [amount]);
+
+  useEffect(() => {
+    if (debouncedItems !== items) {
+      onChangeItems(debouncedItems);
+    }
+  }, [debouncedItems, items, onChangeItems]);
+
+  useEffect(() => {
+    if (debouncedAmount !== amount) {
+      onChangeAmount(debouncedAmount);
+    }
+  }, [debouncedAmount, amount, onChangeAmount]);
+
+  const handleFloatChange = (setter: (value?: number) => void) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (value === "") {
+      setter(undefined);
+    } else {
+      const num = parseFloat(value);
+      if (!isNaN(num)) {
+        setter(num);
+      }
+    }
+  };
+
   return (
-    <IonItem lines="none">
-      <IonLabel>Total amount</IonLabel>
-      <IonInput
-        className="ion-padding-horizontal ion-text-right"
+    <Box sx={{ display: "flex", alignItems: "center", gap: 1, my: 2 }}>
+      <Typography>Total amount</Typography>
+      <TextField
+        sx={{ width: "80px" }}
         type="number"
         inputMode="numeric"
         placeholder="1"
-        value={items}
-        onIonInput={onIonChangeFloat(items, onChangeItems)}
-        debounce={INPUT_DEBOUNCE_MS}
+        value={internalItems ?? ""}
+        onChange={handleFloatChange(setInternalItems)}
+        size="small"
       />
-      <IonText>x</IonText>
-      <IonInput
-        className="ion-padding-horizontal ion-text-right"
+      <Typography>x</Typography>
+      <TextField
+        sx={{ width: "100px" }}
         type="number"
         inputMode="decimal"
         placeholder="..."
-        value={amount}
-        onIonInput={onIonChangeFloat(amount, onChangeAmount)}
-        debounce={INPUT_DEBOUNCE_MS}
+        value={internalAmount ?? ""}
+        onChange={handleFloatChange(setInternalAmount)}
+        size="small"
       />
-      <IonText>g</IonText>
-    </IonItem>
+      <Typography>g</Typography>
+    </Box>
   );
 }

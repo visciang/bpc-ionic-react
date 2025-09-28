@@ -1,5 +1,17 @@
-import { IonLabel, IonItem, IonButton, IonIcon, IonAlert } from "@ionic/react";
-import { createOutline, trashOutline } from "ionicons/icons";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import {
+  ListItem,
+  ListItemText,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+  DialogContentText,
+} from "@mui/material";
 import { useCallback, useState } from "react";
 
 type Props = {
@@ -10,103 +22,87 @@ type Props = {
 };
 
 export default function RecipeItem({ name, onSelect, onRename, onDelete }: Props) {
-  const [showRenameAlert, setShowRenameAlert] = useState(false);
-  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const [showRenameDialog, setShowRenameDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [newName, setNewName] = useState(name);
 
   const onSelectClick = useCallback(() => onSelect(name), [name, onSelect]);
 
-  const onRenameClick = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
-      e.preventDefault();
-      setShowRenameAlert(true);
-    },
-    [setShowRenameAlert],
-  );
+  const onRenameClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowRenameDialog(true);
+  }, []);
 
-  const handleRename = useCallback(
-    (newName: string) => {
-      if (newName && newName.trim() !== "") {
-        onRename(name, newName.trim());
-      }
-      setShowRenameAlert(false);
-    },
-    [name, onRename],
-  );
+  const onRenameClose = useCallback(() => {
+    setShowRenameDialog(false);
+    setNewName(name);
+  }, [name]);
 
-  const onDeleteClick = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
-      e.preventDefault();
-      setShowDeleteAlert(true);
-    },
-    [setShowDeleteAlert],
-  );
+  const handleRename = useCallback(() => {
+    if (newName && newName.trim() !== "") {
+      onRename(name, newName.trim());
+    }
+    onRenameClose();
+  }, [name, newName, onRename, onRenameClose]);
+
+  const onDeleteClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowDeleteDialog(true);
+  }, []);
+
+  const onDeleteClose = useCallback(() => {
+    setShowDeleteDialog(false);
+  }, []);
 
   const handleDelete = useCallback(() => {
     onDelete(name);
-    setShowDeleteAlert(false);
-  }, [name, onDelete]);
+    onDeleteClose();
+  }, [name, onDelete, onDeleteClose]);
 
   return (
     <>
-      <IonItem button lines="full" onClick={onSelectClick} detail={false}>
-        <IonLabel slot="start">{name}</IonLabel>
-        <IonButton slot="end" onClick={onRenameClick} fill="clear">
-          <IonIcon slot="icon-only" icon={createOutline} />
-        </IonButton>
-        <IonButton slot="end" onClick={onDeleteClick} fill="clear">
-          <IonIcon slot="icon-only" icon={trashOutline} />
-        </IonButton>
-      </IonItem>
-      <IonAlert
-        isOpen={showRenameAlert}
-        onDidDismiss={() => setShowRenameAlert(false)}
-        header="Rename Recipe"
-        inputs={[
-          {
-            name: "newName",
-            type: "text",
-            placeholder: "Enter new name",
-            value: name,
-          },
-        ]}
-        buttons={[
-          {
-            text: "Cancel",
-            role: "cancel",
-            handler: () => {
-              setShowRenameAlert(false);
-            },
-          },
-          {
-            text: "Rename",
-            handler: (data) => {
-              handleRename(data.newName);
-            },
-          },
-        ]}
-      />
-      <IonAlert
-        isOpen={showDeleteAlert}
-        onDidDismiss={() => setShowDeleteAlert(false)}
-        header="Delete Recipe"
-        message={`Are you sure you want to delete "${name}"?`}
-        buttons={[
-          {
-            text: "Cancel",
-            role: "cancel",
-            handler: () => {
-              setShowDeleteAlert(false);
-            },
-          },
-          {
-            text: "Delete",
-            role: "destructive",
-            handler: handleDelete,
-          },
-        ]}
-      />
+      <ListItem button onClick={onSelectClick}>
+        <ListItemText primary={name} />
+        <IconButton edge="end" aria-label="rename" onClick={onRenameClick}>
+          <EditIcon />
+        </IconButton>
+        <IconButton edge="end" aria-label="delete" onClick={onDeleteClick}>
+          <DeleteIcon />
+        </IconButton>
+      </ListItem>
+      {/* Rename Dialog */}
+      <Dialog open={showRenameDialog} onClose={onRenameClose}>
+        <DialogTitle>Rename Recipe</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Recipe Name"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onRenameClose}>Cancel</Button>
+          <Button onClick={handleRename}>Rename</Button>
+        </DialogActions>
+      </Dialog>
+      {/* Delete Dialog */}
+      <Dialog open={showDeleteDialog} onClose={onDeleteClose}>
+        <DialogTitle>Delete Recipe</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Are you sure you want to delete "{name}"?</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onDeleteClose}>Cancel</Button>
+          <Button onClick={handleDelete} color="error">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

@@ -1,12 +1,47 @@
-import { ItemReorderEventDetail } from "@ionic/core";
-import { IonList, IonReorderGroup } from "@ionic/react";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { List, Paper, Box } from "@mui/material";
 import IngredientPercentageItem from "components/IngredientPercentageItem";
 import IngredientPicker from "components/IngredientPicker";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
-import { mapDelete, mapMoveIdx, mapSet } from "components/utils";
+import { mapDelete, mapSet, mapMoveIdx } from "components/utils";
 import { IngredientName, IngredientValue } from "dataModel/Ingredient";
 import { Preferment, PrefermentKind } from "dataModel/Preferment";
 import { useCallback, useMemo } from "react";
+
+type SortableItemProps = {
+  id: string;
+  name: IngredientName;
+  value: IngredientValue;
+  editable: boolean;
+  onChange(name: IngredientName, value: IngredientValue): void;
+  onDelete(name: IngredientName): void;
+};
+
+function SortableIngredientItem(props: SortableItemProps) {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: props.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style}>
+      <IngredientPercentageItem {...props} dragHandleProps={{ ...attributes, ...listeners }} />
+    </div>
+  );
+}
 
 type Props = {
   name: string;
@@ -27,6 +62,43 @@ export default function PrefermentPercentageList({
   onPrefermentChange,
   onPrefermentDelete,
 }: Props) {
+  const flourIds = useMemo(() => [...preferment.flours.keys()], [preferment.flours]);
+  const ingredientIds = useMemo(() => [...preferment.ingredients.keys()], [preferment.ingredients]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  const handleFlourDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+      if (over && active.id !== over.id) {
+        const oldIndex = flourIds.indexOf(active.id as string);
+        const newIndex = flourIds.indexOf(over.id as string);
+        onPrefermentChange(name, { ...preferment, flours: mapMoveIdx(preferment.flours, oldIndex, newIndex) });
+      }
+    },
+    [flourIds, name, preferment, onPrefermentChange],
+  );
+
+  const handleIngredientDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+      if (over && active.id !== over.id) {
+        const oldIndex = ingredientIds.indexOf(active.id as string);
+        const newIndex = ingredientIds.indexOf(over.id as string);
+        onPrefermentChange(name, {
+          ...preferment,
+          ingredients: mapMoveIdx(preferment.ingredients, oldIndex, newIndex),
+        });
+      }
+    },
+    [ingredientIds, name, preferment, onPrefermentChange],
+  );
+
   const onPrefermentedFlourChange = useCallback(
     (_name: IngredientName, value: IngredientValue) => {
       onPrefermentChange(name, { ...preferment, prefermentedFlour: value });
@@ -38,7 +110,9 @@ export default function PrefermentPercentageList({
 
   const onSeedChange = useCallback(
     (_name: IngredientName, value: IngredientValue) => {
-      if (preferment.kind === PrefermentKind.SOURDOUGH) onPrefermentChange(name, { ...preferment, seed: value });
+      if (preferment.kind === PrefermentKind.SOURDOUGH) {
+        onPrefermentChange(name, { ...preferment, seed: value });
+      }
     },
     [name, preferment, onPrefermentChange],
   );
@@ -83,28 +157,6 @@ export default function PrefermentPercentageList({
     [name, preferment, onPrefermentChange],
   );
 
-  const onFlourReorder = useCallback(
-    (event: CustomEvent<ItemReorderEventDetail>) => {
-      onPrefermentChange(name, {
-        ...preferment,
-        flours: mapMoveIdx(preferment.flours, event.detail.from, event.detail.to),
-      });
-      event.detail.complete();
-    },
-    [name, preferment, onPrefermentChange],
-  );
-
-  const onIngredientReorder = useCallback(
-    (event: CustomEvent<ItemReorderEventDetail>) => {
-      onPrefermentChange(name, {
-        ...preferment,
-        ingredients: mapMoveIdx(preferment.ingredients, event.detail.from, event.detail.to),
-      });
-      event.detail.complete();
-    },
-    [name, preferment, onPrefermentChange],
-  );
-
   const onNewFlour = useCallback(
     (flour: IngredientName) => {
       onPrefermentChange(name, {
@@ -135,54 +187,68 @@ export default function PrefermentPercentageList({
   );
 
   return (
-    <IonList lines="none" inset={true}>
+    <Paper elevation={2} sx={{ my: 2 }}>
       <IngredientsTitleToolbar
         title={name}
         onDelete={editable ? _onPrefermentDelete : undefined}
         showPercentageLabel={true}
       />
-      <IngredientPercentageItem
-        name="Prefermented flour"
-        value={preferment.prefermentedFlour}
-        editable={editable}
-        onChange={onPrefermentedFlourChange}
-      />
-      {preferment.kind === PrefermentKind.SOURDOUGH ? (
+      <List dense>
         <IngredientPercentageItem
-          name="Sourdough starter"
-          value={preferment.seed}
+          name="Prefermented flour"
+          value={preferment.prefermentedFlour}
           editable={editable}
-          onChange={onSeedChange}
+          onChange={onPrefermentedFlourChange}
         />
-      ) : undefined}
-      <IonReorderGroup disabled={!editable} onIonItemReorder={onFlourReorder}>
-        {[...preferment.flours].map(([name, value]) => (
+        {preferment.kind === PrefermentKind.SOURDOUGH ? (
           <IngredientPercentageItem
-            key={name}
-            name={name}
-            value={value}
+            name="Sourdough starter"
+            value={preferment.seed}
             editable={editable}
-            onChange={onFlourChange}
-            onDelete={onFlourDelete}
+            onChange={onSeedChange}
           />
-        ))}
-      </IonReorderGroup>
-      <IonReorderGroup disabled={!editable} onIonItemReorder={onIngredientReorder}>
-        {[...preferment.ingredients].map(([name, value]) => {
-          return (
-            <IngredientPercentageItem
-              key={name}
-              name={name}
-              value={value}
-              editable={editable}
-              onChange={onIngredientChange}
-              onDelete={onIngredientDelete}
-            />
-          );
-        })}
-      </IonReorderGroup>
-      <IngredientPicker label="Pick flour" values={selectableFlours} onPick={onNewFlour} />
-      <IngredientPicker label="Pick ingredient" values={selectableIngredients} onPick={onNewIngredient} />
-    </IonList>
+        ) : undefined}
+      </List>
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleFlourDragEnd}>
+        <SortableContext items={flourIds} strategy={verticalListSortingStrategy}>
+          <List dense>
+            {[...preferment.flours].map(([name, value]) => (
+              <SortableIngredientItem
+                key={name}
+                id={name}
+                name={name}
+                value={value}
+                editable={editable}
+                onChange={onFlourChange}
+                onDelete={onFlourDelete}
+              />
+            ))}
+          </List>
+        </SortableContext>
+      </DndContext>
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleIngredientDragEnd}>
+        <SortableContext items={ingredientIds} strategy={verticalListSortingStrategy}>
+          <List dense>
+            {[...preferment.ingredients].map(([name, value]) => (
+              <SortableIngredientItem
+                key={name}
+                id={name}
+                name={name}
+                value={value}
+                editable={editable}
+                onChange={onIngredientChange}
+                onDelete={onIngredientDelete}
+              />
+            ))}
+          </List>
+        </SortableContext>
+      </DndContext>
+      {editable && (
+        <Box sx={{ p: 2 }}>
+          <IngredientPicker label="Pick flour" values={selectableFlours} onPick={onNewFlour} />
+          <IngredientPicker label="Pick ingredient" values={selectableIngredients} onPick={onNewIngredient} />
+        </Box>
+      )}
+    </Paper>
   );
 }

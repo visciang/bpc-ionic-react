@@ -1,3 +1,4 @@
+import { Box, List, ListItem, ListItemText, Typography } from "@mui/material";
 import { calculate } from "components/FinalDoughCalculator";
 import IngredientsWeightList from "components/IngredientsWeightList";
 import { validateRecipe } from "components/RecipeValidator";
@@ -18,14 +19,18 @@ export default function FinalDoughTable({ recipe, scaleBy, totalAmount }: Props)
 
   if (recipeValidationErrors.length > 0) {
     return (
-      <div className="ion-padding">
-        <strong>RECIPE NOT VALID</strong>
-        <ul>
+      <Box sx={{ p: 2 }}>
+        <Typography variant="h6" color="error">
+          RECIPE NOT VALID
+        </Typography>
+        <List>
           {recipeValidationErrors.map((error, idx) => (
-            <li key={idx}>{error}</li>
+            <ListItem key={idx}>
+              <ListItemText primary={error} />
+            </ListItem>
           ))}
-        </ul>
-      </div>
+        </List>
+      </Box>
     );
   }
 

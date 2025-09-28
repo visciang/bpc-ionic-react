@@ -1,4 +1,4 @@
-import { IonLabel, IonItem, IonSelect, IonSelectOption } from "@ionic/react";
+import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 import { ScaleBy } from "dataModel/Recipe";
 import { useCallback } from "react";
 
@@ -8,23 +8,29 @@ type Props = {
 };
 
 export default function ScaleBySelector({ onSelect, value }: Props) {
-  const onChange = useCallback(
-    (e: CustomEvent) => {
-      onSelect(e.detail.value as ScaleBy);
+  const handleChange = useCallback(
+    (event: SelectChangeEvent<ScaleBy>) => {
+      onSelect(event.target.value as ScaleBy);
     },
     [onSelect],
   );
 
   return (
-    <IonItem lines="none">
-      <IonLabel>Scale by</IonLabel>
-      <IonSelect labelPlacement="end" interface="popover" onIonChange={onChange} value={value}>
-        {Object.keys(ScaleBy).map((value) => (
-          <IonSelectOption key={value} value={value}>
-            {value}
-          </IonSelectOption>
+    <FormControl fullWidth margin="normal">
+      <InputLabel id="scale-by-select-label">Scale by</InputLabel>
+      <Select
+        labelId="scale-by-select-label"
+        id="scale-by-select"
+        value={value || ""}
+        label="Scale by"
+        onChange={handleChange}
+      >
+        {Object.values(ScaleBy).map((scaleByValue) => (
+          <MenuItem key={scaleByValue} value={scaleByValue}>
+            {scaleByValue}
+          </MenuItem>
         ))}
-      </IonSelect>
-    </IonItem>
+      </Select>
+    </FormControl>
   );
 }

@@ -1,5 +1,5 @@
 import { Preferment, PrefermentKind } from "dataModel/Preferment";
-import { Recipe } from "dataModel/Recipe";
+import { Recipe, newRecipe } from "dataModel/Recipe";
 
 type StoredRecipe = {
   name: string;
@@ -51,8 +51,19 @@ export function getStoredRecipes(): Map<string, Recipe> {
 
   for (let idx = 0; idx < window.localStorage.length; idx++) {
     const key = window.localStorage.key(idx)!;
-    const recipe = decodeLocalStorage(JSON.parse(window.localStorage.getItem(key)!));
-    recipes.set(recipe.name!, recipe);
+    if (key.startsWith("recipe::")) {
+      const recipe = decodeLocalStorage(JSON.parse(window.localStorage.getItem(key)!));
+      recipes.set(recipe.name!, recipe);
+    }
+  }
+
+  if (recipes.size === 0) {
+    const defaultRecipe = newRecipe("Default");
+    defaultRecipe.flours.set("Bread Flour", 100);
+    defaultRecipe.ingredients.set("Water", 70);
+    defaultRecipe.ingredients.set("Salt", 2);
+    setStoredRecipe(defaultRecipe);
+    recipes.set(defaultRecipe.name!, defaultRecipe);
   }
 
   return recipes;
