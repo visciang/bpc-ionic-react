@@ -21,10 +21,8 @@ import { exportStoredRecipes, importStoredRecipes } from "store";
 
 type Props = {
   isOpen: boolean;
-  dismissable: boolean;
   recipesBookCtx: RecipesBookContextProps;
   onSelect(name: string): void;
-  onClose?(): void;
 };
 
 type ToastMessage = {
@@ -32,13 +30,7 @@ type ToastMessage = {
   severity: "success" | "error";
 };
 
-export default function RecipesBookModal({
-  isOpen,
-  dismissable,
-  recipesBookCtx,
-  onSelect,
-  onClose,
-}: Props) {
+export default function RecipesBookModal({ isOpen, recipesBookCtx, onSelect }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [toast, setToast] = useState<ToastMessage | null>(null);
 
@@ -46,9 +38,8 @@ export default function RecipesBookModal({
     (name: string) => {
       recipesBookCtx.onSelect(name);
       onSelect(name);
-      onClose?.();
     },
-    [recipesBookCtx, onSelect, onClose],
+    [recipesBookCtx, onSelect],
   );
 
   const onRenameItem = useCallback(
@@ -86,24 +77,8 @@ export default function RecipesBookModal({
 
   return (
     <>
-      <Dialog open={isOpen} onClose={dismissable ? onClose : undefined} fullWidth maxWidth="sm">
-        <DialogTitle>
-          Recipes
-          {dismissable && onClose && (
-            <IconButton
-              aria-label="close"
-              onClick={onClose}
-              sx={{
-                position: "absolute",
-                right: 8,
-                top: 8,
-                color: (theme) => theme.palette.grey[500],
-              }}
-            >
-              <CloseIcon />
-            </IconButton>
-          )}
-        </DialogTitle>
+      <Dialog open={isOpen} fullWidth maxWidth="sm">
+        <DialogTitle>Recipes</DialogTitle>
         <DialogContent>
           <Box sx={{ display: "flex", justifyContent: "center", gap: 2, my: 2 }}>
             <Button variant="outlined" startIcon={<UploadFileIcon />} onClick={handleImportClick}>

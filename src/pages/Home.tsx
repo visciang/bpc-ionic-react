@@ -108,9 +108,7 @@ export default function Main() {
         <InfoAlert isOpen={showInfo} onDidDismiss={hideInfo} />
         <RecipesBookModal
           isOpen={title === undefined || showRecipes}
-          dismissable={title !== undefined}
           onSelect={setTitle}
-          onClose={hideRecipes}
           recipesBookCtx={recipesBookCtx}
         />
         <SourdoughBuilderModal isOpen={showSourdoughBuilder} onClose={hideSourdoughBuilder} />
