@@ -21,6 +21,7 @@ import { exportStoredRecipes, importStoredRecipes } from "store";
 
 type Props = {
   isOpen: boolean;
+  dismissable: boolean;
   recipesBookCtx: RecipesBookContextProps;
   onSelect(name: string): void;
   onClose?(): void;
@@ -31,7 +32,13 @@ type ToastMessage = {
   severity: "success" | "error";
 };
 
-export default function RecipesBookModal({ isOpen, recipesBookCtx, onSelect, onClose }: Props) {
+export default function RecipesBookModal({
+  isOpen,
+  dismissable,
+  recipesBookCtx,
+  onSelect,
+  onClose,
+}: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [toast, setToast] = useState<ToastMessage | null>(null);
 
@@ -79,10 +86,10 @@ export default function RecipesBookModal({ isOpen, recipesBookCtx, onSelect, onC
 
   return (
     <>
-      <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="sm">
+      <Dialog open={isOpen} onClose={dismissable ? onClose : undefined} fullWidth maxWidth="sm">
         <DialogTitle>
           Recipes
-          {onClose && (
+          {dismissable && onClose && (
             <IconButton
               aria-label="close"
               onClick={onClose}
