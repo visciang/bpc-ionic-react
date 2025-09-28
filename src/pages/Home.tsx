@@ -66,6 +66,14 @@ export default function Main() {
     setSelectedTab(newValue);
   };
 
+  const onRecipeSelect = useCallback(
+    (name: string) => {
+      setTitle(name);
+      setShowRecipes(false);
+    },
+    [setTitle, setShowRecipes],
+  );
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100dvh" }}>
       <AppBar position="static">
@@ -108,7 +116,7 @@ export default function Main() {
         <InfoAlert isOpen={showInfo} onDidDismiss={hideInfo} />
         <RecipesBookModal
           isOpen={title === undefined || showRecipes}
-          onSelect={setTitle}
+          onSelect={onRecipeSelect}
           recipesBookCtx={recipesBookCtx}
         />
         <SourdoughBuilderModal isOpen={showSourdoughBuilder} onClose={hideSourdoughBuilder} />
