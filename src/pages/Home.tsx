@@ -67,9 +67,9 @@ export default function Main() {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", height: "100dvh" }}>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar sx={{ paddingTop: "env(safe-area-inset-top)" }}>
           <IconButton color="inherit" onClick={onInfo}>
             <InfoOutlinedIcon />
           </IconButton>
@@ -87,7 +87,15 @@ export default function Main() {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Container sx={{ flexGrow: 1, overflow: "auto", py: 2 }}>
+      <Container
+        sx={{
+          flexGrow: 1,
+          overflow: "auto",
+          py: 2,
+          paddingLeft: "env(safe-area-inset-left)",
+          paddingRight: "env(safe-area-inset-right)",
+        }}
+      >
         <TabPanel value={selectedTab} index={0}>
           <IngredientsView editable={editToggle.editable} recipesBookCtx={recipesBookCtx} />
         </TabPanel>
@@ -107,7 +115,7 @@ export default function Main() {
         <SourdoughBuilderModal isOpen={showSourdoughBuilder} onClose={hideSourdoughBuilder} />
       </Container>
       <AppBar position="static" sx={{ top: "auto", bottom: 0 }}>
-        <Toolbar>
+        <Toolbar sx={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
           <Tabs
             value={selectedTab}
             onChange={handleTabChange}
