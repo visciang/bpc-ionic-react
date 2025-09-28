@@ -1,5 +1,5 @@
-import { IonTitle, IonToolbar, IonButton, IonIcon, IonText } from "@ionic/react";
-import { trashOutline } from "ionicons/icons";
+import { Toolbar, Typography, IconButton, Box } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 type Props = {
   title: string;
@@ -12,22 +12,20 @@ export default function IngredientsTitleToolbar({ title, showPercentageLabel, on
 
   if (onDelete) {
     buttons = (
-      <IonButton size="small" slot="end" onClick={onDelete} fill="clear">
-        <IonIcon slot="icon-only" icon={trashOutline} />
-      </IonButton>
+      <IconButton size="small" onClick={onDelete}>
+        <DeleteIcon />
+      </IconButton>
     );
   } else if (showPercentageLabel) {
-    buttons = (
-      <IonText className="ion-padding-horizontal" slot="end">
-        %
-      </IonText>
-    );
+    buttons = <Typography sx={{ px: 2 }}>%</Typography>;
   }
 
   return (
-    <IonToolbar>
-      <IonTitle>{title}</IonTitle>
+    <Toolbar>
+      <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        {title}
+      </Typography>
       {buttons}
-    </IonToolbar>
+    </Toolbar>
   );
 }

@@ -1,11 +1,38 @@
-import { ItemReorderEventDetail } from "@ionic/core";
-import { IonList, IonReorderGroup } from "@ionic/react";
+import { List, Paper } from "@mui/material";
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import IngredientPercentageItem from "components/IngredientPercentageItem";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import NewItemInput from "components/NewItemInput";
-import { mapMoveIdx, mapDelete, mapSet } from "components/utils";
+import { mapDelete, mapSet, mapMoveIdx } from "components/utils";
 import { IngredientName, Ingredients, IngredientValue } from "dataModel/Ingredient";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
+
+type SortableItemProps = {
+  id: string;
+  name: IngredientName;
+  value: IngredientValue;
+  editable: boolean;
+  onChange(name: IngredientName, value: IngredientValue): void;
+  onDelete(name: IngredientName): void;
+};
+
+function SortableIngredientItem(props: SortableItemProps) {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: props.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style}>
+      <IngredientPercentageItem {...props} dragHandleProps={{ ...attributes, ...listeners }} />
+    </div>
+  );
+}
 
 type Props = {
   title: string;
@@ -15,17 +42,31 @@ type Props = {
 };
 
 export default function IngredientsPercentageList({ title, ingredients, editable, onIngredientsChange }: Props) {
+  const ingredientIds = useMemo(() => [...ingredients.keys()], [ingredients]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+
+      if (over && active.id !== over.id) {
+        const oldIndex = ingredientIds.indexOf(active.id as string);
+        const newIndex = ingredientIds.indexOf(over.id as string);
+        onIngredientsChange(mapMoveIdx(ingredients, oldIndex, newIndex));
+      }
+    },
+    [ingredientIds, ingredients, onIngredientsChange],
+  );
+
   const onIngredientChange = useCallback(
     (name: IngredientName, value: IngredientValue) => {
       onIngredientsChange(mapSet(ingredients, name, value));
-    },
-    [ingredients, onIngredientsChange],
-  );
-
-  const onIngredientReorder = useCallback(
-    (event: CustomEvent<ItemReorderEventDetail>) => {
-      onIngredientsChange(mapMoveIdx(ingredients, event.detail.from, event.detail.to));
-      event.detail.complete();
     },
     [ingredients, onIngredientsChange],
   );
@@ -45,21 +86,26 @@ export default function IngredientsPercentageList({ title, ingredients, editable
   );
 
   return (
-    <IonList lines="none" inset={true}>
+    <Paper elevation={2} sx={{ my: 2 }}>
       <IngredientsTitleToolbar title={title} showPercentageLabel={true} />
-      <IonReorderGroup disabled={!editable} onIonItemReorder={onIngredientReorder}>
-        {[...ingredients].map(([name, value]) => (
-          <IngredientPercentageItem
-            key={name}
-            name={name}
-            value={value}
-            editable={editable}
-            onChange={onIngredientChange}
-            onDelete={onDeleteIngredient}
-          />
-        ))}
-      </IonReorderGroup>
-      <NewItemInput onNewItem={onNewIngredient} />
-    </IonList>
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext items={ingredientIds} strategy={verticalListSortingStrategy}>
+          <List dense>
+            {[...ingredients].map(([name, value]) => (
+              <SortableIngredientItem
+                key={name}
+                id={name}
+                name={name}
+                value={value}
+                editable={editable}
+                onChange={onIngredientChange}
+                onDelete={onDeleteIngredient}
+              />
+            ))}
+          </List>
+        </SortableContext>
+      </DndContext>
+      {editable && <NewItemInput onNewItem={onNewIngredient} />}
+    </Paper>
   );
 }

@@ -1,5 +1,4 @@
-import { SelectChangeEventDetail } from "@ionic/core";
-import { IonItem, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
+import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 import { PrefermentKind } from "dataModel/Preferment";
 import { useCallback } from "react";
 
@@ -9,21 +8,29 @@ type Props = {
 };
 
 export default function PrefermentSelector({ value, onSelect }: Props) {
-  const onIonChange = useCallback(
-    (event: CustomEvent<SelectChangeEventDetail>) => event.detail.value && onSelect(event.detail.value),
+  const handleChange = useCallback(
+    (event: SelectChangeEvent<PrefermentKind>) => {
+      onSelect(event.target.value as PrefermentKind);
+    },
     [onSelect],
   );
 
   return (
-    <IonItem lines="none">
-      <IonLabel>Kind</IonLabel>
-      <IonSelect labelPlacement="end" interface="popover" value={value} onIonChange={onIonChange}>
-        {Object.keys(PrefermentKind).map((value) => (
-          <IonSelectOption key={value} value={value}>
-            {value}
-          </IonSelectOption>
+    <FormControl fullWidth margin="normal">
+      <InputLabel id="preferment-kind-select-label">Kind</InputLabel>
+      <Select
+        labelId="preferment-kind-select-label"
+        id="preferment-kind-select"
+        value={value || ""}
+        label="Kind"
+        onChange={handleChange}
+      >
+        {Object.keys(PrefermentKind).map((kind) => (
+          <MenuItem key={kind} value={kind}>
+            {kind}
+          </MenuItem>
         ))}
-      </IonSelect>
-    </IonItem>
+      </Select>
+    </FormControl>
   );
 }

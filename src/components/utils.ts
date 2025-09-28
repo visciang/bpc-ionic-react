@@ -1,27 +1,4 @@
-import { IonInputCustomEvent, InputInputEventDetail } from "@ionic/core";
 import { IngredientValue } from "dataModel/Ingredient";
-
-type OnIonChange = (event: IonInputCustomEvent<InputInputEventDetail>) => void;
-type OnChangeFloat = (value?: number) => void;
-
-export function onIonChangeFloat(previousValue: number | undefined, onChangeFloat: OnChangeFloat): OnIonChange {
-  return (event) => {
-    // if the value is not a valid float, clear the field (we can rely on <input type="numeric" /> validation)
-    if (!event.detail.value || !/^[0-9]*[.,]?[0-9]*$/.test(event.detail.value)) {
-      onChangeFloat(undefined);
-      return;
-    }
-
-    // Normalize the value to a float (using . as the decimal separator)
-    const value = parseFloat(event.detail.value!.replace(",", "."));
-
-    if (value === previousValue) {
-      return;
-    }
-
-    onChangeFloat(value);
-  };
-}
 
 export function sum(...iterables: Iterable<IngredientValue>[]): NonNullable<IngredientValue> {
   let s = 0;

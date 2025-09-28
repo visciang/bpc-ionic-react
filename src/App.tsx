@@ -1,42 +1,25 @@
-import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
-import { IonReactRouter } from "@ionic/react-router";
-/* Core CSS required for Ionic components to work properly */
-import "@ionic/react/css/core.css";
-/* Core CSS required for Ionic components to work properly */
-import "@ionic/react/css/core.css";
-/* Basic CSS for apps built with Ionic */
-import "@ionic/react/css/normalize.css";
-import "@ionic/react/css/structure.css";
-import "@ionic/react/css/typography.css";
-/* Optional CSS utils that can be commented out */
-import "@ionic/react/css/padding.css";
-import "@ionic/react/css/float-elements.css";
-import "@ionic/react/css/text-alignment.css";
-import "@ionic/react/css/text-transformation.css";
-import "@ionic/react/css/flex-utils.css";
-import "@ionic/react/css/display.css";
-/* Theme variables */
-import "theme/custom.css";
-/* -- */
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 import Main from "pages/Home";
-import { Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-setupIonicReact({
-  innerHTMLTemplatesEnabled: true,
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
 });
 
 const basename = import.meta.env.BASE_URL || "/";
 
 export default function App() {
   return (
-    <IonApp>
-      <IonReactRouter basename={basename}>
-        <IonRouterOutlet>
-          <Route exact path="/">
-            <Main />
-          </Route>
-        </IonRouterOutlet>
-      </IonReactRouter>
-    </IonApp>
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <BrowserRouter basename={basename}>
+        <Routes>
+          <Route path="/" element={<Main />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }

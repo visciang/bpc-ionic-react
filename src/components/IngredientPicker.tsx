@@ -1,6 +1,5 @@
-import { IonItem, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
+import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 import { IngredientName } from "dataModel/Ingredient";
-import { useState } from "react";
 
 type Props = {
   label: string;
@@ -9,29 +8,30 @@ type Props = {
 };
 
 export default function IngredientPicker({ label, values, onPick }: Props) {
-  const [value, setValue] = useState<string | undefined>(undefined);
+  const handleChange = (event: SelectChangeEvent<string>) => {
+    const value = event.target.value;
+    if (value) {
+      onPick(value);
+    }
+  };
 
   return (
-    <IonItem lines="none">
-      <IonLabel>{label}</IonLabel>
-      <IonSelect
-        labelPlacement="end"
+    <FormControl fullWidth margin="normal">
+      <InputLabel id={`${label}-select-label`}>{label}</InputLabel>
+      <Select
+        labelId={`${label}-select-label`}
+        id={`${label}-select`}
+        value=""
+        label={label}
+        onChange={handleChange}
         disabled={values.length === 0}
-        interface="popover"
-        value={value}
-        onIonChange={(e) => {
-          if (!e.detail.value) return;
-
-          onPick(e.detail.value);
-          setValue(undefined);
-        }}
       >
-        {[...values].map((value) => (
-          <IonSelectOption key={value} value={value}>
+        {values.map((value) => (
+          <MenuItem key={value} value={value}>
             {value}
-          </IonSelectOption>
+          </MenuItem>
         ))}
-      </IonSelect>
-    </IonItem>
+      </Select>
+    </FormControl>
   );
 }

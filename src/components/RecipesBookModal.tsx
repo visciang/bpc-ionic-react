@@ -1,24 +1,23 @@
 import {
-  IonButton,
-  IonButtons,
-  IonCol,
-  IonContent,
-  IonHeader,
-  IonIcon,
-  IonList,
-  IonModal,
-  IonRow,
-  IonTitle,
-  IonToolbar,
-  useIonToast,
-  UseIonToastResult,
-} from "@ionic/react";
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  IconButton,
+  Button,
+  List,
+  Box,
+  Typography,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import NewItemInput from "components/NewItemInput";
 import RecipeItem from "components/RecipeItem";
 import { RecipesBookContextProps } from "hooks/useRecipesBook";
-import { closeOutline, downloadOutline, pushOutline } from "ionicons/icons";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { exportStoredRecipes, importStoredRecipes } from "store";
+import CloseIcon from "@mui/icons-material/Close";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import DownloadIcon from "@mui/icons-material/Download";
 
 type Props = {
   isOpen: boolean;
@@ -27,9 +26,14 @@ type Props = {
   onClose?(): void;
 };
 
+type ToastMessage = {
+  message: string;
+  severity: "success" | "error";
+};
+
 export default function RecipesBookModal({ isOpen, recipesBookCtx, onSelect, onClose }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const toast = useIonToast();
+  const [toast, setToast] = useState<ToastMessage | null>(null);
 
   const onSelectItem = useCallback(
     (name: string) => {
@@ -62,34 +66,42 @@ export default function RecipesBookModal({ isOpen, recipesBookCtx, onSelect, onC
 
   const handleImportFile = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      handleImport(event, toast, () => {
+      handleImport(event, setToast, () => {
         recipesBookCtx.reload();
       });
     },
-    [toast, recipesBookCtx],
+    [setToast, recipesBookCtx],
   );
 
+  const handleCloseToast = () => {
+    setToast(null);
+  };
+
   return (
-    <IonModal isOpen={isOpen} backdropDismiss={false}>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            {onClose && (
-              <IonButton onClick={onClose}>
-                <IonIcon icon={closeOutline} />
-              </IonButton>
-            )}
-          </IonButtons>
-          <IonTitle>Recipes</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent className="ion-padding">
-        <IonRow class="ion-justify-content-center ion-padding">
-          <IonCol size="auto">
-            <IonButton fill="outline" onClick={handleImportClick}>
-              <IonIcon icon={pushOutline}></IonIcon>
+    <>
+      <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="sm">
+        <DialogTitle>
+          Recipes
+          {onClose && (
+            <IconButton
+              aria-label="close"
+              onClick={onClose}
+              sx={{
+                position: "absolute",
+                right: 8,
+                top: 8,
+                color: (theme) => theme.palette.grey[500],
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          )}
+        </DialogTitle>
+        <DialogContent>
+          <Box sx={{ display: "flex", justifyContent: "center", gap: 2, my: 2 }}>
+            <Button variant="outlined" startIcon={<UploadFileIcon />} onClick={handleImportClick}>
               Import
-            </IonButton>
+            </Button>
             <input
               type="file"
               ref={fileInputRef}
@@ -97,54 +109,55 @@ export default function RecipesBookModal({ isOpen, recipesBookCtx, onSelect, onC
               accept=".json"
               onChange={handleImportFile}
             />
-          </IonCol>
-          <IonCol size="auto">
-            <IonButton fill="outline" onClick={handleExport}>
-              <IonIcon icon={downloadOutline}></IonIcon>
+            <Button variant="outlined" startIcon={<DownloadIcon />} onClick={handleExport}>
               Export
-            </IonButton>
-          </IonCol>
-        </IonRow>
-        <IonRow class="ion-justify-content-center ion-padding">Pick or create a new recipe</IonRow>
-        <IonList className="ion-padding-vertical" inset={true}>
-          {recipesBookCtx.recipes.toSorted().map((name) => (
-            <RecipeItem
-              key={name}
-              name={name}
-              onSelect={onSelectItem}
-              onRename={onRenameItem}
-              onDelete={onDeleteItem}
-            />
-          ))}
-          <NewItemInput onNewItem={recipesBookCtx.onNew} />
-        </IonList>
-      </IonContent>
-    </IonModal>
+            </Button>
+          </Box>
+          <Typography align="center" sx={{ my: 2 }}>
+            Pick or create a new recipe
+          </Typography>
+          <List>
+            {recipesBookCtx.recipes.toSorted().map((name) => (
+              <RecipeItem
+                key={name}
+                name={name}
+                onSelect={onSelectItem}
+                onRename={onRenameItem}
+                onDelete={onDeleteItem}
+              />
+            ))}
+            <NewItemInput onNewItem={recipesBookCtx.onNew} />
+          </List>
+        </DialogContent>
+      </Dialog>
+      <Snackbar open={!!toast} autoHideDuration={3000} onClose={handleCloseToast}>
+        <Alert onClose={handleCloseToast} severity={toast?.severity} sx={{ width: "100%" }}>
+          {toast?.message}
+        </Alert>
+      </Snackbar>
+    </>
   );
 }
 
 function handleExport() {
   const recipesJson = exportStoredRecipes();
 
-  // Create a blob and download link
   const blob = new Blob([recipesJson], { type: "application/json" });
   const url = URL.createObjectURL(blob);
 
-  // Create a temporary anchor element to trigger download
   const a = document.createElement("a");
   a.href = url;
   a.download = "bread-recipes.json";
   document.body.appendChild(a);
   a.click();
 
-  // Clean up
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
 
 function handleImport(
   event: React.ChangeEvent<HTMLInputElement>,
-  [present]: UseIonToastResult,
+  setToast: (toast: ToastMessage) => void,
   onComplete?: () => void,
 ) {
   const file = event.target.files?.[0];
@@ -157,22 +170,19 @@ function handleImport(
       const recipesJson = e.target?.result as string;
       const recipesCount = importStoredRecipes(recipesJson);
 
-      present({
+      setToast({
         message: `Successfully imported ${recipesCount} recipes`,
-        duration: 3000,
-        color: "success",
+        severity: "success",
       });
 
       onComplete?.();
     } catch {
-      present({
+      setToast({
         message: "Failed to import recipes. Please check the file format.",
-        duration: 3000,
-        color: "danger",
+        severity: "error",
       });
     }
 
-    // Reset the file input
     if (event.target) {
       event.target.value = "";
     }

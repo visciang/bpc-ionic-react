@@ -1,27 +1,19 @@
 import {
-  IonButton,
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonIcon,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonModal,
-  IonText,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  IconButton,
+  TextField,
+  Typography,
+  List,
+  Box,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import IngredientPercentageItem from "components/IngredientPercentageItem";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import IngredientsWeightList from "components/IngredientsWeightList";
-import { onIonChangeFloat } from "components/utils";
 import { IngredientName, Ingredients, IngredientValue } from "dataModel/Ingredient";
-import { closeOutline } from "ionicons/icons";
 import { useCallback, useState } from "react";
-
-const INPUT_DEBOUNCE_MS = 300;
 
 type SourdoughBuilderModalProps = {
   isOpen: boolean;
@@ -37,25 +29,32 @@ export default function SourdoughBuilderModal({ isOpen, onClose }: SourdoughBuil
   const [buildPercentage, buildsWeights] = calculateBuildWeights(starter, hydration, builds, total);
 
   return (
-    <IonModal isOpen={isOpen}>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonButton onClick={onClose}>
-              <IonIcon icon={closeOutline} />
-            </IonButton>
-          </IonButtons>
-          <IonTitle>Sourdough Builder</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-        <div className="ion-padding">
+    <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="sm">
+      <DialogTitle>
+        Sourdough Builder
+        {onClose && (
+          <IconButton
+            aria-label="close"
+            onClick={onClose}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        )}
+      </DialogTitle>
+      <DialogContent>
+        <Box sx={{ p: 2 }}>
           <Total builds={builds} total={total} setBuilds={setBuilds} setTotal={setTotal} />
-        </div>
+        </Box>
         <FeedRatio starter={starter} hydration={hydration} setStarter={setStarter} setHydration={setHydration} />
-        <IonText>
-          <h1 className="ion-text-center">BUILDS</h1>
-        </IonText>
+        <Typography variant="h5" align="center" sx={{ mt: 2 }}>
+          BUILDS
+        </Typography>
         {buildsWeights.map((buildWeight, idx) => (
           <IngredientsWeightList
             key={idx}
@@ -64,8 +63,8 @@ export default function SourdoughBuilderModal({ isOpen, onClose }: SourdoughBuil
             ingredientsWeight={buildWeight}
           />
         ))}
-      </IonContent>
-    </IonModal>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -77,35 +76,37 @@ type TotalProps = {
 };
 
 function Total({ builds, total, setBuilds, setTotal }: TotalProps) {
+  const handleFloatChange =
+    (setter: (value?: number) => void) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      if (value === "") {
+        setter(undefined);
+      } else {
+        setter(parseFloat(value));
+      }
+    };
+
   return (
-    <>
-      <IonItem lines="none">
-        <IonLabel>Builds</IonLabel>
-        <IonInput
-          className="ion-padding-horizontal ion-text-right"
-          type="number"
-          inputMode="numeric"
-          placeholder="..."
-          value={builds}
-          onIonInput={onIonChangeFloat(builds, setBuilds)}
-          debounce={INPUT_DEBOUNCE_MS}
-        />
-        <IonText>#</IonText>
-      </IonItem>
-      <IonItem lines="none">
-        <IonLabel>Total</IonLabel>
-        <IonInput
-          className="ion-padding-horizontal ion-text-right"
-          type="number"
-          inputMode="numeric"
-          placeholder="..."
-          value={total}
-          onIonInput={onIonChangeFloat(total, setTotal)}
-          debounce={INPUT_DEBOUNCE_MS}
-        />
-        <IonText>g</IonText>
-      </IonItem>
-    </>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      <TextField
+        label="Builds"
+        type="number"
+        inputProps={{ inputMode: "numeric" }}
+        value={builds ?? ""}
+        onChange={handleFloatChange(setBuilds)}
+        InputProps={{ endAdornment: <Typography>#</Typography> }}
+        fullWidth
+      />
+      <TextField
+        label="Total"
+        type="number"
+        inputProps={{ inputMode: "numeric" }}
+        value={total ?? ""}
+        onChange={handleFloatChange(setTotal)}
+        InputProps={{ endAdornment: <Typography>g</Typography> }}
+        fullWidth
+      />
+    </Box>
   );
 }
 
@@ -132,21 +133,16 @@ function FeedRatio({ starter, hydration, setStarter, setHydration }: FeedRatioPr
   );
 
   return (
-    <IonList lines="none" inset={true}>
+    <List dense>
       <IngredientsTitleToolbar title="FEED RATIO" showPercentageLabel={true} />
-      <IngredientPercentageItem
-        name="Starter (% of Flour)"
-        value={starter}
-        editable={false}
-        onChange={onStarterChange}
-      />
+      <IngredientPercentageItem name="Starter (% of Flour)" value={starter} editable={false} onChange={onStarterChange} />
       <IngredientPercentageItem
         name="Hydration (% of Flour)"
         value={hydration}
         editable={false}
         onChange={onHydrationChange}
       />
-    </IonList>
+    </List>
   );
 }
 

@@ -1,37 +1,56 @@
 import {
-  IonButton,
-  IonButtons,
-  IonContent,
-  IonFooter,
-  IonHeader,
-  IonIcon,
-  IonLabel,
-  IonPage,
-  IonSegment,
-  IonSegmentButton,
-  IonSegmentContent,
-  IonSegmentView,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
+  AppBar,
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Tabs,
+  Tab,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import InfoAlert from "components/InfoAlert";
 import RecipesBookModal from "components/RecipesBookModal";
 import SourdoughBuilderModal from "components/SourdoughBuilderModal";
 import { useEditToggle } from "hooks/useEditToggle";
 import { useRecipesBook } from "hooks/useRecipesBook";
-import {
-  arrowUndoOutline,
-  bookOutline,
-  calculatorOutline,
-  infiniteOutline,
-  informationCircleOutline,
-  pencilOutline,
-  restaurantOutline,
-} from "ionicons/icons";
 import FinalDoughView from "pages/FinalDoughView";
 import IngredientsView from "pages/IngredientsView";
 import PrefermentsView from "pages/PrefermentsView";
-import { useState, useCallback } from "react";
+import { useState, useCallback, SyntheticEvent } from "react";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
+import AllInclusiveIcon from "@mui/icons-material/AllInclusive";
+import EditIcon from "@mui/icons-material/Edit";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
+import UndoIcon from "@mui/icons-material/Undo";
+import CalculateIcon from "@mui/icons-material/Calculate";
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography component="div">{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
 
 export default function Main() {
   const recipesBookCtx = useRecipesBook();
@@ -39,6 +58,7 @@ export default function Main() {
   const [showInfo, setShowInfo] = useState(false);
   const [showRecipes, setShowRecipes] = useState(false);
   const [showSourdoughBuilder, setShowSourdoughBuilder] = useState(false);
+  const [selectedTab, setSelectedTab] = useState(0);
 
   const editToggle = useEditToggle();
 
@@ -52,70 +72,66 @@ export default function Main() {
 
   const [title, setTitle] = useState<string | undefined>(undefined);
 
+  const handleTabChange = (event: SyntheticEvent, newValue: number) => {
+    setSelectedTab(newValue);
+  };
+
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonButton onClick={onInfo}>
-              <IonIcon icon={informationCircleOutline} />
-            </IonButton>
-            <IonButton onClick={onRecipes}>
-              <IonIcon icon={bookOutline} />
-            </IonButton>
-          </IonButtons>
-          <IonTitle>{title}</IonTitle>
-          <IonButtons slot="end">
-            <IonButton onClick={onSourdoughBulder}>
-              <IonIcon icon={infiniteOutline} />
-            </IonButton>
-            <IonButton fill={editToggle.editable ? "solid" : undefined} onClick={editToggle.onToggle}>
-              <IonIcon icon={pencilOutline} />
-            </IonButton>
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-        <IonSegmentView>
-          <IonSegmentContent id="ingredients">
-            <IngredientsView editable={editToggle.editable} recipesBookCtx={recipesBookCtx} />
-          </IonSegmentContent>
-          <IonSegmentContent id="preferments">
-            <PrefermentsView editable={editToggle.editable} recipesBookCtx={recipesBookCtx} />
-          </IonSegmentContent>
-          <IonSegmentContent id="finalDough">
-            <FinalDoughView recipesBookCtx={recipesBookCtx} />
-          </IonSegmentContent>
-        </IonSegmentView>
+    <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton color="inherit" onClick={onInfo}>
+            <InfoOutlinedIcon />
+          </IconButton>
+          <IconButton color="inherit" onClick={onRecipes}>
+            <MenuBookOutlinedIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: "center" }}>
+            {title}
+          </Typography>
+          <IconButton color="inherit" onClick={onSourdoughBulder}>
+            <AllInclusiveIcon />
+          </IconButton>
+          <IconButton color="inherit" onClick={editToggle.onToggle} aria-label="edit">
+            <EditIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <Container sx={{ flexGrow: 1, overflow: "auto", py: 2 }}>
+        <TabPanel value={selectedTab} index={0}>
+          <IngredientsView editable={editToggle.editable} recipesBookCtx={recipesBookCtx} />
+        </TabPanel>
+        <TabPanel value={selectedTab} index={1}>
+          <PrefermentsView editable={editToggle.editable} recipesBookCtx={recipesBookCtx} />
+        </TabPanel>
+        <TabPanel value={selectedTab} index={2}>
+          <FinalDoughView recipesBookCtx={recipesBookCtx} />
+        </TabPanel>
         <InfoAlert isOpen={showInfo} onDidDismiss={hideInfo} />
         <RecipesBookModal
-          // Prompt to select a recipe if none is selected (undefined title) or
-          // if the user explicitly requested to see the recipes
           isOpen={title === undefined || showRecipes}
           onSelect={setTitle}
           onClose={title === undefined ? undefined : hideRecipes}
           recipesBookCtx={recipesBookCtx}
         />
         <SourdoughBuilderModal isOpen={showSourdoughBuilder} onClose={hideSourdoughBuilder} />
-      </IonContent>
-      <IonFooter>
-        <IonToolbar>
-          <IonSegment>
-            <IonSegmentButton contentId="ingredients">
-              <IonIcon icon={restaurantOutline} />
-              <IonLabel>INGREDIENTS</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton contentId="preferments">
-              <IonIcon icon={arrowUndoOutline} />
-              <IonLabel>PREFERMENTS</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton contentId="finalDough">
-              <IonIcon icon={calculatorOutline} />
-              <IonLabel>FINAL DOUGH</IonLabel>
-            </IonSegmentButton>
-          </IonSegment>
-        </IonToolbar>
-      </IonFooter>
-    </IonPage>
+      </Container>
+      <AppBar position="static" sx={{ top: "auto", bottom: 0 }}>
+        <Toolbar>
+          <Tabs
+            value={selectedTab}
+            onChange={handleTabChange}
+            indicatorColor="secondary"
+            textColor="inherit"
+            variant="fullWidth"
+            aria-label="full width tabs example"
+          >
+            <Tab icon={<RestaurantIcon />} label="INGREDIENTS" />
+            <Tab icon={<UndoIcon />} label="PREFERMENTS" />
+            <Tab icon={<CalculateIcon />} label="FINAL DOUGH" />
+          </Tabs>
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 }

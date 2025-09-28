@@ -1,4 +1,12 @@
-import { IonAlert, IonicSafeString } from "@ionic/react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  Typography,
+  Link,
+  Box,
+} from "@mui/material";
 import donate from "assets/img/donate.gif";
 import { version } from "../../package.json";
 
@@ -10,26 +18,33 @@ type Props = {
 };
 
 export default function InfoAlert({ isOpen, onDidDismiss }: Props) {
-  const message = new IonicSafeString(`
-    <div class="ion-text-center">
-      <p>
-        <strong>Version</strong>: ${version} (${gitSHA.substring(0, 7)})
-      </p>
-      <p>
-        <a href="mailto:panificazionefavaglie@gmail.com?subject=BakerCalc">
-          Info mail
-        </a>
-      </p>
-      <p>
-        If you like the App<br/>support me with a beer!<br/>Thank you
-      </p>
-      <p>
-        <a href="https://www.paypal.com/ncp/payment/MW65J8LXXJ8S4">
-        <img src=${donate}>
-        </a>
-      </p>
-    </div>
-  `);
-
-  return <IonAlert isOpen={isOpen} onDidDismiss={onDidDismiss} header={"About B%C"} message={message} />;
+  return (
+    <Dialog open={isOpen} onClose={onDidDismiss}>
+      <DialogTitle>About B%C</DialogTitle>
+      <DialogContent>
+        <DialogContentText component="div" textAlign="center">
+          <Typography>
+            <strong>Version</strong>: {version} ({gitSHA.substring(0, 7)})
+          </Typography>
+          <Typography>
+            <Link href="mailto:panificazionefavaglie@gmail.com?subject=BakerCalc">
+              Info mail
+            </Link>
+          </Typography>
+          <Typography>
+            If you like the App
+            <br />
+            support me with a beer!
+            <br />
+            Thank you
+          </Typography>
+          <Box mt={2}>
+            <a href="https://www.paypal.com/ncp/payment/MW65J8LXXJ8S4">
+              <img src={donate} alt="Donate" />
+            </a>
+          </Box>
+        </DialogContentText>
+      </DialogContent>
+    </Dialog>
+  );
 }
