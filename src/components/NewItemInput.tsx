@@ -1,5 +1,5 @@
-import { TextField, IconButton, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { TextField, IconButton, Box } from "@mui/material";
 import { useState, useCallback } from "react";
 
 type Props = {
@@ -35,7 +35,7 @@ export default function NewItemInput({ onNewItem }: Props) {
         value={newItem}
         onChange={handleChange}
         onKeyDown={(e) => {
-          if (e.key === 'Enter') {
+          if (e.key === "Enter") {
             handleClick();
           }
         }}

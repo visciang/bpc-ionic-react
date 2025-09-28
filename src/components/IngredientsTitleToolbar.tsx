@@ -1,5 +1,5 @@
-import { Toolbar, Typography, IconButton, Box } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { Toolbar, Typography, IconButton } from "@mui/material";
 
 type Props = {
   title: string;

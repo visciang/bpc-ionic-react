@@ -1,6 +1,6 @@
-import { ListItem, ListItemText, TextField, IconButton, Box } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import { ListItem, ListItemText, TextField, IconButton, Box } from "@mui/material";
 import { IngredientName, IngredientValue } from "dataModel/Ingredient";
 import { useCallback, useState, useEffect } from "react";
 import { useDebounce } from "use-debounce";
@@ -11,7 +11,7 @@ type Props = {
   editable: boolean;
   onChange(name: IngredientName, value: IngredientValue): void;
   onDelete?(name: IngredientName): void;
-  dragHandleProps?: any;
+  dragHandleProps?: Record<string, unknown>;
 };
 
 export default function IngredientPercentageItem({

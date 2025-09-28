@@ -1,3 +1,6 @@
+import CloseIcon from "@mui/icons-material/Close";
+import DownloadIcon from "@mui/icons-material/Download";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 import {
   Dialog,
   DialogTitle,
@@ -15,9 +18,6 @@ import RecipeItem from "components/RecipeItem";
 import { RecipesBookContextProps } from "hooks/useRecipesBook";
 import { useCallback, useRef, useState } from "react";
 import { exportStoredRecipes, importStoredRecipes } from "store";
-import CloseIcon from "@mui/icons-material/Close";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
-import DownloadIcon from "@mui/icons-material/Download";
 
 type Props = {
   isOpen: boolean;

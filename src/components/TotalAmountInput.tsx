@@ -36,18 +36,17 @@ export default function TotalAmountInput({ items, amount, onChangeAmount, onChan
     }
   }, [debouncedAmount, amount, onChangeAmount]);
 
-  const handleFloatChange =
-    (setter: (value?: number) => void) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value;
-      if (value === "") {
-        setter(undefined);
-      } else {
-        const num = parseFloat(value);
-        if (!isNaN(num)) {
-          setter(num);
-        }
+  const handleFloatChange = (setter: (value?: number) => void) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (value === "") {
+      setter(undefined);
+    } else {
+      const num = parseFloat(value);
+      if (!isNaN(num)) {
+        setter(num);
       }
-    };
+    }
+  };
 
   return (
     <Box sx={{ display: "flex", alignItems: "center", gap: 1, my: 2 }}>

@@ -1,12 +1,4 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  Typography,
-  Link,
-  Box,
-} from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogContentText, Typography, Link, Box } from "@mui/material";
 import donate from "assets/img/donate.gif";
 import { version } from "../../package.json";
 
@@ -27,9 +19,7 @@ export default function InfoAlert({ isOpen, onDidDismiss }: Props) {
             <strong>Version</strong>: {version} ({gitSHA.substring(0, 7)})
           </Typography>
           <Typography>
-            <Link href="mailto:panificazionefavaglie@gmail.com?subject=BakerCalc">
-              Info mail
-            </Link>
+            <Link href="mailto:panificazionefavaglie@gmail.com?subject=BakerCalc">Info mail</Link>
           </Typography>
           <Typography>
             If you like the App

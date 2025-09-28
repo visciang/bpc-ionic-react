@@ -1,14 +1,5 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  IconButton,
-  TextField,
-  Typography,
-  List,
-  Box,
-} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { Dialog, DialogTitle, DialogContent, IconButton, TextField, Typography, List, Box } from "@mui/material";
 import IngredientPercentageItem from "components/IngredientPercentageItem";
 import IngredientsTitleToolbar from "components/IngredientsTitleToolbar";
 import IngredientsWeightList from "components/IngredientsWeightList";
@@ -76,15 +67,14 @@ type TotalProps = {
 };
 
 function Total({ builds, total, setBuilds, setTotal }: TotalProps) {
-  const handleFloatChange =
-    (setter: (value?: number) => void) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value;
-      if (value === "") {
-        setter(undefined);
-      } else {
-        setter(parseFloat(value));
-      }
-    };
+  const handleFloatChange = (setter: (value?: number) => void) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (value === "") {
+      setter(undefined);
+    } else {
+      setter(parseFloat(value));
+    }
+  };
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -135,7 +125,12 @@ function FeedRatio({ starter, hydration, setStarter, setHydration }: FeedRatioPr
   return (
     <List dense>
       <IngredientsTitleToolbar title="FEED RATIO" showPercentageLabel={true} />
-      <IngredientPercentageItem name="Starter (% of Flour)" value={starter} editable={false} onChange={onStarterChange} />
+      <IngredientPercentageItem
+        name="Starter (% of Flour)"
+        value={starter}
+        editable={false}
+        onChange={onStarterChange}
+      />
       <IngredientPercentageItem
         name="Hydration (% of Flour)"
         value={hydration}

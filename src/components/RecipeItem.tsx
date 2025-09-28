@@ -1,3 +1,5 @@
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   ListItem,
   ListItemText,
@@ -10,8 +12,6 @@ import {
   TextField,
   DialogContentText,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useCallback, useState } from "react";
 
 type Props = {
@@ -94,9 +94,7 @@ export default function RecipeItem({ name, onSelect, onRename, onDelete }: Props
       <Dialog open={showDeleteDialog} onClose={onDeleteClose}>
         <DialogTitle>Delete Recipe</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Are you sure you want to delete "{name}"?
-          </DialogContentText>
+          <DialogContentText>Are you sure you want to delete "{name}"?</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={onDeleteClose}>Cancel</Button>

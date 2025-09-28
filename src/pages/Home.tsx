@@ -1,14 +1,11 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  IconButton,
-  Tabs,
-  Tab,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import AllInclusiveIcon from "@mui/icons-material/AllInclusive";
+import CalculateIcon from "@mui/icons-material/Calculate";
+import EditIcon from "@mui/icons-material/Edit";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
+import UndoIcon from "@mui/icons-material/Undo";
+import { AppBar, Box, Container, IconButton, Tabs, Tab, Toolbar, Typography } from "@mui/material";
 import InfoAlert from "components/InfoAlert";
 import RecipesBookModal from "components/RecipesBookModal";
 import SourdoughBuilderModal from "components/SourdoughBuilderModal";
@@ -18,13 +15,6 @@ import FinalDoughView from "pages/FinalDoughView";
 import IngredientsView from "pages/IngredientsView";
 import PrefermentsView from "pages/PrefermentsView";
 import { useState, useCallback, SyntheticEvent } from "react";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
-import AllInclusiveIcon from "@mui/icons-material/AllInclusive";
-import EditIcon from "@mui/icons-material/Edit";
-import RestaurantIcon from "@mui/icons-material/Restaurant";
-import UndoIcon from "@mui/icons-material/Undo";
-import CalculateIcon from "@mui/icons-material/Calculate";
 
 interface TabPanelProps {
   children?: React.ReactNode;
