@@ -1,18 +1,6 @@
-import CloseIcon from "@mui/icons-material/Close";
 import DownloadIcon from "@mui/icons-material/Download";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  IconButton,
-  Button,
-  List,
-  Box,
-  Typography,
-  Snackbar,
-  Alert,
-} from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, Button, List, Box, Typography, Snackbar, Alert } from "@mui/material";
 import NewItemInput from "components/NewItemInput";
 import RecipeItem from "components/RecipeItem";
 import { RecipesBookContextProps } from "hooks/useRecipesBook";

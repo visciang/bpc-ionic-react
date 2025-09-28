@@ -57,7 +57,6 @@ export default function Main() {
   const onSourdoughBulder = useCallback(() => setShowSourdoughBuilder(true), [setShowSourdoughBuilder]);
 
   const hideInfo = useCallback(() => setShowInfo(false), [setShowInfo]);
-  const hideRecipes = useCallback(() => setShowRecipes(false), [setShowRecipes]);
   const hideSourdoughBuilder = useCallback(() => setShowSourdoughBuilder(false), [setShowSourdoughBuilder]);
 
   const [title, setTitle] = useState<string | undefined>(undefined);
